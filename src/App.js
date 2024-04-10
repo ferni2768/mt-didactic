@@ -1,0 +1,32 @@
+import React from 'react';
+import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
+import StudentView from './components/StudentView';
+import TeacherView from './components/TeacherView';
+
+function App() {
+  return (
+    <Router>
+      <div className="App">
+        <header className="App-header">
+          <nav>
+            <ul>
+              <li>
+                <Link to="/student">Student View</Link>
+              </li>
+              <li>
+                <Link to="/teacher">Teacher View</Link>
+              </li>
+            </ul>
+          </nav>
+        </header>
+
+        <Routes>
+          <Route path="/student" element={<StudentView />} />
+          <Route path="/teacher" element={<TeacherView />} />
+        </Routes>
+      </div>
+    </Router>
+  );
+}
+
+export default App;
