@@ -1,24 +1,51 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 function StudentView() {
+    const { classCode: urlClassCode } = useParams();
+    const navigate = useNavigate();
+    const [classCode, setClassCode] = useState('');
+    const [name, setName] = useState('student1');
     const [student, setStudent] = useState(null);
-    const { studentId = 1 } = useParams(); // Default student ID is 1 if not provided in the URL
 
     useEffect(() => {
-        const fetchStudent = async () => {
-            try {
-                const response = await fetch(`http://localhost:3001/student/${studentId}`);
+        const loggedInClassCode = localStorage.getItem('loggedInStudentClassCode');
+        if (loggedInClassCode) {
+            setClassCode(loggedInClassCode);
+            // For simplicity, return a dummy student object
+            setStudent({ id: 1, name: 'student1', score: 0 });
+            navigate(`/student/${loggedInClassCode}`);
+        }
+
+        if (urlClassCode) {
+            setClassCode(urlClassCode);
+        }
+    }, [urlClassCode, navigate]);
+
+    const handleJoin = async (event) => {
+        event.preventDefault();
+        try {
+            const response = await fetch(`http://localhost:3001/class/${classCode}/exists`);
+            if (response.ok) {
                 const data = await response.json();
                 setStudent(data);
-            } catch (error) {
-                console.error('Error fetching student:', error);
+                localStorage.setItem('loggedInStudentClassCode', classCode);
+                navigate(`/student/${classCode}`);
+            } else {
+                alert('Class code does not exist');
             }
-        };
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error occurred while joining');
+        }
+    };
 
-        // Fetch student details initially
-        fetchStudent();
-    }, [studentId]); // Fetch student details whenever the student ID changes
+    const handleReset = () => {
+        localStorage.removeItem('loggedInStudentClassCode');
+        setStudent(null);
+        navigate('/student');
+        window.location.reload(); // Reload the page to reset the state
+    };
 
     const updateScore = async () => {
         try {
@@ -29,31 +56,58 @@ function StudentView() {
                 },
                 body: JSON.stringify({ score: 1000 })
             });
-            // Update the state to reflect the change in score
             setStudent(prevStudent => ({ ...prevStudent, score: 1000 }));
         } catch (error) {
             console.error('Error updating score:', error);
         }
     };
 
+    if (!student) {
+        return (
+            <div>
+                <h1>Student Join</h1>
+                <form onSubmit={handleJoin}>
+                    <label>
+                        Name:
+                        <input
+                            type="text"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                    </label>
+                    <br />
+                    <label>
+                        Class Code:
+                        <input
+                            type="text"
+                            value={classCode}
+                            onChange={(e) => setClassCode(e.target.value)}
+                        />
+                    </label>
+                    <br /> <br />
+                    <button type="submit">Join</button>
+                </form>
+            </div>
+        );
+    }
+
     return (
         <div>
             <h1>Student View</h1>
             <p>This is the student view page.</p>
-            {student && (
-                <div>
-                    <h2>My Details:</h2>
-                    <p>ID: {student.id}</p>
-                    <p>Name: {student.name}</p>
-                    <p>Score: {student.score}</p>
-                    {student.score !== 1000 && (
-                        <button onClick={updateScore}>Update Score</button>
-                    )}
-                    {student.score === 1000 && (
-                        <p>Score Updated</p>
-                    )}
-                </div>
-            )}
+            <div>
+                <h2>My Details:</h2>
+                <p>ID: {student.id}</p>
+                <p>Name: {student.name}</p>
+                <p>Score: {student.score}</p>
+                {student.score !== 1000 && (
+                    <button onClick={updateScore}>Update Score</button>
+                )}
+                {student.score === 1000 && (
+                    <p>Score Updated</p>
+                )}
+                <button onClick={handleReset}>Reset</button>
+            </div>
         </div>
     );
 }

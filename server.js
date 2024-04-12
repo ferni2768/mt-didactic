@@ -76,6 +76,25 @@ app.get('/student/:id', (req, res) => {
     });
 });
 
+// API endpoint to check if a class exists
+app.get('/class/:code/exists', (req, res) => {
+    const classCode = req.params.code;
+    const query = 'SELECT * FROM class WHERE code = ?';
+    db.query(query, [classCode], (err, result) => {
+        if (err) {
+            console.error('Error checking class existence:', err);
+            res.status(500).json({ error: 'Internal server error' });
+        } else {
+            if (result.length === 1) {
+                // For simplicity, return a dummy student object
+                res.json({ id: 1, name: 'student1', score: 0 });
+            } else {
+                res.status(404).json({ error: 'Class code does not exist' });
+            }
+        }
+    });
+});
+
 // API endpoint to update a student's score
 app.put('/student/:id/updateScore', (req, res) => {
     const studentId = req.params.id;

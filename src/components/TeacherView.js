@@ -25,7 +25,7 @@ function TeacherView() {
             setClassCode(loggedInClassCode);
             setIsAuthenticated(true);
             // If the teacher is logged in, the URL includes the class code
-            if (!urlClassCode) {
+            if (urlClassCode !== loggedInClassCode) {
                 navigate(`/teacher/${loggedInClassCode}`);
             }
         }
