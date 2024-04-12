@@ -27,6 +27,24 @@ app.use(cors());
 // Parse JSON requests
 app.use(express.json());
 
+// API endpoint for teacher authentication
+app.post('/teacher/authenticate', (req, res) => {
+    const { code, password } = req.body;
+    const query = 'SELECT * FROM class WHERE code = ? AND password = ?';
+    db.query(query, [code, password], (err, result) => {
+        if (err) {
+            console.error('Error authenticating teacher:', err);
+            res.status(500).json({ error: 'Internal server error' });
+        } else {
+            if (result.length === 1) {
+                res.status(200).json({ message: 'Authentication successful' });
+            } else {
+                res.status(401).json({ error: 'Invalid credentials' });
+            }
+        }
+    });
+});
+
 // API endpoint to fetch list of students
 app.get('/student', (req, res) => {
     const query = 'SELECT * FROM student';

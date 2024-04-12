@@ -23,6 +23,7 @@ function App() {
         <Routes>
           <Route path="/student" element={<StudentView />} />
           <Route path="/teacher" element={<TeacherView />} />
+          <Route path="/teacher/:classCode" element={<TeacherView />} />
         </Routes>
       </div>
     </Router>
