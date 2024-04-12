@@ -31,7 +31,10 @@ function TeacherView() {
             <h2>List of Students:</h2>
             <ul>
                 {students.map(student => (
-                    <li key={student.id}>{student.name}</li>
+                    <li key={student.id}>
+                        ID: {student.ID} ||
+                        name: {student.name} ||
+                        score: {student.score}</li>
                 ))}
             </ul>
         </div>
