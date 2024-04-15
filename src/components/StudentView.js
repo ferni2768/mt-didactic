@@ -14,7 +14,7 @@ function StudentView() {
         if (loggedInClassCode) {
             setClassCode(loggedInClassCode);
             // For simplicity, return a dummy student object
-            setStudent({ id: 1, name: 'student1', score: 0 });
+            setStudent({ id: 1, name: 'student1', score: -1 });
             navigate(`/student/${loggedInClassCode}`);
         }
 

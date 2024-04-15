@@ -11,7 +11,8 @@ function App() {
           <nav>
             <ul>
               <li>
-                <Link to="/student">Student View</Link>
+                {/* Set classCode to speed up development */}
+                <Link to="/student/ABC123">Student View</Link>
               </li>
               <li>
                 <Link to="/teacher">Teacher View</Link>

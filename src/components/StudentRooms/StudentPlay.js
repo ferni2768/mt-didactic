@@ -1,6 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
+import PlayWordSelector from './playComponents/playWordSelector';
+const defaultAnswersObj = require('./dev/defaultAnswers');
 
 function StudentPlay({ student, setStudent, navigate }) {
+
+    const [answerCombos, setAnswerCombos] = useState([{ word: '', label: '' }]);
+    const [selectedModel, setSelectedModel] = useState('modelo2'); // Default model for development
+    const [testResults, setTestResults] = useState();
+
+    // If true, it submits the default answers object
+    const dev = true;
+
+
     const updateScore = async () => {
         try {
             await fetch(`http://localhost:3001/student/${student.id}/updateScore`, {
@@ -16,6 +27,85 @@ function StudentPlay({ student, setStudent, navigate }) {
         }
     };
 
+    const handleComboChange = (index, type, value) => {
+        setAnswerCombos((prevCombos) => {
+            const updatedCombos = [...prevCombos];
+            if (type === 'word') {
+                updatedCombos[index].word = value;
+            } else if (type === 'label') {
+                updatedCombos[index].label = value;
+            }
+            return updatedCombos;
+        });
+    };
+
+    const addNewWord = () => {
+        setAnswerCombos((prevCombos) => [...prevCombos, { word: '', label: '' }]);
+    };
+
+    const handleAnswerSubmit = async () => {
+        const answersObj = !dev ? {} : {};
+        answerCombos.forEach((combo) => {
+            if (combo.word.trim() !== '' && combo.label !== '') {
+                answersObj[combo.word] = combo.label;
+            }
+        });
+
+        // Use the 'answersObj' or 'defaultAnswersObj' based on the inverted 'dev' constant
+        const answersToUse = !dev ? answersObj : defaultAnswersObj;
+
+        console.log(answersToUse);
+
+        const url = `http://localhost:5000/models/${selectedModel}/train`;
+        const config = { method: 'post', body: JSON.stringify(answersToUse), headers: { 'Content-Type': 'application/json' } };
+
+        try {
+            // Loop to train the model 10 times
+            for (let i = 0; i < 10; i++) {
+                const response = await fetch(url, config);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log(`Training Result ${i + 1}:`, data);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+    const handleTestModelClick = async (selectedModelNames) => {
+        try {
+            const response = await fetch('http://127.0.0.1:5000/models/test', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ model_names: selectedModelNames }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log('API Response:', data);
+            const processedData = data.map((modelResult) => ({
+                model: modelResult.model,
+                accuracy: modelResult.metrics.compile_metrics * 100,
+                loss: modelResult.metrics.loss * 100,
+            }));
+            console.log('Processed Data for State:', processedData);
+
+            if (processedData.length > 0) {
+                setTestResults(`Accuracy: ${processedData[0].accuracy.toFixed(2)}%`);
+            }
+        } catch (error) {
+            console.error('Failed to fetch model evaluation results:', error);
+        }
+    };
+
+
     const handleReset = () => {
         localStorage.removeItem('loggedInStudentClassCode');
         setStudent(null);
@@ -29,9 +119,10 @@ function StudentPlay({ student, setStudent, navigate }) {
             <p>This is the student view page.</p>
             <div>
                 <h2>My Details:</h2>
-                <p>ID: {student.id}</p>
-                <p>Name: {student.name}</p>
-                <p>Score: {student.score}</p>
+                <div>ID: {student.id}</div>
+                <div>Name: {student.name}</div>
+                <div>Score: {student.score}</div>
+                <br />
                 {student.score !== 1000 && (
                     <button onClick={updateScore}>Update Score</button>
                 )}
@@ -39,6 +130,11 @@ function StudentPlay({ student, setStudent, navigate }) {
                     <p>Score Updated</p>
                 )}
                 <button onClick={handleReset}>Reset</button>
+                <br /> <br />
+                <PlayWordSelector answerCombos={answerCombos} handleComboChange={handleComboChange} addNewWord={addNewWord} />
+                <button onClick={handleAnswerSubmit}>Submit Answers</button>
+                <br /> <br />
+                <button onClick={() => handleTestModelClick([selectedModel])}>{testResults || "Test Results"}</button>
             </div>
         </div>
     );
