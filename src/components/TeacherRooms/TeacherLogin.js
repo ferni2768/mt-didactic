@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-function TeacherLogin({ setIsAuthenticated, navigate, classCode, setClassCode }) {
-    const [password, setPassword] = useState('');
+function TeacherLogin({ navigate, classCode }) {
+    const [password, setPassword] = useState('password');
+    const [inputClassCode, setInputClassCode] = useState(classCode);
 
-    const handleSubmit = async (event) => {
+    useEffect(() => {
+        setInputClassCode(classCode);
+    }, [classCode]);
+
+    const handleCreateClass = async (event) => {
         event.preventDefault();
         try {
             const response = await fetch('http://localhost:3001/teacher/authenticate', {
@@ -15,9 +20,8 @@ function TeacherLogin({ setIsAuthenticated, navigate, classCode, setClassCode })
             });
 
             if (response.ok) {
-                setIsAuthenticated(true);
-                // Store the class code in local storage
-                sessionStorage.setItem('loggedInClassCode', classCode);
+                sessionStorage.setItem('isAuthenticated', true);
+                sessionStorage.setItem('createdClassCode', classCode);
                 navigate(`/teacher/${classCode}`);
             } else {
                 const errorData = await response.json();
@@ -32,13 +36,13 @@ function TeacherLogin({ setIsAuthenticated, navigate, classCode, setClassCode })
     return (
         <div>
             <h1>Teacher Login</h1>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleCreateClass}>
                 <label>
                     Class Code:
                     <input
                         type="text"
-                        value={classCode}
-                        onChange={(e) => setClassCode(e.target.value)}
+                        value={inputClassCode}
+                        onChange={(e) => setInputClassCode(e.target.value)}
                     />
                 </label>
                 <br />

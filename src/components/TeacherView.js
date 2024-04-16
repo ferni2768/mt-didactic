@@ -1,32 +1,40 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import TeacherLogin from './TeacherRooms/TeacherLogin';
 import TeacherWaitRoom from './TeacherRooms/TeacherWaitRoom';
+import TeacherResults from './TeacherRooms/TeacherResults';
 
 function TeacherView() {
     const { classCode: urlClassCode } = useParams();
     const navigate = useNavigate();
-    const [classCode, setClassCode] = useState('');
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
-        const loggedInClassCode = sessionStorage.getItem('loggedInClassCode');
-        if (loggedInClassCode) {
-            setClassCode(loggedInClassCode);
-            setIsAuthenticated(true);
-            navigate(`/teacher/${loggedInClassCode}`);
+        const createdClassCode = sessionStorage.getItem('createdClassCode');
+        const isAuthenticated = sessionStorage.getItem('isAuthenticated');
+        const isFinished = sessionStorage.getItem('isFinished');
+
+        if (createdClassCode && createdClassCode !== urlClassCode) {
+            navigate(`/teacher/${createdClassCode}`); // Redirect to the correct class code
         }
 
-        if (urlClassCode) {
-            setClassCode(urlClassCode);
+        if (createdClassCode && createdClassCode && isFinished) {
+            navigate(`/teacher/${createdClassCode}/results`);
+        } else if (createdClassCode && isAuthenticated) {
+            sessionStorage.setItem('createdClassCode', createdClassCode);
+            navigate(`/teacher/${createdClassCode}`);
         }
+
     }, [urlClassCode, navigate]);
 
-    if (!isAuthenticated) {
-        return <TeacherLogin setIsAuthenticated={setIsAuthenticated} navigate={navigate} classCode={classCode} setClassCode={setClassCode} />;
+    if (!sessionStorage.getItem('isAuthenticated')) {
+        return <TeacherLogin navigate={navigate} classCode={urlClassCode} />;
     }
 
-    return <TeacherWaitRoom classCode={classCode} setIsAuthenticated={setIsAuthenticated} navigate={navigate} />;
+    if (sessionStorage.getItem('isAuthenticated') && !sessionStorage.getItem('isFinished')) {
+        return <TeacherWaitRoom navigate={navigate} classCode={urlClassCode} />;
+    }
+
+    return <TeacherResults navigate={navigate} classCode={urlClassCode} />;
 }
 
 export default TeacherView;

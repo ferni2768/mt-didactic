@@ -15,7 +15,8 @@ function App() {
                 <Link to="/student/ABC123">Student View</Link>
               </li>
               <li>
-                <Link to="/teacher">Teacher View</Link>
+                {/* Set classCode to speed up development */}
+                <Link to="/teacher/ABC123">Teacher View</Link>
               </li>
             </ul>
           </nav>
@@ -27,6 +28,7 @@ function App() {
           <Route path="/student/:classCode/results" element={<StudentView />} />
           <Route path="/teacher" element={<TeacherView />} />
           <Route path="/teacher/:classCode" element={<TeacherView />} />
+          <Route path="/teacher/:classCode/results" element={<TeacherView />} />
         </Routes>
       </div>
     </Router>

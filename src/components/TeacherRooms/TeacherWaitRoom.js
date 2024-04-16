@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function TeacherWaitRoom({ classCode, setIsAuthenticated, navigate }) {
+function TeacherWaitRoom({ navigate, classCode }) {
     const [students, setStudents] = useState([]);
 
     useEffect(() => {
@@ -21,9 +21,17 @@ function TeacherWaitRoom({ classCode, setIsAuthenticated, navigate }) {
     }, []);
 
     const handleLogout = () => {
-        sessionStorage.removeItem('loggedInClassCode');
-        navigate('/teacher');
-        window.location.reload();
+        // Reset the session
+        sessionStorage.removeItem('createdClassCode');
+        sessionStorage.removeItem('isAuthenticated');
+        sessionStorage.removeItem('isFinished');
+        navigate('/teacher/ABC123');
+        window.location.reload(); // Reload the page to reset the state
+    };
+
+    const seeResults = () => {
+        sessionStorage.setItem('isFinished', true);
+        navigate(`/teacher/${classCode}/results`);
     };
 
     return (
@@ -34,13 +42,13 @@ function TeacherWaitRoom({ classCode, setIsAuthenticated, navigate }) {
             <ul>
                 {students.map(student => (
                     <li key={student.id}>
-                        ID: {student.ID} ||
-                        name: {student.name} ||
-                        score: {student.score}
+                        ID: {student.id} ||
+                        name: {student.name}
                     </li>
                 ))}
             </ul>
-            <button onClick={handleLogout}>Logout</button>
+            <button onClick={handleLogout}>Reset</button>
+            <button onClick={seeResults}>See Results</button>
         </div>
     );
 }
