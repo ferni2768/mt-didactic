@@ -10,7 +10,7 @@ function TeacherView() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
-        const loggedInClassCode = localStorage.getItem('loggedInClassCode');
+        const loggedInClassCode = sessionStorage.getItem('loggedInClassCode');
         if (loggedInClassCode) {
             setClassCode(loggedInClassCode);
             setIsAuthenticated(true);

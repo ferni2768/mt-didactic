@@ -17,7 +17,7 @@ function TeacherLogin({ setIsAuthenticated, navigate, classCode, setClassCode })
             if (response.ok) {
                 setIsAuthenticated(true);
                 // Store the class code in local storage
-                localStorage.setItem('loggedInClassCode', classCode);
+                sessionStorage.setItem('loggedInClassCode', classCode);
                 navigate(`/teacher/${classCode}`);
             } else {
                 const errorData = await response.json();

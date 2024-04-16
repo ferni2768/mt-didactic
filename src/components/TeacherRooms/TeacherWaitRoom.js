@@ -21,7 +21,7 @@ function TeacherWaitRoom({ classCode, setIsAuthenticated, navigate }) {
     }, []);
 
     const handleLogout = () => {
-        localStorage.removeItem('loggedInClassCode');
+        sessionStorage.removeItem('loggedInClassCode');
         navigate('/teacher');
         window.location.reload();
     };

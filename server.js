@@ -87,7 +87,7 @@ app.get('/class/:code/exists', (req, res) => {
         } else {
             if (result.length === 1) {
                 // For simplicity, return a dummy student object
-                res.json({ id: 1, name: 'student1', score: -1 });
+                res.json({ id: 1, name: 'student1' });
             } else {
                 res.status(404).json({ error: 'Class code does not exist' });
             }

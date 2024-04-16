@@ -1,27 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PlayWordSelector from './playComponents/playWordSelector';
 const defaultAnswersObj = require('./dev/defaultAnswers');
 
-function StudentPlay({ student, setStudent, navigate }) {
-
+function StudentPlay({ navigate, classCode }) {
+    const [student, setStudent] = useState({});
     const [answerCombos, setAnswerCombos] = useState([{ word: '', label: '' }]);
-    const [selectedModel, setSelectedModel] = useState('modelo2'); // Default model for development
+    const [selectedModel] = useState('modelo4'); // Default model for development
     const [testResults, setTestResults] = useState();
 
     // If true, it submits the default answers object
     const dev = true;
 
+    useEffect(() => {
+        // Get the data from sessionStorage
+        const loggedInStudent = JSON.parse(sessionStorage.getItem('loggedInStudent'));
+        setStudent(loggedInStudent);
+    }, []);
 
     const updateScore = async () => {
+        const defaultScore = 1000; // Default score
         try {
             await fetch(`http://localhost:3001/student/${student.id}/updateScore`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ score: 1000 })
+                body: JSON.stringify({ score: defaultScore }) // Default score to database
             });
-            setStudent(prevStudent => ({ ...prevStudent, score: 1000 }));
+            sessionStorage.setItem('loggedInScore', defaultScore); // Default score to this keep in the session
+            navigate(`/student/${classCode}/results`);
         } catch (error) {
             console.error('Error updating score:', error);
         }
@@ -74,6 +81,8 @@ function StudentPlay({ student, setStudent, navigate }) {
             console.error('Error:', error);
         }
     };
+
+
     const handleTestModelClick = async (selectedModelNames) => {
         try {
             const response = await fetch('http://127.0.0.1:5000/models/test', {
@@ -107,9 +116,11 @@ function StudentPlay({ student, setStudent, navigate }) {
 
 
     const handleReset = () => {
-        localStorage.removeItem('loggedInStudentClassCode');
-        setStudent(null);
-        navigate('/student');
+        // Reset the session
+        sessionStorage.removeItem('loggedInClassCode');
+        sessionStorage.removeItem('loggedInStudent');
+        sessionStorage.removeItem('loggedInScore');
+        navigate('/student/ABC123');
         window.location.reload(); // Reload the page to reset the state
     };
 
@@ -132,7 +143,7 @@ function StudentPlay({ student, setStudent, navigate }) {
                 <button onClick={handleReset}>Reset</button>
                 <br /> <br />
                 <PlayWordSelector answerCombos={answerCombos} handleComboChange={handleComboChange} addNewWord={addNewWord} />
-                <button onClick={handleAnswerSubmit}>Submit Answers</button>
+                <button onClick={handleAnswerSubmit}>Submit Answers</button> *Submitting a predefined set of answers
                 <br /> <br />
                 <button onClick={() => handleTestModelClick([selectedModel])}>{testResults || "Test Results"}</button>
             </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function StudentJoin({ setStudent, navigate, classCode }) {
+function StudentJoin({ navigate, classCode }) {
     const [name, setName] = useState('student1');
     const [inputClassCode, setInputClassCode] = useState(classCode);
 
@@ -14,8 +14,8 @@ function StudentJoin({ setStudent, navigate, classCode }) {
             const response = await fetch(`http://localhost:3001/class/${inputClassCode}/exists`);
             if (response.ok) {
                 const data = await response.json();
-                setStudent(data);
-                localStorage.setItem('loggedInStudentClassCode', inputClassCode);
+                sessionStorage.setItem('loggedInStudent', JSON.stringify(data)); // Store the student data in sessionStorage
+                sessionStorage.setItem('loggedInClassCode', inputClassCode);
                 navigate(`/student/${inputClassCode}`);
             } else {
                 alert('Class code does not exist');
