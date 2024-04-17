@@ -130,12 +130,7 @@ function StudentPlay({ navigate, classCode }) {
                 <div>ID: {student.id}</div>
                 <div>Name: {student.name}</div>
                 <div>Score: 0</div>
-
-                <br /> <br />
-
-                <PlayWordSelector setAnswerCombos={setAnswerCombos} setTrain={setTrain} />
-
-                <br /> <br /> <br />
+                <br />
                 {student.score !== 1000 && (
                     <button onClick={updateScore}>Update Score</button>
                 )}
@@ -143,13 +138,9 @@ function StudentPlay({ navigate, classCode }) {
                     <p>Score Updated</p>
                 )}
                 <button onClick={handleReset}>Reset</button>
-                <br /> <br />
-                //////////////////////////////////////////////////  <br />
-                /////                                               <br />
-                /////   PlayWordSelector Component                  <br />
-                /////                                               <br />
-                //////////////////////////////////////////////////  <br />
-                <br /> <br />
+                <br /> <br /> <br />
+                <PlayWordSelector setAnswerCombos={setAnswerCombos} setTrain={setTrain} />
+                <br /> <br /> <br />
                 <button onClick={handleAnswerSubmit}>Submit Answers</button> *Submitting a predefined set of answers
                 <br /> <br />
                 <button onClick={() => handleTestModelClick([selectedModel])}>{testResults || "Test Results"}</button>
