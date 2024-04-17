@@ -1,50 +1,60 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { loadData } from './database/dataFetcher'; // To fetch the data from the csv files
+import diphthongsData from './database/diptongos.csv';
+import hiatusesData from './database/hiatos.csv';
+import generalsData from './database/general.csv';
 
-function PlayWordSelector({ answerCombos, handleComboChange, addNewWord }) {
-    const renderCheckbox = (index, label) => (
-        <label htmlFor={`checkbox${label}_${index}`} key={`checkbox_${label}_${index}`}>
-            <input
-                id={`checkbox${label}_${index}`}
-                type="checkbox"
-                className={`custom-checkbox custom-checkbox-${label.toLowerCase()}`}
-                value={label}
-                checked={answerCombos[index].label === label}
-                onChange={() => handleComboChange(index, 'label', label)}
-            />
-            {label}
-        </label>
-    );
+function PlayWordSelector({ setAnswerCombos, setTrain }) {
+    const [diphthongs, setDiphthongs] = useState([]);
+    const [hiatuses, setHiatuses] = useState([]);
+    const [generals, setGenerals] = useState([]);
+    const [selectedElements, setSelectedElements] = useState([]);
+
+    useEffect(() => {
+        const loadDataAndSetState = async () => {
+            try {
+                // Load the words from the csv files as tuples in the form of [word, label]
+                const diphthongsTuples = await loadData(diphthongsData, 'd');
+                const hiatusesTuples = await loadData(hiatusesData, 'h');
+                const generalsTuples = await loadData(generalsData, 'g');
+
+                setDiphthongs(diphthongsTuples);
+                setHiatuses(hiatusesTuples);
+                setGenerals(generalsTuples);
+
+                // Combine and shuffle the arrays
+                const combinedArray = [...diphthongsTuples, ...hiatusesTuples, ...generalsTuples];
+                const shuffledArray = shuffleArray(combinedArray);
+
+                // Select the first 10 elements
+                const selected = shuffledArray.slice(0, 10);
+                setSelectedElements(selected);
+            } catch (error) {
+                console.error("Error loading data:", error);
+            }
+        };
+
+        loadDataAndSetState();
+    }, []);
+
+    // Function to shuffle an array
+    const shuffleArray = (array) => {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    };
+
 
     return (
-        <div className="word-combos-container">
-            {answerCombos.map((combo, index) => (
-                <div className="word-input blurred-input" key={`wordCombo_${index}`}>
-                    <label className="word-input-label" htmlFor={`wordInput_${index}`}></label>
-                    <input
-                        id={`wordInput_${index}`}
-                        className="blurred-input"
-                        type="text"
-                        value={combo.word}
-                        onChange={(event) => handleComboChange(index, 'word', event.target.value)}
-                        placeholder="Palabra"
-                    />
-                    {['D', 'H', 'N'].map(label => renderCheckbox(index, label))}
-                </div>
+        <div>
+            {/* Display the selected elements */}
+            {selectedElements.map((element, index) => (
+                <div key={index}>{element[0]} - {element[1]}</div>
             ))}
-            <button onClick={addNewWord}>+ Add Word</button>
         </div>
     );
 }
-
-PlayWordSelector.propTypes = {
-    answerCombos: PropTypes.arrayOf(
-        PropTypes.shape({
-            word: PropTypes.string.isRequired,
-            label: PropTypes.string.isRequired,
-        })
-    ).isRequired,
-    handleComboChange: PropTypes.func.isRequired,
-};
 
 export default PlayWordSelector;

@@ -5,6 +5,7 @@ const defaultAnswersObj = require('./dev/defaultAnswers');
 function StudentPlay({ navigate, classCode }) {
     const [student, setStudent] = useState({});
     const [answerCombos, setAnswerCombos] = useState([{ word: '', label: '' }]);
+    const [train, setTrain] = useState(false);
     const [selectedModel] = useState('modelo4'); // Default model for development
     const [testResults, setTestResults] = useState();
 
@@ -44,10 +45,6 @@ function StudentPlay({ navigate, classCode }) {
             }
             return updatedCombos;
         });
-    };
-
-    const addNewWord = () => {
-        setAnswerCombos((prevCombos) => [...prevCombos, { word: '', label: '' }]);
     };
 
     const handleAnswerSubmit = async () => {
@@ -132,8 +129,13 @@ function StudentPlay({ navigate, classCode }) {
                 <h2>My Details:</h2>
                 <div>ID: {student.id}</div>
                 <div>Name: {student.name}</div>
-                <div>Score: {student.score}</div>
-                <br />
+                <div>Score: 0</div>
+
+                <br /> <br />
+
+                <PlayWordSelector setAnswerCombos={setAnswerCombos} setTrain={setTrain} />
+
+                <br /> <br /> <br />
                 {student.score !== 1000 && (
                     <button onClick={updateScore}>Update Score</button>
                 )}
@@ -142,7 +144,12 @@ function StudentPlay({ navigate, classCode }) {
                 )}
                 <button onClick={handleReset}>Reset</button>
                 <br /> <br />
-                <PlayWordSelector answerCombos={answerCombos} handleComboChange={handleComboChange} addNewWord={addNewWord} />
+                //////////////////////////////////////////////////  <br />
+                /////                                               <br />
+                /////   PlayWordSelector Component                  <br />
+                /////                                               <br />
+                //////////////////////////////////////////////////  <br />
+                <br /> <br />
                 <button onClick={handleAnswerSubmit}>Submit Answers</button> *Submitting a predefined set of answers
                 <br /> <br />
                 <button onClick={() => handleTestModelClick([selectedModel])}>{testResults || "Test Results"}</button>
