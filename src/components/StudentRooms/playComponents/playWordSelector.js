@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import useDataFetcher from './database/dataFetcher'; // To fetch the data from the csv files
 
-function PlayWordSelector({ updateScore }) {
+function PlayWordSelector({ updateScore, setProgress }) {
     const [currentWordIndex, setCurrentWordIndex] = useState(0); // To keep track of the current word index
     const [selectedModel] = useState('model1'); // Default model for development
     const [iteration, setIteration] = useState(0); // To keep track of the training iterations
@@ -29,6 +29,7 @@ function PlayWordSelector({ updateScore }) {
             setCurrentWordIndex(0);
             setNewWords(false);
             setIteration(iteration + 1);
+            setProgress((iteration + 1) * 20); // Update the student's progress by 20% for each iteration
         }
     }, [selectedElements, trainingData]);
 

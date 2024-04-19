@@ -111,6 +111,21 @@ app.put('/student/:id/updateScore', (req, res) => {
     });
 });
 
+// API endpoint to update a student's progress
+app.put('/student/:id/setProgress', (req, res) => {
+    const studentId = req.params.id;
+    const progress = req.body.progress;
+
+    const query = 'UPDATE student SET progress = ? WHERE id = ?';
+    db.query(query, [progress, studentId], (err, result) => {
+        if (err) {
+            console.error('Error updating student progress:', err);
+            res.status(500).json({ error: 'Internal server error' });
+        } else {
+            res.status(200).json({ message: 'Progress updated successfully' });
+        }
+    });
+});
 
 // Close MySQL connection when Node.js process exits
 process.on('SIGINT', () => {

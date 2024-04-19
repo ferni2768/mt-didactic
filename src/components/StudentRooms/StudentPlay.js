@@ -30,6 +30,22 @@ function StudentPlay({ navigate, classCode }) {
         }
     };
 
+    const setProgress = async (progress) => {
+        try {
+            await fetch(`http://localhost:3001/student/${student.id}/setProgress`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ progress: progress }) // Updated progress to database
+            });
+
+
+        } catch (error) {
+            console.error('Error updating progress:', error);
+        }
+    };
+
     const handleReset = () => {
         // Reset the session
         sessionStorage.removeItem('loggedInClassCode');
@@ -58,7 +74,7 @@ function StudentPlay({ navigate, classCode }) {
                 )}
                 <button onClick={handleReset}>Reset</button>
                 <br /> <br />
-                <PlayWordSelector updateScore={updateScore} />
+                <PlayWordSelector updateScore={updateScore} setProgress={setProgress} />
             </div>
         </div>
     );

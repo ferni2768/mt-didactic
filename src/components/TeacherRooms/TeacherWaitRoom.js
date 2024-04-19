@@ -43,7 +43,8 @@ function TeacherWaitRoom({ navigate, classCode }) {
                 {students.map(student => (
                     <li key={student.id}>
                         ID: {student.id} ||
-                        name: {student.name}
+                        name: {student.name} ||
+                        progress: {student.progress}%
                     </li>
                 ))}
             </ul>
