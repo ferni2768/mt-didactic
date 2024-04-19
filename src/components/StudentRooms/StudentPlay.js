@@ -3,17 +3,39 @@ import PlayWordSelector from './playComponents/playWordSelector';
 
 function StudentPlay({ navigate, classCode }) {
     const [student, setStudent] = useState({});
-
+    const [classPhase, setClassPhase] = useState(null); // State to track the class phase
 
     useEffect(() => {
         // Get the data from sessionStorage
         const loggedInStudent = JSON.parse(sessionStorage.getItem('loggedInStudent'));
         setStudent(loggedInStudent);
-    }, []);
 
+        const checkClassPhase = async () => {
+            try {
+                const response = await fetch(`http://localhost:3001/class/${classCode}/phase`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setClassPhase(data.phase);
+                } else {
+                    console.error('Error fetching class phase:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
+        // Initial check
+        checkClassPhase();
+
+        // Set up an interval to check the class phase every second
+        const intervalId = setInterval(checkClassPhase, 1000);
+
+        // Cleanup function to clear the interval when the component unmounts
+        return () => clearInterval(intervalId);
+    }, [classCode]);
 
     const updateScore = async (score) => {
-        // Multiply the percetage score by 100 to get the actual score
+        // Multiply the percentage score by 100 to get the actual score
         const updatedScore = score * 100;
         try {
             await fetch(`http://localhost:3001/student/${student.id}/updateScore`, {
@@ -39,8 +61,6 @@ function StudentPlay({ navigate, classCode }) {
                 },
                 body: JSON.stringify({ progress: progress }) // Updated progress to database
             });
-
-
         } catch (error) {
             console.error('Error updating progress:', error);
         }
@@ -55,6 +75,9 @@ function StudentPlay({ navigate, classCode }) {
         window.location.reload(); // Reload the page to reset the state
     };
 
+    if (classPhase === 2) {
+        return <div>The class already finished</div>;
+    }
 
     return (
         <div>
@@ -66,12 +89,6 @@ function StudentPlay({ navigate, classCode }) {
                 <div>Name: {student.name}</div>
                 <div>Score: 0</div>
                 <br />
-                {student.score !== 1000 && (
-                    <button onClick={updateScore}>Update Score</button>
-                )}
-                {student.score === 1000 && (
-                    <p>Score Updated</p>
-                )}
                 <button onClick={handleReset}>Reset</button>
                 <br /> <br />
                 <PlayWordSelector updateScore={updateScore} setProgress={setProgress} />

@@ -45,6 +45,24 @@ app.post('/teacher/authenticate', (req, res) => {
     });
 });
 
+// API endpoint to check the class phase
+app.get('/class/:code/phase', (req, res) => {
+    const classCode = req.params.code;
+    const query = 'SELECT phase FROM class WHERE code = ?';
+    db.query(query, [classCode], (err, result) => {
+        if (err) {
+            console.error('Error checking class phase:', err);
+            res.status(500).json({ error: 'Internal server error' });
+        } else {
+            if (result.length === 1) {
+                res.json({ phase: result[0].phase });
+            } else {
+                res.status(404).json({ error: 'Class code does not exist' });
+            }
+        }
+    });
+});
+
 // API endpoint to fetch list of students
 app.get('/student', (req, res) => {
     const query = 'SELECT * FROM student';
@@ -91,6 +109,22 @@ app.get('/class/:code/exists', (req, res) => {
             } else {
                 res.status(404).json({ error: 'Class code does not exist' });
             }
+        }
+    });
+});
+
+// API endpoint to set the class phase
+app.put('/class/:code/setPhase', (req, res) => {
+    const classCode = req.params.code;
+    const phase = req.body.phase;
+
+    const query = 'UPDATE class SET phase = ? WHERE code = ?';
+    db.query(query, [phase, classCode], (err, result) => {
+        if (err) {
+            console.error('Error setting class phase:', err);
+            res.status(500).json({ error: 'Internal server error' });
+        } else {
+            res.status(200).json({ message: 'Phase updated successfully' });
         }
     });
 });

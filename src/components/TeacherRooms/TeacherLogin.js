@@ -4,6 +4,7 @@ function TeacherLogin({ navigate, classCode }) {
     const [password, setPassword] = useState('password');
     const [inputClassCode, setInputClassCode] = useState(classCode);
 
+
     useEffect(() => {
         setInputClassCode(classCode);
     }, [classCode]);
@@ -11,18 +12,32 @@ function TeacherLogin({ navigate, classCode }) {
     const handleCreateClass = async (event) => {
         event.preventDefault();
         try {
-            const response = await fetch('http://localhost:3001/teacher/authenticate', {
+            const response = await fetch('http://localhost:3001/teacher/authenticate', { // Teacher authenticates
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ code: classCode, password }),
+                body: JSON.stringify({ code: inputClassCode, password }),
             });
 
             if (response.ok) {
                 sessionStorage.setItem('isAuthenticated', true);
-                sessionStorage.setItem('createdClassCode', classCode);
-                navigate(`/teacher/${classCode}`);
+                sessionStorage.setItem('createdClassCode', inputClassCode);
+                navigate(`/teacher/${inputClassCode}`);
+
+                // After successful login, set the class phase to 1
+                const phaseResponse = await fetch(`http://localhost:3001/class/${inputClassCode}/setPhase`, { // Set the class phase to 1
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ phase: 1 }),
+                });
+
+                if (!phaseResponse.ok) {
+                    console.error('Error setting class phase:', phaseResponse.statusText);
+                    alert('Error occurred while setting class phase');
+                }
             } else {
                 const errorData = await response.json();
                 alert(errorData.error || 'Invalid class code or password');
@@ -32,6 +47,7 @@ function TeacherLogin({ navigate, classCode }) {
             alert('Error occurred while logging in');
         }
     };
+
 
     return (
         <div>

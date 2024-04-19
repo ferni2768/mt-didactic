@@ -29,16 +29,41 @@ function TeacherWaitRoom({ navigate, classCode }) {
         window.location.reload(); // Reload the page to reset the state
     };
 
-    const seeResults = () => {
-        sessionStorage.setItem('isFinished', true);
-        navigate(`/teacher/${classCode}/results`);
+    const seeResults = async () => {
+        try {
+            // Set the class phase to 2
+            const response = await fetch(`http://localhost:3001/class/${classCode}/setPhase`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ phase: 2 }),
+            });
+
+            if (response.ok) {
+                sessionStorage.setItem('isFinished', true);
+                navigate(`/teacher/${classCode}/results`);
+            } else {
+                console.error('Error setting class phase:', response.statusText);
+                alert('Error occurred while setting class phase');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error occurred while setting class phase');
+        }
     };
+
+    // Calculate the number of students with progress of 100%
+    const completedStudents = students.filter(student => student.progress === 100).length;
+    const totalStudents = students.length;
+
 
     return (
         <div>
             <h1>Teacher View</h1>
             <p>This is the teacher view page.</p>
             <h2>List of Students:</h2>
+            <p>{completedStudents}/{totalStudents} students have completed the class.</p>
             <ul>
                 {students.map(student => (
                     <li key={student.id}>
