@@ -31,7 +31,7 @@ function PlayWordSelector({ updateScore, setProgress }) {
             setIteration(iteration + 1);
             setProgress((iteration + 1) * 20); // Update the student's progress by 20% for each iteration
         }
-    }, [selectedElements, trainingData]);
+    }, [selectedElements, trainingData, iteration, newWords, processTrainingData, setProgress]);
 
 
     const handleAnswerSubmit = async (newAnswer) => {

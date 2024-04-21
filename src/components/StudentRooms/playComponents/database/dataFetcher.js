@@ -36,7 +36,7 @@ function useDataFetcher() {
         };
 
         loadDataAndSetState(); // Load the files
-    }, []);
+    });
 
 
     // Function that processes the training data and returns a shuffled array of 10 recommended words

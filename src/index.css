@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input[type="text"]:focus~.input-text,
+input[type="text"]:not(:placeholder-shown)~.input-text,
+input[type="password"]:focus~.input-text,
+input[type="password"]:not(:placeholder-shown)~.input-text {
+    @apply text-accent transform -translate-y-7 -translate-x-3 scale-75;
+}

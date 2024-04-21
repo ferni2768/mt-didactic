@@ -1,0 +1,92 @@
+.background {
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    height: 100%;
+    overflow: auto;
+    position: relative;
+    background-image: radial-gradient(circle at bottom, #ff0081, #ff3102);
+}
+
+.parent-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: center;
+}
+
+.form-container {
+    position: relative;
+}
+
+.custom-input {
+    background-color: white;
+}
+
+.inside-card {
+    width: 100%;
+    border-radius: 2rem;
+    background-color: white;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
+}
+
+.inside-card h1 {
+    font-size: 2.5rem;
+    font-weight: 500;
+    color: rgb(28, 28, 28);
+    text-align: center;
+}
+
+.animated-button {
+    border-radius: 1rem;
+    width: 100%;
+    background-color: rgb(28, 28, 28);
+
+    overflow: hidden;
+    position: relative;
+
+    :hover {
+        cursor: pointer;
+    }
+}
+
+.animated-button-bg {
+    height: 128px;
+    width: 128px;
+    background-color: #19bd24;
+
+    z-index: 1;
+    position: absolute;
+    top: -75px;
+    right: -75px;
+
+    border-radius: 50%;
+
+    -webkit-transition: all .5s ease;
+    -o-transition: all .5s ease;
+    transition: all .5s ease;
+}
+
+.animated-button:hover .animated-button-bg {
+    -webkit-transform: scale(10);
+    -ms-transform: scale(10);
+    transform: scale(10);
+}
+
+.animated-button-text {
+    overflow: hidden;
+
+    font-weight: bold;
+    color: #FFF;
+
+    z-index: 2;
+    position: relative;
+}
