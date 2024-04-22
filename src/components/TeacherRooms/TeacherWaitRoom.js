@@ -1,9 +1,33 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { TransitionContext } from '../../visualComponents/TransitionContext';
+import Scrollbar from 'smooth-scrollbar';
+import OverscrollPlugin, { OverscrollEffect } from 'smooth-scrollbar/plugins/overscroll';
 
 function TeacherWaitRoom({ navigate, classCode }) {
     const [students, setStudents] = useState([]);
     const { isTransitioning } = useContext(TransitionContext);
+    const scrollbarRef = useRef(null);
+
+    Scrollbar.use(OverscrollPlugin);
+
+
+    useEffect(() => {
+        if (scrollbarRef.current) {
+            const scrollbar = Scrollbar.init(scrollbarRef.current, {
+                damping: 0.1,
+                plugins: {
+                    overscroll: {
+                        enabled: true,
+                        maxOverscroll: 50,
+                        effect: 'bounce',
+                        damping: 0.1
+                    }
+                }
+            });
+            return () => scrollbar.destroy();
+        }
+    }, []);
+
 
     useEffect(() => {
         const fetchStudents = async () => {
@@ -62,26 +86,52 @@ function TeacherWaitRoom({ navigate, classCode }) {
 
     return (
         <div>
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-                <div className="col-span-full md:col-span-1 lg:col-span-3">
-                    <div className={`inside-card ${isTransitioning ? 'entering' : ''}`}>
-                        <div>
-                            <h1>List of Students:</h1>
-                            <p>{completedStudents}/{totalStudents} students have completed the class</p>
+            <div className={`inside-card ${isTransitioning ? 'entering' : ''}`}>
+                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:h-80 gap-4'>
+
+                    <div className="col-span-full md:col-span-full lg:col-span-1">
+                        <h1>List of Students</h1>
+                        <p> {completedStudents}/{totalStudents} students finished</p>
+
+                        <button onClick={seeResults} className="animated-button p-2 text-center mt-4 align-bottom">
+                            <div className="animated-button-bg"></div>
+                            <div className="animated-button-text">
+                                See results
+                            </div>
+                        </button>
+                    </div>
+
+                    <div className="col-span-full md:col-span-full lg:col-span-2 lg:pl-7">
+                        <div className="inside-card-2 p-6" ref={scrollbarRef}>
                             <ul>
-                                {students.map(student => (
-                                    <li key={student.id}>
-                                        ID: {student.id} ||
-                                        name: {student.name} ||
-                                        progress: {student.progress}%
+                                {students.slice(0, 99).map(student => (
+                                    <li key={student.id} className="student-item">
+
+                                        <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 lg:gap-4 md:gap-4 gap-0.5'>
+                                            <div className="col-span-full md:col-span-1 lg:col-span-1">
+                                                <span>
+                                                    {student.name.length > 16 ? student.name.substring(0, 16) + "..." : student.name}
+                                                </span>
+                                            </div>
+
+                                            <div className="col-span-full md:col-span-2 lg:col-span-2 flex items-center justify-start md:justify-end lg:justify-end
+                                            pr-0 md:pr-3 lg:pr-3">
+                                                <div className="progress-bar-container h-3">
+                                                    <div className="progress-bar" style={{ width: `${student.progress}%` }}></div>
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </li>
                                 ))}
                             </ul>
-                            <br />
-                            <button onClick={handleLogout}>Reset</button>
-                            <button onClick={seeResults}>See Results</button>
                         </div>
                     </div>
+
+                    {/* <div>
+                        <button onClick={handleLogout}>Reset</button>
+                    </div> */}
+
                 </div>
             </div>
         </div >

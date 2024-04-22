@@ -26,11 +26,11 @@ function TeacherView() {
 
             const changeComponentTimeoutId = setTimeout(() => {
                 setRenderComponent(determineComponentToRender());
-            }, 650);
+            }, 450);
 
             const endTransitionTimeoutId = setTimeout(() => {
                 setIsTransitioning(false);
-            }, 1100); // End the transition
+            }, 900); // End the transition
 
             return () => {
                 clearTimeout(changeComponentTimeoutId);
