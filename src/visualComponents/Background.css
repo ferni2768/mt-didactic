@@ -5,7 +5,7 @@
     justify-content: center;
     flex-grow: 1;
     height: 100%;
-    overflow: auto;
+    overflow: hidden;
     position: relative;
     background-image: radial-gradient(circle at bottom, #ff0081, #ff3102);
 }
@@ -27,6 +27,8 @@
 
 .inside-card {
     width: 100%;
+    transform: translateX(0);
+    transition: transform 0.5s ease-in-out;
     border-radius: 2rem;
     background-color: white;
     padding: 2rem;
@@ -89,4 +91,47 @@
 
     z-index: 2;
     position: relative;
+}
+
+
+/* Go out of page */
+@keyframes Bounce {
+    0% {
+        transform: translateX(0vw);
+    }
+
+    70% {
+        transform: translateX(10vw);
+    }
+
+    100% {
+        transform: translateX(-100vw);
+    }
+
+    110% {
+        transform: translateX(100vw);
+    }
+}
+
+/* Come into page */
+@keyframes inverseBounce {
+    0% {
+        transform: translateX(130vw);
+    }
+
+    50% {
+        transform: translateX(-10vw);
+    }
+
+    100% {
+        transform: translateX(0vw);
+    }
+}
+
+.transitioning {
+    animation: Bounce 0.7s ease-in-out;
+}
+
+.entering {
+    animation: inverseBounce 0.45s ease-in-out;
 }

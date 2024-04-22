@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { TransitionContext } from '../../visualComponents/TransitionContext';
 
 function TeacherWaitRoom({ navigate, classCode }) {
     const [students, setStudents] = useState([]);
+    const { isTransitioning } = useContext(TransitionContext);
 
     useEffect(() => {
         const fetchStudents = async () => {
@@ -60,22 +62,29 @@ function TeacherWaitRoom({ navigate, classCode }) {
 
     return (
         <div>
-            <h1>Teacher View</h1>
-            <p>This is the teacher view page.</p>
-            <h2>List of Students:</h2>
-            <p>{completedStudents}/{totalStudents} students have completed the class.</p>
-            <ul>
-                {students.map(student => (
-                    <li key={student.id}>
-                        ID: {student.id} ||
-                        name: {student.name} ||
-                        progress: {student.progress}%
-                    </li>
-                ))}
-            </ul>
-            <button onClick={handleLogout}>Reset</button>
-            <button onClick={seeResults}>See Results</button>
-        </div>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+                <div className="col-span-full md:col-span-1 lg:col-span-3">
+                    <div className={`inside-card ${isTransitioning ? 'entering' : ''}`}>
+                        <div>
+                            <h1>List of Students:</h1>
+                            <p>{completedStudents}/{totalStudents} students have completed the class</p>
+                            <ul>
+                                {students.map(student => (
+                                    <li key={student.id}>
+                                        ID: {student.id} ||
+                                        name: {student.name} ||
+                                        progress: {student.progress}%
+                                    </li>
+                                ))}
+                            </ul>
+                            <br />
+                            <button onClick={handleLogout}>Reset</button>
+                            <button onClick={seeResults}>See Results</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div >
     );
 }
 
