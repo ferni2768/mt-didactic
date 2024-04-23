@@ -40,12 +40,107 @@
     justify-content: top;
     font-size: 1.5rem;
     box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
+    overflow: hidden;
 }
+
+.inside-card-podium {
+    width: 120%;
+    position: relative;
+    right: 10%;
+    padding-left: 10%;
+    padding-right: 10%;
+    border-radius: 1rem;
+    background-color: rgb(189, 189, 189);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    font-size: 1.5rem;
+}
+
+
+.top-bar-1 {
+    height: 100vh;
+    width: calc(100% + 2rem);
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: top;
+    font-size: 1.5rem;
+    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
+    border-radius: 1rem;
+    top: 4rem;
+    right: calc(100% + 2rem);
+    position: relative;
+    z-index: 20 !important;
+
+    transition: transform 0.05s ease-out;
+}
+
+.top-bar-1:hover,
+.top-bar-2:hover,
+.top-bar-3:hover {
+    transform: translateY(-0.5rem);
+}
+
+
+.top-bar-2 {
+    height: 100vh;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: top;
+    font-size: 1.3rem;
+    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
+    border-top-left-radius: 1rem;
+    position: relative;
+    z-index: 0 !important;
+    top: 5rem;
+
+    transition: transform 0.05s ease-out;
+}
+
+.top-bar-3 {
+    height: 100vh;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: top;
+    font-size: 1.2rem;
+    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
+    border-top-right-radius: 1rem;
+    position: relative;
+    top: 12rem;
+    left: calc(100% + 1rem);
+
+    transition: transform 0.05s ease-out;
+}
+
+
+
 
 .inside-card h1 {
     font-size: 2.5rem;
     font-weight: 500;
     color: rgb(28, 28, 28);
+}
+
+.inside-card h2 {
+    font-size: 7rem;
+    font-weight: 500;
+    opacity: 60%;
+    position: relative;
+    bottom: 2rem;
+}
+
+.inside-card h3 {
+    font-size: 4rem;
+    font-weight: 500;
+    opacity: 60%;
+    position: relative;
+    bottom: 2rem;
 }
 
 .inside-login-card {
@@ -71,6 +166,8 @@
 
 .inside-card-2 {
     width: 100%;
+    min-width: 16rem;
+    max-width: 35rem;
     height: 26rem;
     transform: translateX(0);
     transition: transform 0.5s ease-in-out;
@@ -79,7 +176,7 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     box-shadow: 0 0 2rem rgba(0, 0, 0, 0.25);
 }
 
@@ -176,12 +273,69 @@
     }
 }
 
+/* Come into results */
+@keyframes podium-1 {
+    0% {
+        transform: translateY(70vh);
+    }
+
+    60% {
+        transform: translateY(-5vh);
+    }
+
+    100% {
+        transform: translateY(0vh);
+    }
+}
+
+/* Come into results */
+@keyframes podium-2 {
+    0% {
+        transform: translateY(70vh);
+    }
+
+    50% {
+        transform: translateY(-5vh);
+    }
+
+    90% {
+        transform: translateY(0vh);
+    }
+}
+
+/* Come into results */
+@keyframes podium-3 {
+    0% {
+        transform: translateY(70vh);
+    }
+
+    40% {
+        transform: translateY(-5vh);
+    }
+
+    80% {
+        transform: translateY(0vh);
+    }
+}
+
 .transitioning {
     animation: Bounce 0.5s ease-in-out;
 }
 
 .entering {
     animation: inverseBounce 0.45s ease-in-out;
+}
+
+.podium-1 {
+    animation: podium-1 1.5s ease-in-out;
+}
+
+.podium-2 {
+    animation: podium-2 1.5s ease-in-out;
+}
+
+.podium-3 {
+    animation: podium-3 1.5s ease-in-out;
 }
 
 .student-item {
@@ -198,9 +352,37 @@
     overflow: hidden;
 }
 
+.progress-bar-container-dark {
+    width: 70%;
+    background-color: #dadada;
+    border-radius: 50px;
+    overflow: hidden;
+}
+
 .progress-bar {
     height: 100%;
     background-color: #19bd24;
+    border-radius: inherit;
+    transition: width 0.5s ease-in-out;
+}
+
+.progress-bar-gold {
+    height: 100%;
+    background-color: #c79f26;
+    border-radius: inherit;
+    transition: width 0.5s ease-in-out;
+}
+
+.progress-bar-silver {
+    height: 100%;
+    background-color: #969898;
+    border-radius: inherit;
+    transition: width 0.5s ease-in-out;
+}
+
+.progress-bar-bronce {
+    height: 100%;
+    background-color: #986032;
     border-radius: inherit;
     transition: width 0.5s ease-in-out;
 }

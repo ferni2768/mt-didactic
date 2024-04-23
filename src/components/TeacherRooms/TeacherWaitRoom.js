@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { TransitionContext } from '../../visualComponents/TransitionContext';
 import Scrollbar from 'smooth-scrollbar';
-import OverscrollPlugin, { OverscrollEffect } from 'smooth-scrollbar/plugins/overscroll';
+import OverscrollPlugin from 'smooth-scrollbar/plugins/overscroll';
 
 function TeacherWaitRoom({ navigate, classCode }) {
     const [students, setStudents] = useState([]);
-    const { isTransitioning } = useContext(TransitionContext);
+    const { isEntering, isTransitioning } = useContext(TransitionContext);
     const scrollbarRef = useRef(null);
 
     Scrollbar.use(OverscrollPlugin);
@@ -86,7 +86,7 @@ function TeacherWaitRoom({ navigate, classCode }) {
 
     return (
         <div>
-            <div className={`inside-card ${isTransitioning ? 'entering' : ''}`}>
+            <div className={`inside-card ${isTransitioning ? 'transitioning' : ''} ${isEntering ? 'entering' : ''}`}>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:h-80 gap-4'>
 
                     <div className="col-span-full md:col-span-full lg:col-span-1">
@@ -116,7 +116,7 @@ function TeacherWaitRoom({ navigate, classCode }) {
 
                                             <div className="col-span-full md:col-span-2 lg:col-span-2 flex items-center justify-start md:justify-end lg:justify-end
                                             pr-0 md:pr-3 lg:pr-3">
-                                                <div className="progress-bar-container h-3">
+                                                <div className="progress-bar-container h-2.5">
                                                     <div className="progress-bar" style={{ width: `${student.progress}%` }}></div>
                                                 </div>
                                             </div>

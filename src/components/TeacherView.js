@@ -9,11 +9,12 @@ import Background from '../visualComponents/Background';
 function TeacherView() {
     const { classCode: urlClassCode } = useParams();
     const { isTransitioning, setIsTransitioning } = useContext(TransitionContext);
+    const { isEntering, setIsEntering } = useContext(TransitionContext);
     const navigate = useNavigate();
     const location = useLocation();
     const [, setPrevLocation] = useState(location);
     const [renderComponent, setRenderComponent] = useState(null); // State to control rendering
-    const [hasMounted, setHasMounted] = useState(false);
+    const [hasMounted, setHasMounted] = useState(true);
 
 
     useEffect(() => {
@@ -25,11 +26,13 @@ function TeacherView() {
             setIsTransitioning(true); // Start the transition
 
             const changeComponentTimeoutId = setTimeout(() => {
+                setIsTransitioning(false);
+                setIsEntering(true);
                 setRenderComponent(determineComponentToRender());
             }, 450);
 
             const endTransitionTimeoutId = setTimeout(() => {
-                setIsTransitioning(false);
+                setIsEntering(false);
             }, 900); // End the transition
 
             return () => {
@@ -39,6 +42,7 @@ function TeacherView() {
         } else {
             // If the component is mounting for the first time, skip the transition
             setIsTransitioning(false);
+            setIsEntering(false);
             setRenderComponent(determineComponentToRender());
         }
     }, [location, setIsTransitioning]);
