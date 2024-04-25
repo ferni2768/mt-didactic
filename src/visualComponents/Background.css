@@ -57,7 +57,6 @@
     font-size: 1.5rem;
 }
 
-
 .top-bar-1 {
     height: 100vh;
     width: calc(100% + 2rem);
@@ -82,7 +81,6 @@
 .top-bar-3:hover {
     transform: translateY(-0.5rem);
 }
-
 
 .top-bar-2 {
     height: 100vh;
@@ -118,9 +116,6 @@
     transition: transform 0.05s ease-out;
 }
 
-
-
-
 .inside-card h1 {
     font-size: 2.5rem;
     font-weight: 500;
@@ -144,7 +139,7 @@
 }
 
 .inside-login-card {
-    width: 100%;
+    height: 100%;
     transform: translateX(0);
     transition: transform 0.5s ease-in-out;
     border-radius: 2rem;
@@ -156,6 +151,70 @@
     justify-content: top;
     font-size: 1.5rem;
     box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+}
+
+.shrink {
+    animation: smallTransition 0.8s ease-in-out forwards;
+    overflow: hidden;
+}
+
+/* Go to 'waiting' state */
+@keyframes smallTransition {
+    0% {
+        width: auto;
+        height: var(--initial-height);
+    }
+
+    60% {
+        height: calc(var(--initial-height) + 1rem);
+    }
+
+    90% {
+        height: 5.3rem;
+    }
+
+    100% {
+        height: 6rem;
+    }
+}
+
+@keyframes formAnimation {
+    0% {
+        transform: translateX(0);
+    }
+
+    15% {
+        transform: translateX(3vw);
+    }
+
+    100% {
+        transform: translateX(-100vw);
+        height: 1rem;
+        visibility: hidden;
+    }
+}
+
+.form-animated {
+    animation: formAnimation 0.5s ease-in-out forwards;
+}
+
+@keyframes formAnimation2 {
+    0% {
+        transform: translateX(100vw);
+    }
+
+    80% {
+        transform: translateX(-0vw);
+    }
+
+    100% {
+        transform: translateX(0vw);
+    }
+}
+
+.form-animated-2 {
+    animation: formAnimation2 0.5s ease-in-out forwards;
 }
 
 .inside-login-card h1 {
@@ -182,18 +241,56 @@
 
 .smooth-scrollbar-track {
     background: transparent;
-    /* Make the track transparent */
 }
 
 .smooth-scrollbar-thumb {
     background: #888;
-    /* Customize the thumb color */
     border-radius: 10px;
-    /* Optional: Add rounded corners to the thumb */
 }
 
 .animated-button {
     border-radius: 1rem;
+    width: 100%;
+    background-color: rgb(28, 28, 28);
+
+    overflow: hidden;
+    position: relative;
+
+    :hover {
+        cursor: pointer;
+    }
+}
+
+.animated-button-diphthong {
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    width: 100%;
+    background-color: rgb(28, 28, 28);
+
+    overflow: hidden;
+    position: relative;
+
+    :hover {
+        cursor: pointer;
+    }
+}
+
+.animated-button-hiatus {
+    border-radius: 0rem;
+    width: 100%;
+    background-color: rgb(28, 28, 28);
+
+    overflow: hidden;
+    position: relative;
+
+    :hover {
+        cursor: pointer;
+    }
+}
+
+.animated-button-general {
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
     width: 100%;
     background-color: rgb(28, 28, 28);
 
@@ -222,10 +319,69 @@
     transition: all .5s ease;
 }
 
+.animated-button-bg-diphthong {
+    height: 128px;
+    width: 128px;
+    background-color: #f5d105;
+
+    z-index: 1;
+    position: absolute;
+    top: 85%;
+    right: 13%;
+
+    border-radius: 50%;
+
+    -webkit-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
+.animated-button-bg-hiatus {
+    height: 128px;
+    width: 128px;
+    background-color: #127edd;
+
+    z-index: 1;
+    position: absolute;
+    top: 85%;
+    right: 13%;
+
+    border-radius: 50%;
+
+    -webkit-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
+.animated-button-bg-general {
+    height: 128px;
+    width: 128px;
+    background-color: #ee1212;
+
+    z-index: 1;
+    position: absolute;
+    top: 85%;
+    right: 13%;
+
+    border-radius: 50%;
+
+    -webkit-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
 .animated-button:hover .animated-button-bg {
     -webkit-transform: scale(12);
     -ms-transform: scale(12);
     transform: scale(12);
+}
+
+.animated-button-diphthong:hover .animated-button-bg-diphthong,
+.animated-button-hiatus:hover .animated-button-bg-hiatus,
+.animated-button-general:hover .animated-button-bg-general {
+    -webkit-transform: scale(7);
+    -ms-transform: scale(7);
+    transform: scale(7);
 }
 
 .animated-button-text {
@@ -237,7 +393,6 @@
     z-index: 2;
     position: relative;
 }
-
 
 /* Go out of page */
 @keyframes Bounce {
@@ -342,7 +497,6 @@
     width: 100%;
     align-items: center;
     padding: 5px 0;
-    /* Adjust padding as needed */
 }
 
 .progress-bar-container {
@@ -385,4 +539,127 @@
     background-color: #986032;
     border-radius: inherit;
     transition: width 0.5s ease-in-out;
+}
+
+.word-container {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+.word {
+    position: relative;
+    width: 100%;
+}
+
+.move-old.diphthong {
+    animation: word-old 0.3s ease-in-out;
+    --start-color: #eae794;
+    --end-color: #ddb412;
+}
+
+.move-old.hiatus {
+    animation: word-old 0.3s ease-in-out;
+    --start-color: #94c2ea;
+    --end-color: #127edd;
+}
+
+.move-old.general {
+    animation: word-old 0.3s ease-in-out;
+    --start-color: #ea9494;
+    --end-color: #dd1212;
+}
+
+@keyframes word-old {
+    0% {
+        transform: translateX(0vw);
+        color: var(--start-color);
+    }
+
+    60% {
+        transform: translateX(3vw);
+    }
+
+    100% {
+        transform: translateX(-50vw);
+        color: var(--end-color);
+    }
+
+    110% {
+        transform: translateX(-50vw);
+    }
+}
+
+.word.move-new {
+    animation: word-new 0.3s ease-in-out;
+}
+
+@keyframes word-new {
+    0% {
+        transform: translateX(50vw);
+    }
+
+    60% {
+        transform: translateX(-3vw);
+    }
+
+    100% {
+        transform: translateX(0vw);
+    }
+}
+
+.animated-word {
+    border-radius: 0.5rem;
+    width: 100%;
+    background-color: rgb(125, 125, 125);
+
+    overflow: hidden;
+    position: relative;
+}
+
+.animated-word-bg {
+    height: 128px;
+    width: 128px;
+
+    z-index: 1;
+    position: absolute;
+    top: -75px;
+    right: -70%;
+
+    border-radius: 50%;
+
+    -webkit-transition: all 0.5s ease, background-color 0s ease;
+    -o-transition: all 0.5s ease, background-color 0s ease;
+    transition: all 0.5s ease, background-color 0s ease;
+
+}
+
+.hiatus .animated-word-bg {
+    background-color: #127edd;
+}
+
+.diphthong .animated-word-bg {
+    background-color: #f5d105;
+}
+
+.general .animated-word-bg {
+    background-color: #ee1212;
+}
+
+.animated-word.assigned .animated-word-bg {
+    -webkit-transform: scale(12);
+    -ms-transform: scale(12);
+    transform: scale(12);
+}
+
+.animated-word-text {
+    overflow: hidden;
+
+    font-weight: bold;
+    font-size: medium;
+    color: #FFF;
+
+    z-index: 2;
+    position: relative;
 }

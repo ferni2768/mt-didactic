@@ -1,9 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
+import { TransitionContext } from '../../visualComponents/TransitionContext';
 import PlayWordSelector from './playComponents/playWordSelector';
+import Scrollbar from 'smooth-scrollbar';
+import OverscrollPlugin from 'smooth-scrollbar/plugins/overscroll';
 
 function StudentPlay({ navigate, classCode }) {
     const [student, setStudent] = useState({});
     const [classPhase, setClassPhase] = useState(null); // State to track the class phase
+    const { isTransitioning, isEntering } = useContext(TransitionContext);
+    const [words, setWords] = useState([]); // State to store the words and labels [word, label]
+    const scrollbarRef = useRef(null);
+
+    Scrollbar.use(OverscrollPlugin);
+
+
+    useEffect(() => {
+        if (scrollbarRef.current) {
+            const scrollbar = Scrollbar.init(scrollbarRef.current, {
+                damping: 0.1,
+                plugins: {
+                    overscroll: {
+                        enabled: true,
+                        maxOverscroll: 50,
+                        effect: 'bounce',
+                        damping: 0.1
+                    }
+                }
+            });
+            return () => scrollbar.destroy();
+        }
+    }, []);
 
     useEffect(() => {
         // Get the data from sessionStorage
@@ -71,6 +97,7 @@ function StudentPlay({ navigate, classCode }) {
         sessionStorage.removeItem('loggedInClassCode');
         sessionStorage.removeItem('loggedInStudent');
         sessionStorage.removeItem('loggedInScore');
+        sessionStorage.removeItem('classStarted');
         navigate('/student/ABC123');
         window.location.reload(); // Reload the page to reset the state
     };
@@ -81,18 +108,34 @@ function StudentPlay({ navigate, classCode }) {
 
     return (
         <div>
-            <h1>Student View</h1>
-            <p>This is the student view page.</p>
-            <div>
-                <h2>My Details:</h2>
-                <div>ID: {student.id}</div>
-                <div>Name: {student.name}</div>
-                <div>Score: 0</div>
-                <br />
-                <button onClick={handleReset}>Reset</button>
-                <br /> <br />
-                <PlayWordSelector updateScore={updateScore} setProgress={setProgress} />
+            <div className={`inside-card ${isTransitioning ? 'transitioning' : ''} ${isEntering ? 'entering' : ''}`}>
+                <div className="grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-1">
+                    <div className='col-span-2'>
+                        <h1 className='hidden lg:block'>Student Play</h1>
+                        <div className='h-full'>
+                            <PlayWordSelector updateScore={updateScore} setProgress={setProgress} setWords={setWords} />
+                        </div>
+                    </div>
+                    <div>
+                        <div className="col-span-full md:col-span-full lg:col-span-2 lg:pl-7">
+                            <div className="inside-card-2 p-6 pt-4" ref={scrollbarRef}>
+                                <div className='grid grid-rows-10'>
+                                    {words.map(([word, label], index) => (
+                                        <div key={index} className={`animated-word p-1 text-center mt-1.5 ${label === 'H' ? 'hiatus assigned' : label === 'D' ? 'diphthong assigned' : label === 'G' ? 'general assigned' : ''}`}>
+                                            <div className="animated-word-bg"></div>
+                                            <div className="animated-word-text">
+                                                {word}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+            {/* <button onClick={handleReset}>Reset</button> */}
         </div>
     );
 }

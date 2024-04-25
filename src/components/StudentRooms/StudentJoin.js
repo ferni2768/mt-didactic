@@ -1,9 +1,46 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
+
+import { TransitionContext } from '../../visualComponents/TransitionContext';
 
 function StudentJoin({ navigate, classCode }) {
     const [name, setName] = useState('student1');
     const [inputClassCode, setInputClassCode] = useState(classCode);
     const [wantsToJoin, setWantsToJoin] = useState(false);
+    const { isTransitioning, isEntering } = useContext(TransitionContext);
+
+    const shrinkCard = useRef(null);
+
+    useEffect(() => {
+        const updateHeight = () => {
+            if (shrinkCard.current) {
+                const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+
+                const heightInPixels = shrinkCard.current.offsetHeight;
+                const heightInRem = heightInPixels / rootFontSize;
+
+                const widthInPixels = shrinkCard.current.offsetWidth;
+                const widthInRem = widthInPixels / rootFontSize;
+
+                shrinkCard.current.style.setProperty('--initial-height', `${heightInRem}rem`);
+                shrinkCard.current.style.setProperty('--initial-width', `${widthInRem}rem`);
+            }
+        };
+
+        // Call the function initially to set the height
+        updateHeight();
+
+        // Add event listeners for resize and zoom level changes
+        window.addEventListener('resize', updateHeight);
+        // Listen for changes in devicePixelRatio to detect zoom level changes
+        window.addEventListener('resize', updateHeight);
+
+        // Cleanup function to remove event listeners
+        return () => {
+            window.removeEventListener('resize', updateHeight);
+            window.removeEventListener('resize', updateHeight);
+        };
+    }, [shrinkCard, wantsToJoin]); // Add wantsToJoin to the dependency array if it's used inside the effect
+
 
 
     useEffect(() => {
@@ -20,6 +57,7 @@ function StudentJoin({ navigate, classCode }) {
                         if (data.phase === 1) {
                             clearInterval(intervalId); // Clear the interval when the phase is 1
                             sessionStorage.setItem('loggedInClassCode', inputClassCode);
+                            sessionStorage.setItem('classStarted', true);
                             navigate(`/student/${inputClassCode}`);
                         }
                     } else {
@@ -58,33 +96,57 @@ function StudentJoin({ navigate, classCode }) {
 
     return (
         <div>
-            <h1>Student Join</h1>
-            {!wantsToJoin ? (
-                <form onSubmit={handleJoin}>
-                    <label>
-                        Name:
-                        <input
-                            type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                    </label>
-                    <br />
-                    <label>
-                        Class Code:
-                        <input
-                            type="text"
-                            value={inputClassCode}
-                            onChange={(e) => setInputClassCode(e.target.value)}
-                        />
-                    </label>
-                    <br /> <br />
-                    <button type="submit">Join</button>
-                </form>
-            ) : (
-                <p>Waiting for the teacher to enter the class...</p>
-            )}
-        </div>
+            <div ref={shrinkCard} className={`inside-login-card ${wantsToJoin ? 'shrink' : ''} ${isTransitioning ? 'transitioning' : ''} ${isEntering ? 'entering' : ''}`}>
+                <div className="form-container">
+
+                    {wantsToJoin && <p className={`waiting ${wantsToJoin ? 'form-animated-2' : ''}`} style={{ position: 'absolute' }}>Waiting...</p>}
+
+                    <h1 className={`text-2xl font-bold text-center ${wantsToJoin ? 'form-animated' : ''}`}>Student Join</h1>
+
+                    <div className={`${wantsToJoin ? 'form-animated' : ''}`}>
+                        <form onSubmit={handleJoin} className="space-y-4">
+
+                            <div className="flex justify-center relative">
+                                <input
+                                    id="name"
+                                    type="text"
+                                    placeholder=""
+                                    value={name}
+                                    disabled={wantsToJoin}
+                                    onChange={(e) => setName(e.target.value)}
+                                    className="mt-8 border-custom_black focus:border-accent border-2 rounded-lg
+                                               outline-none block w-full shadow-sm text-custom_black p-2"
+                                />
+                                <span className='text-2xl text-gray-300 bg-white absolute left-5 top-11 px-1
+                                transition duration-200 input-text pointer-events-none'>Name</span>
+                            </div>
+                            <div className="flex justify-center relative">
+                                <input
+                                    id="classCode"
+                                    type="text"
+                                    placeholder=""
+                                    value={inputClassCode}
+                                    disabled={wantsToJoin}
+                                    onChange={(e) => setInputClassCode(e.target.value)}
+                                    className="mt-3 border-custom_black focus:border-accent border-2 rounded-lg
+                                               outline-none block w-full shadow-sm text-custom_black p-2"
+                                />
+                                <span className='text-2xl text-gray-300 bg-white absolute left-3 top-6 px-1
+                                transition duration-200 input-text pointer-events-none'>Class code</span>
+                            </div>
+                            <div>
+                                <button type="submit" className="animated-button p-2 text-center mt-4" disabled={wantsToJoin}>
+                                    <div className="animated-button-bg"></div>
+                                    <div className="animated-button-text">
+                                        Join
+                                    </div>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div >
     );
 }
 

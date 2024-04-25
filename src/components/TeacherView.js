@@ -8,8 +8,9 @@ import Background from '../visualComponents/Background';
 
 function TeacherView() {
     const { classCode: urlClassCode } = useParams();
-    const { isTransitioning, setIsTransitioning } = useContext(TransitionContext);
-    const { isEntering, setIsEntering } = useContext(TransitionContext);
+    const {
+        setIsTransitioning } = useContext(TransitionContext);
+    const { setIsEntering } = useContext(TransitionContext);
     const navigate = useNavigate();
     const location = useLocation();
     const [, setPrevLocation] = useState(location);
@@ -57,11 +58,11 @@ function TeacherView() {
         const isFinished = sessionStorage.getItem('isFinished');
 
         if (!isAuthenticated) {
-            return <TeacherLogin navigate={navigate} classCode={urlClassCode} isTransitioning={isTransitioning} />;
+            return <TeacherLogin navigate={navigate} classCode={urlClassCode} />;
         } else if (isAuthenticated && !isFinished) {
-            return <TeacherWaitRoom navigate={navigate} classCode={urlClassCode} isTransitioning={isTransitioning} />;
+            return <TeacherWaitRoom navigate={navigate} classCode={urlClassCode} />;
         } else {
-            return <TeacherResults navigate={navigate} classCode={urlClassCode} isTransitioning={isTransitioning} />;
+            return <TeacherResults navigate={navigate} classCode={urlClassCode} />;
         }
     };
 

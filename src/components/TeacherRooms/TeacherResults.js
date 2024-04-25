@@ -44,8 +44,6 @@ function TeacherResults({ navigate, classCode }) {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-
-
     useEffect(() => {
         const fetchStudents = async () => {
             try {
@@ -87,7 +85,7 @@ function TeacherResults({ navigate, classCode }) {
                                             <div key={student.id} className='w-full'>
                                                 {student.name} <br />
                                                 <div className="col-span-full md:col-span-2 lg:col-span-2 flex items-center justify-center pt-3">
-                                                    <div className="progress-bar-container-dark h-3">
+                                                    <div className="progress-bar-container-dark h-2">
                                                         <div className='progress-bar-silver' style={{ width: `${student.score}%` }}></div>
                                                     </div>
                                                 </div>
@@ -99,8 +97,6 @@ function TeacherResults({ navigate, classCode }) {
                             </div>
                         </div>
 
-
-
                         <div className="hidden lg:block col-span-1 podium-3 w-full">
                             <div className='top-bar-3 py-8'>
                                 <div className='flex justify-between text-center w-full'>
@@ -108,7 +104,7 @@ function TeacherResults({ navigate, classCode }) {
                                         <div key={student.id} className='w-full'>
                                             {student.name} <br />
                                             <div className="col-span-full md:col-span-2 lg:col-span-2 flex items-center justify-center pt-3">
-                                                <div className="progress-bar-container-dark h-3">
+                                                <div className="progress-bar-container-dark h-2">
                                                     <div className='progress-bar-bronce' style={{ width: `${student.score}%` }}></div>
                                                 </div>
                                             </div>
@@ -126,7 +122,7 @@ function TeacherResults({ navigate, classCode }) {
                                         <div key={student.id} className='w-full'>
                                             {student.name} <br />
                                             <div className="col-span-full md:col-span-2 lg:col-span-2 flex items-center justify-center pt-3">
-                                                <div className="progress-bar-container-dark h-3">
+                                                <div className="progress-bar-container-dark h-2">
                                                     <div className='progress-bar-gold' style={{ width: `${student.score}%` }}></div>
                                                 </div>
                                             </div>
@@ -161,8 +157,6 @@ function TeacherResults({ navigate, classCode }) {
 
                                             </div>
 
-
-
                                         </li>
                                     ))}
                                 </ul>
@@ -195,7 +189,6 @@ function TeacherResults({ navigate, classCode }) {
                         </div>
 
                     </div>
-
 
                 </div>
             </div>

@@ -11,6 +11,7 @@ function useDataFetcher() {
     const [generals, setGenerals] = useState([]);
     const [selectedElements, setSelectedElements] = useState([]);
 
+
     useEffect(() => {
         const loadDataAndSetState = async () => {
             try {
@@ -36,7 +37,7 @@ function useDataFetcher() {
         };
 
         loadDataAndSetState(); // Load the files
-    });
+    }, []);
 
 
     // Function that processes the training data and returns a shuffled array of 10 recommended words
