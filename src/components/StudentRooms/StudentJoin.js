@@ -39,8 +39,7 @@ function StudentJoin({ navigate, classCode }) {
             window.removeEventListener('resize', updateHeight);
             window.removeEventListener('resize', updateHeight);
         };
-    }, [shrinkCard, wantsToJoin]); // Add wantsToJoin to the dependency array if it's used inside the effect
-
+    }, [shrinkCard, wantsToJoin]);
 
 
     useEffect(() => {

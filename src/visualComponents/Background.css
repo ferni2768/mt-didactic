@@ -22,6 +22,188 @@
     position: relative;
 }
 
+.turnInContainer {
+    border-radius: 1rem;
+    justify-self: center;
+    width: 100%;
+    background-color: rgb(28, 28, 28);
+
+    overflow: hidden;
+    position: relative;
+
+    :hover {
+        cursor: pointer;
+    }
+}
+
+.buttonsShrink {
+    animation: smallButtonsTransition 0.5s ease-in-out forwards;
+    overflow: hidden;
+}
+
+.buttonsShrink2 {
+    animation: bigButtonsTransition 0.5s ease-in-out forwards;
+    overflow: hidden;
+}
+
+/* Go to 'turnIn' state */
+@keyframes smallButtonsTransition {
+    0% {
+        width: var(--initial-width);
+        height: var(--initial-height);
+    }
+
+    40% {
+        width: calc(var(--initial-width) - 1rem);
+    }
+
+    80% {
+        width: 14rem;
+    }
+
+    100% {
+        width: 15rem;
+        height: var(--initial-height);
+    }
+}
+
+/* Go back to 'modify tags' state */
+@keyframes bigButtonsTransition {
+    0% {
+        width: 15rem;
+        height: var(--initial-height);
+    }
+
+    50% {
+
+        width: calc(var(--initial-width) - 1rem);
+    }
+
+    60% {
+
+        width: var(--initial-width);
+        height: var(--initial-height);
+
+    }
+}
+
+@keyframes buttonsTextAnimation {
+    0% {
+        transform: translateY(0);
+    }
+
+    15% {
+        transform: translateY(-1vh);
+    }
+
+    100% {
+        transform: translateY(50vh);
+        height: 1rem;
+        visibility: hidden;
+    }
+}
+
+.turnInTransition {
+    animation: buttonsTextAnimation 0.5s ease-in-out forwards;
+}
+
+@keyframes buttonsTextAnimation2 {
+    0% {
+        transform: translateY(-50vh);
+    }
+
+    70% {
+        transform: translateY(1vh);
+    }
+
+    80% {
+        transform: translateY(0vh);
+    }
+}
+
+.turnInTransition2 {
+    animation: buttonsTextAnimation2 0.5s ease-in-out;
+    -webkit-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
+.buttonsIn {
+    animation: buttonsIn 0.5s ease-in-out forwards;
+    overflow: hidden;
+}
+
+.buttonsOut {
+    animation: buttonsOut 0.5s ease-in-out forwards;
+    overflow: hidden;
+}
+
+@keyframes buttonsIn {
+    0% {
+        transform: translateY(60vh);
+    }
+
+    85% {
+        transform: translateY(-2vh);
+    }
+
+    100% {
+        transform: translateY(0vh);
+    }
+}
+
+@keyframes buttonsOut {
+    0% {
+        transform: translateY(0vh);
+    }
+
+    25% {
+        transform: translateY(-4vh);
+    }
+
+    100% {
+        transform: translateY(100vh);
+    }
+}
+
+.trainingIn {
+    animation: trainingIn 0.6s ease-in-out forwards;
+    overflow: hidden;
+}
+
+.trainingOut {
+    animation: trainingOut 0.4s ease-in-out forwards;
+    overflow: hidden;
+}
+
+@keyframes trainingIn {
+    0% {
+        transform: translateX(-60vw);
+    }
+
+    85% {
+        transform: translateX(2vw);
+    }
+
+    100% {
+        transform: translateX(0vw);
+    }
+}
+
+@keyframes trainingOut {
+    0% {
+        transform: translateX(0vw);
+    }
+
+    25% {
+        transform: translateX(4vw);
+    }
+
+    100% {
+        transform: translateX(-60vw);
+    }
+}
+
 .custom-input {
     background-color: white;
 }
@@ -378,7 +560,8 @@
 
 .animated-button-diphthong:hover .animated-button-bg-diphthong,
 .animated-button-hiatus:hover .animated-button-bg-hiatus,
-.animated-button-general:hover .animated-button-bg-general {
+.animated-button-general:hover .animated-button-bg-general,
+.turnInContainer:hover .animated-button-bg {
     -webkit-transform: scale(7);
     -ms-transform: scale(7);
     transform: scale(7);
@@ -481,6 +664,44 @@
     animation: inverseBounce 0.45s ease-in-out;
 }
 
+.animated-word.entering {
+    animation: animatedWordEntering 0.65s ease-in-out;
+}
+
+.animated-word.out {
+    animation: animatedWordOut 0.65s ease-in-out forwards;
+}
+
+/* Come into page */
+@keyframes animatedWordEntering {
+    0% {
+        transform: translateX(100vw);
+    }
+
+    70% {
+        transform: translateX(-1vw);
+    }
+
+    100% {
+        transform: translateX(0vw);
+    }
+}
+
+/* Go out of page */
+@keyframes animatedWordOut {
+    0% {
+        transform: translateX(0vw);
+    }
+
+    10% {
+        transform: translateX(1vw);
+    }
+
+    100% {
+        transform: translateX(-100vw);
+    }
+}
+
 .podium-1 {
     animation: podium-1 1.5s ease-in-out;
 }
@@ -571,6 +792,12 @@
     --end-color: #dd1212;
 }
 
+.move-old.nothing {
+    animation: word-old 0.3s ease-in-out;
+    --start-color: #1c1c1c;
+    --end-color: #1c1c1c;
+}
+
 @keyframes word-old {
     0% {
         transform: translateX(0vw);
@@ -612,7 +839,7 @@
 .animated-word {
     border-radius: 0.5rem;
     width: 100%;
-    background-color: rgb(125, 125, 125);
+    background-color: rgb(162, 162, 162);
 
     overflow: hidden;
     position: relative;
@@ -632,7 +859,6 @@
     -webkit-transition: all 0.5s ease, background-color 0s ease;
     -o-transition: all 0.5s ease, background-color 0s ease;
     transition: all 0.5s ease, background-color 0s ease;
-
 }
 
 .hiatus .animated-word-bg {
@@ -648,9 +874,9 @@
 }
 
 .animated-word.assigned .animated-word-bg {
-    -webkit-transform: scale(12);
-    -ms-transform: scale(12);
-    transform: scale(12);
+    -webkit-transform: scale(2);
+    -ms-transform: scale(2);
+    transform: scale(2);
 }
 
 .animated-word-text {
@@ -658,7 +884,7 @@
 
     font-weight: bold;
     font-size: medium;
-    color: #FFF;
+    color: #ffffff;
 
     z-index: 2;
     position: relative;

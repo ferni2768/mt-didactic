@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import useDataFetcher from './database/dataFetcher'; // To fetch the data from the csv files
 
-function PlayWordSelector({ updateScore, setProgress, setWords }) {
+function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentWordIndex, ExternalCurrentWordIndexChange, setExternalIsTraining }) {
     const [currentWordIndex, setCurrentWordIndex] = useState(0); // To keep track of the current word index
     const [selectedModel] = useState('model1'); // Default model for development
     const [iteration, setIteration] = useState(0); // To keep track of the training iterations
@@ -16,23 +16,75 @@ function PlayWordSelector({ updateScore, setProgress, setWords }) {
 
     const [animationClass, setAnimationClass] = useState(''); // To trigger the transition animation between words
     const [isAnimating, setIsAnimating] = useState(false);
+    const [isTurningIn, setIsTurningIn] = useState(false);
+    const [isTraining, setIsTraining] = useState(false);
+    const [periods, setPeriods] = useState(3); // Periods in training text
+
+    const shrinkButton = useRef(null);
+    const shrinkSpace = useRef(null);
+    const maxIterations = 5; // Maximum training times
 
 
     useEffect(() => {
-        // Initialize newBatch with a random set of 10 words
-        setNewBatch(selectedElements);
+        if (currentWordIndex > 10) {
+            setIsTurningIn(true);
+        } else {
+            setIsTurningIn(false);
+        }
+    }, [currentWordIndex]);
 
+    useEffect(() => {
+        const updateWidth = () => {
+            if (shrinkButton.current && shrinkSpace.current) {
+                const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+
+                const heightInPixels = shrinkSpace.current.offsetHeight;
+                const heightInRem = heightInPixels / rootFontSize;
+
+                const widthInPixels = shrinkSpace.current.offsetWidth;
+                const widthInRem = widthInPixels / rootFontSize;
+
+                if (!isTurningIn) {
+
+                    shrinkButton.current.style.setProperty('--initial-height', `${heightInRem}rem`);
+                    shrinkButton.current.style.setProperty('--initial-width', `${widthInRem}rem`);
+                }
+            }
+        };
+
+        // Call the function initially to set the height
+        updateWidth();
+
+        // Add event listeners for resize and zoom level changes
+        window.addEventListener('resize', updateWidth);
+        // Listen for changes in devicePixelRatio to detect zoom level changes
+        window.addEventListener('resize', updateWidth);
+
+        // Cleanup function to remove event listeners
+        return () => {
+            window.removeEventListener('resize', updateWidth);
+            window.removeEventListener('resize', updateWidth);
+        };
+    }, [shrinkButton, shrinkSpace, isTurningIn, newBatch]);
+
+    useEffect(() => {
+        // Initialize newBatch with a random set of 10 words
+        if (!newWords) {
+            setNewBatch(selectedElements);
+        }
 
         if (newWords) {
-            const updatedNewBatch = processTrainingData(trainingData); // Assuming trainingData is accessible here
-            setNewBatch(updatedNewBatch);
+            const updatedNewBatch = processTrainingData(trainingData);
+            setNewBatch(updatedNewBatch); // Set new batch of words
             console.log('Updated NewBatch:', updatedNewBatch);
             setCurrentWordIndex(0);
             setNewWords(false);
-            setIteration(iteration + 1);
-            setProgress((iteration + 1) * 20); // Update the student's progress by 20% for each iteration
         }
-    }, [selectedElements, trainingData]);
+    }, [selectedElements, iteration]);
+
+    useEffect(() => {
+        handleExternalClick();
+    }, [ExternalCurrentWordIndexChange]);
 
     useEffect(() => {
         setNewAnswer(newBatch.map(([word, label]) => [word, '']));
@@ -42,8 +94,31 @@ function PlayWordSelector({ updateScore, setProgress, setWords }) {
         setWords(newAnswer);
     }, [newAnswer]);
 
+    useEffect(() => {
+        if (!isTraining) {
+            return; // Exit early if not in training mode
+        }
+
+        const intervalId = setInterval(() => {
+            setPeriods((prevPeriods) => (prevPeriods < 3 ? prevPeriods + 1 : 1));
+        }, 1000); // Update every second
+
+        // Clean up the interval on component unmount
+        return () => clearInterval(intervalId);
+    }, [isTraining]); // Depend on isTraining to reset the interval if it changes
+
 
     const handleAnswerSubmit = async (newAnswer) => {
+        if (!isTurningIn) return;
+
+        if (iteration == maxIterations) {
+            updateScore(getScoreFromTestResults());
+            return;
+        }
+        else {
+            setIsTraining(true);
+            setExternalIsTraining(true);
+        }
         // Transform the newAnswer array into an object with the desired structure
         const answersObj = newAnswer.reduce((acc, combo) => {
             // Check if the combo has both elements (word and label) and the word is not an empty string
@@ -67,7 +142,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords }) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 const data = await response.json();
-                console.log(`Training Result ${i + 1}:`, data);
+                // console.log(`Training Result ${i + 1}:`, data);
 
                 // Transform the data to the desired format
                 const transformedData = data.map(item => [item[1], item[2]]);
@@ -77,7 +152,23 @@ function PlayWordSelector({ updateScore, setProgress, setWords }) {
             }
 
             handleTestModel([selectedModel]);
-            setNewWords(true);
+
+            console.log(iteration + 1 == maxIterations);
+
+            if (iteration + 1 != maxIterations) {
+                setProgress((iteration + 1) * 20); // Update the student's progress by 20% for each iteration
+                setNewWords(true);
+                setIsTraining(false);
+                setIsTurningIn(false);
+                setCurrentWordIndex(0);
+                setExternalIsTraining(false);
+            } else {
+                setIsTraining(false);
+                setIsTurningIn(true);
+                setCurrentWordIndex(12);
+            }
+
+            setIteration(iteration + 1);
 
         } catch (error) {
             console.error('Error:', error);
@@ -115,32 +206,58 @@ function PlayWordSelector({ updateScore, setProgress, setWords }) {
         }
     };
 
+    // Function to find the next non-set word index
+    const findNextNonSetWordIndex = (updatedNewAnswer) => {
+        for (let i = 0; i < updatedNewAnswer.length; i++) {
+            if (updatedNewAnswer[i][1] === '') {
+                return i;
+            }
+        }
+        return 11; // Return 0 if no non-set word is found
+    };
+
     const handleButtonClick = (label) => {
+        if (isTurningIn || isTraining) {
+            return;
+        }
         // Disable buttons to prevent further interaction
         setIsAnimating(true);
 
+        // Add the class for the old word animation
         setAnimationClass('move-old' + (label === 'H' ? ' hiatus' : label === 'D' ? ' diphthong' : label === 'G' ? ' general' : ''));
-
 
         // Delay the update to match the transition duration
         setTimeout(() => {
             const updatedNewAnswer = [...newAnswer];
             updatedNewAnswer[currentWordIndex] = [newBatch[currentWordIndex][0], label];
-            setCurrentWordIndex(currentWordIndex + 1);
 
-            if (currentWordIndex + 1 === 10) {
-                handleAnswerSubmit(updatedNewAnswer); // Submit the answers
+            setCurrentWordIndex(findNextNonSetWordIndex(updatedNewAnswer));
+
+            if (currentWordIndex != 11) {
+                setNewAnswer(updatedNewAnswer);
             }
-
-            setNewAnswer(updatedNewAnswer);
 
             // Add the class for the new word animation
             setAnimationClass('move-new');
             setIsAnimating(false);
-        }, 305);
+        }, 270);
     };
 
+    const handleExternalClick = () => {
+        // Disable buttons to prevent further interaction
+        setIsAnimating(true);
 
+        // Add the class for the old word animation
+        setAnimationClass('move-old nothing');
+
+        // Delay the update to match the transition duration
+        setTimeout(() => {
+            setCurrentWordIndex(ExternalCurrentWordIndex);
+            // Add the class for the new word animation
+            setAnimationClass('move-new');
+            setIsAnimating(false);
+        }, 270);
+    };
 
     const getScoreFromTestResults = () => {
         const match = testResults.match(/Accuracy: (\d+\.\d+)%/);
@@ -155,67 +272,79 @@ function PlayWordSelector({ updateScore, setProgress, setWords }) {
     return (
         <div className='h-full'>
             <div>
-                {currentWordIndex < 10 && newBatch[currentWordIndex] && (
+                {newBatch[0] && (
                     <div className='grid lg:grid-rows-5 grid-rows-2'>
                         <div className='hidden lg:block lg:row-span-1'></div>
                         <div className='row-span-2'>
-                            <div className='grid grid-rows-2 grid-cols-3'>
+                            <h1 className={`text-center ${isTraining ? 'trainingIn' : 'trainingOut'}`} style={{ position: 'absolute' }}>
+                                Training{'.'.repeat(periods)}
+                            </h1>
+                            <div className={`grid grid-rows-2 grid-cols-3 ${isTraining ? 'buttonsOut' : 'buttonsIn'}`} style={{ position: 'relative' }}>
                                 <div className='col-span-full justify-center word-container'>
                                     <div className="word-container">
-                                        <h1 className={`word ${animationClass}`}>{newBatch[currentWordIndex][0]}</h1>
+                                        {currentWordIndex === 11 ? (
+                                            <h1 className={`word ${animationClass}`}> Train? </h1>
+                                        ) : currentWordIndex === 12 ? (
+                                            <h1 className={`word ${animationClass}`}> Turn in </h1>
+                                        ) : (
+                                            <h1 className={`word ${animationClass}`}>{newBatch[currentWordIndex][0]}</h1>
+                                        )}
+
                                     </div>
                                 </div>
 
-                                <button onClick={() => handleButtonClick('D')} disabled={isAnimating} className="animated-button-diphthong p-2 text-center mt-4">
-                                    <div className="animated-button-bg-diphthong"></div>
-                                    <div className="hidden lg:block md:block animated-button-text">
-                                        Diphthong
-                                    </div>
-                                    <div className="lg:hidden md:hidden animated-button-text">
-                                        D
-                                    </div>
-                                </button>
+                                <div ref={shrinkSpace} className='grid grid-cols-3 col-span-3 justify-center mt-4 w-full'>
 
-                                <button onClick={() => handleButtonClick('H')} disabled={isAnimating} className="animated-button-hiatus p-2 text-center mt-4">
-                                    <div className="animated-button-bg-hiatus"></div>
-                                    <div className="hidden lg:block md:block animated-button-text">
-                                        Hiatus
-                                    </div>
-                                    <div className="lg:hidden md:hidden animated-button-text">
-                                        H
-                                    </div>
-                                </button>
+                                    <div ref={shrinkButton} onClick={() => handleAnswerSubmit(newAnswer)} className={`grid grid-cols-3 col-span-3 turnInContainer ${isTurningIn ? 'buttonsShrink' : 'buttonsShrink2'} `}>
 
-                                <button onClick={() => handleButtonClick('G')} disabled={isAnimating} className="animated-button-general p-2 text-center mt-4">
-                                    <div className="animated-button-bg-general"></div>
-                                    <div className="hidden lg:block md:block animated-button-text">
-                                        General
+                                        <div className={`animated-button-text ${isTurningIn ? 'turnInTransition2' : 'turnInTransition'}`} disabled={isTurningIn || isTraining} style={{ position: 'absolute', justifySelf: 'center', alignSelf: 'center' }}>
+                                            Turn In
+                                        </div>
+
+                                        <div className={`animated-button-bg ${isTurningIn ? 'turnInTransition2' : 'turnInTransition'}`}></div>
+
+                                        <button onClick={() => handleButtonClick('D')} disabled={isAnimating || isTurningIn} className={`animated-button-diphthong p-2 text-center`}>
+                                            <div className={`animated-button-bg-diphthong ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}></div>
+                                            <div className={`hidden lg:block md:block animated-button-text ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}>
+                                                Diphthong
+                                            </div>
+                                            <div className={`lg:hidden md:hidden animated-button-text ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}>
+                                                D
+                                            </div>
+                                        </button>
+
+                                        <button onClick={() => handleButtonClick('H')} disabled={isAnimating} className={`animated-button-hiatus p-2 text-center`}>
+                                            <div className={`animated-button-bg-hiatus ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}></div>
+                                            <div className={`hidden lg:block md:block animated-button-text  ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}>
+                                                Hiatus
+                                            </div>
+                                            <div className={`lg:hidden md:hidden animated-button-text  ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}>
+                                                H
+                                            </div>
+                                        </button>
+
+                                        <button onClick={() => handleButtonClick('G')} disabled={isAnimating || isTurningIn} className={`animated-button-general p-2 text-center`}>
+                                            <div className={`animated-button-bg-general  ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}></div>
+                                            <div className={`hidden lg:block md:block animated-button-text  ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}>
+                                                General
+                                            </div>
+                                            <div className={`lg:hidden md:hidden animated-button-text  ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}>
+                                                G
+                                            </div>
+                                        </button>
+
                                     </div>
-                                    <div className="lg:hidden md:hidden animated-button-text">
-                                        G
-                                    </div>
-                                </button>
+                                </div>
                             </div>
                         </div>
                         <div className='hidden lg:block lg:row-span-1'></div>
                         <div className='lg:block lg:row-span-1'>
-                            <button> {testResults || "Test Results"}</button>
-                            <button onClick={() => updateScore(getScoreFromTestResults())}>Turn In</button>
+                            {/* <div> {testResults || "[Test Results]"}</div> */}
+                            {/* <button onClick={() => updateScore(getScoreFromTestResults())}>Turn In</button> */}
                         </div>
                     </div>
                 )}
-                {currentWordIndex === 10 && (
-                    <div>
-                        Waiting for the next batch...
-                    </div>
-                )}
             </div>
-
-            {
-                iteration === 5 && (
-                    <button onClick={() => updateScore(getScoreFromTestResults())}>Turn In</button>
-                )
-            }
         </div >
     );
 }

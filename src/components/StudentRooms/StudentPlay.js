@@ -9,6 +9,9 @@ function StudentPlay({ navigate, classCode }) {
     const [classPhase, setClassPhase] = useState(null); // State to track the class phase
     const { isTransitioning, isEntering } = useContext(TransitionContext);
     const [words, setWords] = useState([]); // State to store the words and labels [word, label]
+    const [ExternalCurrentWordIndex, setExternalCurrentWordIndex] = useState(0); // State to track/modify the current word index
+    const [ExternalCurrentWordIndexChange, setExternalCurrentWordIndexChange] = useState(1); // State to track/modify the current word index
+    const [isTraining, setIsTraining] = useState(false);
     const scrollbarRef = useRef(null);
 
     Scrollbar.use(OverscrollPlugin);
@@ -106,6 +109,7 @@ function StudentPlay({ navigate, classCode }) {
         return <div>The class already finished</div>;
     }
 
+
     return (
         <div>
             <div className={`inside-card ${isTransitioning ? 'transitioning' : ''} ${isEntering ? 'entering' : ''}`}>
@@ -113,7 +117,7 @@ function StudentPlay({ navigate, classCode }) {
                     <div className='col-span-2'>
                         <h1 className='hidden lg:block'>Student Play</h1>
                         <div className='h-full'>
-                            <PlayWordSelector updateScore={updateScore} setProgress={setProgress} setWords={setWords} />
+                            <PlayWordSelector updateScore={updateScore} setProgress={setProgress} setWords={setWords} ExternalCurrentWordIndex={ExternalCurrentWordIndex} ExternalCurrentWordIndexChange={ExternalCurrentWordIndexChange} setExternalIsTraining={setIsTraining} />
                         </div>
                     </div>
                     <div>
@@ -121,15 +125,18 @@ function StudentPlay({ navigate, classCode }) {
                             <div className="inside-card-2 p-6 pt-4" ref={scrollbarRef}>
                                 <div className='grid grid-rows-10'>
                                     {words.map(([word, label], index) => (
-                                        <div key={index} className={`animated-word p-1 text-center mt-1.5 ${label === 'H' ? 'hiatus assigned' : label === 'D' ? 'diphthong assigned' : label === 'G' ? 'general assigned' : ''}`}>
+                                        <button key={index} className={`animated-word p-1 text-center mt-1.5 ${isTraining ? 'out' : 'entering'} ${label === 'H' ? 'hiatus assigned' : label === 'D' ? 'diphthong assigned' : label === 'G' ? 'general assigned' : ''}`}
+                                            onClick={() => {
+                                                setExternalCurrentWordIndex(index);
+                                                setExternalCurrentWordIndexChange(ExternalCurrentWordIndexChange * (-1)); // To notify the child component that the current word index has changed
+                                            }}>
                                             <div className="animated-word-bg"></div>
                                             <div className="animated-word-text">
                                                 {word}
                                             </div>
-                                        </div>
+                                        </button>
                                     ))}
                                 </div>
-
                             </div>
                         </div>
                     </div>
