@@ -55,7 +55,7 @@ function StudentResults({ navigate, classCode }) {
                         <div className="col-span-1">
                             <h1>Student Results</h1>
                             <p>{student.name}</p>
-                            <p>{score}</p>
+                            <p>{score}%</p>
                         </div>
 
                     </div>

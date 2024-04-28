@@ -3,7 +3,11 @@ import useDataFetcher from './database/dataFetcher'; // To fetch the data from t
 
 function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentWordIndex, ExternalCurrentWordIndexChange, setExternalIsTraining }) {
     const [currentWordIndex, setCurrentWordIndex] = useState(0); // To keep track of the current word index
-    const [selectedModel] = useState('model1'); // Default model for development
+    const [selectedModel,] = useState(() => {
+        // Get the name of the model that the student is going to train
+        const loggedInStudent = sessionStorage.getItem('loggedInStudent');
+        return loggedInStudent ? JSON.parse(loggedInStudent).model : '';
+    });
     const [iteration, setIteration] = useState(0); // To keep track of the training iterations
 
     const [newBatch, setNewBatch] = useState([]); // To store the new batch of recommended words
@@ -142,7 +146,6 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 const data = await response.json();
-                // console.log(`Training Result ${i + 1}:`, data);
 
                 // Transform the data to the desired format
                 const transformedData = data.map(item => [item[1], item[2]]);
@@ -153,8 +156,6 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
 
             handleTestModel([selectedModel]);
 
-            console.log(iteration + 1 == maxIterations);
-
             if (iteration + 1 != maxIterations) {
                 setProgress((iteration + 1) * 20); // Update the student's progress by 20% for each iteration
                 setNewWords(true);
@@ -163,6 +164,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                 setCurrentWordIndex(0);
                 setExternalIsTraining(false);
             } else {
+                setProgress((iteration + 1) * 20); // Update the student's progress by 20% for each iteration
                 setIsTraining(false);
                 setIsTurningIn(true);
                 setCurrentWordIndex(12);
@@ -262,10 +264,10 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
     const getScoreFromTestResults = () => {
         const match = testResults.match(/Accuracy: (\d+\.\d+)%/);
         if (match && match[1]) {
-            // Convert the percentage to a score
-            return parseFloat(match[1]);
+            // Convert the percentage to a number with two decimal places
+            return parseFloat(match[1]).toFixed(2);
         }
-        return 0; // Default score if no match is found
+        return "0.00"; // Default score if no match is found
     };
 
 

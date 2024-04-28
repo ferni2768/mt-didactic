@@ -1,6 +1,7 @@
 const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors'); // Import the cors middleware
+const bodyParser = require('body-parser');
 
 const app = express();
 const port = 3001;
@@ -26,6 +27,10 @@ app.use(cors());
 
 // Parse JSON requests
 app.use(express.json());
+
+// Parse URL-encoded bodies
+app.use(bodyParser.json());
+
 
 // API endpoint for teacher authentication
 app.post('/teacher/authenticate', (req, res) => {
@@ -94,23 +99,79 @@ app.get('/student/:id', (req, res) => {
     });
 });
 
-// API endpoint to check if a class exists
-app.get('/class/:code/exists', (req, res) => {
-    const classCode = req.params.code;
-    const query = 'SELECT * FROM class WHERE code = ?';
-    db.query(query, [classCode], (err, result) => {
-        if (err) {
-            console.error('Error checking class existence:', err);
-            res.status(500).json({ error: 'Internal server error' });
-        } else {
-            if (result.length === 1) {
-                // For simplicity, return a dummy student object
-                res.json({ id: 1, name: 'student1' });
-            } else {
-                res.status(404).json({ error: 'Class code does not exist' });
-            }
+app.post('/class/:code/join', async (req, res) => {
+    try {
+        const classCode = req.params.code;
+        const { name } = req.body;
+
+        // Wrap the query in a Promise
+        const query = (sql, args) => {
+            return new Promise((resolve, reject) => {
+                db.query(sql, args, (err, result) => {
+                    if (err) reject(err);
+                    else resolve(result);
+                });
+            });
+        };
+
+        // Check if class exists
+        const classResult = await query('SELECT * FROM class WHERE code = ?', [classCode]);
+        if (classResult.length === 0) {
+            return res.status(404).json({ error: 'Class code does not exist' });
         }
-    });
+
+        // Check if student already exists in the class
+        const studentResult = await query('SELECT * FROM student WHERE name = ? AND class_code = ?', [name, classCode]);
+        if (studentResult.length > 0) {
+            return res.status(400).json({ error: 'Student with that name already exists in the class' });
+        }
+
+        // Create a new model with an encoded date and hour of creation
+        const dateTime = new Date().toISOString().replace(/[:-]/g, '').split('.')[0]; // Get current date and time in YYYYMMDDTHHMMSS format
+        const model = `${name}_${classCode}_${dateTime}`;
+
+        // Create a new model in the external API
+        try {
+            const modelResponse = await fetch(`http://localhost:5000/models/${model}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (!modelResponse.ok) {
+                throw new Error(`Failed to create model: ${modelResponse.statusText}`);
+            }
+
+            // If the model creation is successful, proceed with the rest of the function
+        } catch (modelError) {
+            console.error('Error creating model:', modelError);
+            return res.status(500).json({ error: 'Failed to create model' });
+        }
+
+        const insertResult = await query('INSERT INTO student (name, class_code, score, progress, model) VALUES (?, ?, 0, 0, ?)', [name, classCode, model]);
+
+        // Check if the insert was successful
+        if (insertResult.affectedRows === 0) {
+            return res.status(500).json({ error: 'Failed to create student' });
+        }
+
+        // Retrieve the newly created student's data
+        const newStudentId = insertResult.insertId;
+        const newStudentResult = await query('SELECT * FROM student WHERE id = ?', [newStudentId]);
+
+        // Check if the student was successfully retrieved
+        if (newStudentResult.length === 0) {
+            return res.status(500).json({ error: 'Failed to retrieve newly created student' });
+        }
+
+        // Send the newly created student's data
+        res.json(newStudentResult[0]);
+    } catch (error) {
+        console.error('Error in /class/:code/join:', error);
+        // A response is sent in case of an error
+        res.status(500).json({ error: 'Internal server error' });
+    }
 });
 
 // API endpoint to set the class phase

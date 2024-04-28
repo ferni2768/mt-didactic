@@ -78,20 +78,45 @@ function StudentJoin({ navigate, classCode }) {
     const handleJoin = async (event) => {
         event.preventDefault();
         try {
-            const response = await fetch(`http://localhost:3001/class/${inputClassCode}/exists`);
-            if (response.ok) {
-                const data = await response.json();
-                // Store the student data in sessionStorage immediately after confirming the class exists
-                sessionStorage.setItem('loggedInStudent', JSON.stringify(data));
-                setWantsToJoin(true); // Set wantsToJoin to true to start polling for the class phase
-            } else {
-                alert('Class code does not exist');
+            const response = await fetch(`http://localhost:3001/class/${inputClassCode}/join`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name }),
+            });
+
+            // Directly parse the JSON response
+            const data = await response.json();
+
+            // Check if the response contains an error
+            if (data.error) {
+                // Handle different types of errors
+                switch (data.error) {
+                    case 'Class code does not exist':
+                        alert('The class code does not exist. Please check and try again.');
+                        break;
+                    case 'Student with that name already exists in the class':
+                        alert('A student with that name already exists in the class. Please choose a different name.');
+                        break;
+                    case 'Failed to create model':
+                        alert('Failed to create model. Please try again.');
+                        break;
+                    default:
+                        alert('An error occurred while joining the class.');
+                }
+                return; // Exit the function if there's an error
             }
+
+            // If there's no error, proceed as before
+            sessionStorage.setItem('loggedInStudent', JSON.stringify(data));
+            setWantsToJoin(true); // Set wantsToJoin to true to start polling for the class phase
         } catch (error) {
             console.error('Error:', error);
-            alert('Error occurred while joining');
+            alert('An error occurred while joining the class.');
         }
     };
+
 
     return (
         <div>

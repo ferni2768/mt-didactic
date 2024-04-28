@@ -65,7 +65,7 @@ function StudentPlay({ navigate, classCode }) {
 
     const updateScore = async (score) => {
         // Multiply the percentage score by 100 to get the actual score
-        const updatedScore = score * 100;
+        const updatedScore = score;
         try {
             await fetch(`http://localhost:3001/student/${student.id}/updateScore`, {
                 method: 'PUT',
@@ -142,7 +142,7 @@ function StudentPlay({ navigate, classCode }) {
                     </div>
                 </div>
             </div>
-            {/* <button onClick={handleReset}>Reset</button> */}
+            <button onClick={handleReset}>Reset</button>
         </div>
     );
 }
