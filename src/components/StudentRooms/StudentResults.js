@@ -13,6 +13,20 @@ function StudentResults({ navigate, classCode }) {
 
 
     useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === 'r' || event.key === 'R') {
+                handleReset();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
+
+    useEffect(() => {
         if (scrollbarRef.current) {
             const scrollbar = Scrollbar.init(scrollbarRef.current, {
                 damping: 0.1,
@@ -32,7 +46,7 @@ function StudentResults({ navigate, classCode }) {
     useEffect(() => {
         // Get the data from sessionStorage
         const loggedInStudent = JSON.parse(sessionStorage.getItem('loggedInStudent'));
-        const loggedInScore = JSON.parse(sessionStorage.getItem('loggedInScore'));
+        const loggedInScore = JSON.parse(sessionStorage.getItem('score'));
         setStudent(loggedInStudent);
         setScore(loggedInScore);
     }, []);
@@ -43,6 +57,8 @@ function StudentResults({ navigate, classCode }) {
         sessionStorage.removeItem('loggedInStudent');
         sessionStorage.removeItem('loggedInScore');
         sessionStorage.removeItem('classStarted');
+        sessionStorage.removeItem('iteration');
+        sessionStorage.removeItem('score');
         navigate('/student/ABC123');
         window.location.reload(); // Reload the page to reset the state
     };
@@ -69,7 +85,7 @@ function StudentResults({ navigate, classCode }) {
                 </div>
 
             </div>
-            <button onClick={handleReset}>Reset</button>
+            {/* <button onClick={handleReset}>Reset</button> */}
         </div>
     );
 }

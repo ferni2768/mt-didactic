@@ -2,40 +2,69 @@ import React, { useEffect, useState, useRef } from 'react';
 import useDataFetcher from './database/dataFetcher'; // To fetch the data from the csv files
 
 function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentWordIndex, ExternalCurrentWordIndexChange, setExternalIsTraining }) {
+    const maxIterations = 5; // Maximum training times
     const [currentWordIndex, setCurrentWordIndex] = useState(0); // To keep track of the current word index
+    const [isTurningIn, setIsTurningIn] = useState(false);
+    const [isTraining, setIsTraining] = useState(false);
+
     const [selectedModel,] = useState(() => {
         // Get the name of the model that the student is going to train
         const loggedInStudent = sessionStorage.getItem('loggedInStudent');
         return loggedInStudent ? JSON.parse(loggedInStudent).model : '';
     });
-    const [iteration, setIteration] = useState(0); // To keep track of the training iterations
 
-    const [newBatch, setNewBatch] = useState([]); // To store the new batch of recommended words
+    const [testResults, setTestResults] = useState(() => {
+        // Check if 'score' exists in sessionStorage
+        const storedScore = sessionStorage.getItem('score');
+        return storedScore ? storedScore : "";
+    });
+
     const [newAnswer, setNewAnswer] = useState([]); // To store the input answers
     const [newWords, setNewWords] = useState(false); // To trigger the new batch of words
-
     const [trainingData, setTrainingData] = useState([]);
-    const [testResults, setTestResults] = useState("");
     const { selectedElements, processTrainingData } = useDataFetcher();
 
     const [animationClass, setAnimationClass] = useState(''); // To trigger the transition animation between words
     const [isAnimating, setIsAnimating] = useState(false);
-    const [isTurningIn, setIsTurningIn] = useState(false);
-    const [isTraining, setIsTraining] = useState(false);
     const [periods, setPeriods] = useState(3); // Periods in training text
 
     const shrinkButton = useRef(null);
     const shrinkSpace = useRef(null);
-    const maxIterations = 5; // Maximum training times
+
+    const [iteration, setIteration] = useState(() => {
+        // To keep track of the training iterations
+        const storedIteration = sessionStorage.getItem('iteration');
+        const parsedIteration = storedIteration ? parseInt(storedIteration, 10) : 0;
+        return parsedIteration;
+    });
+
+    const [newBatch, setNewBatch] = useState(() => {
+        // To store the new batch of recommended words
+        const storedNewBatch = sessionStorage.getItem('newBatch');
+        return storedNewBatch ? JSON.parse(storedNewBatch) : [];
+    });
 
 
     useEffect(() => {
-        if (currentWordIndex > 10) {
+        if (currentWordIndex > 10 || parseInt(sessionStorage.getItem('iteration'), 10) >= maxIterations) {
             setIsTurningIn(true);
         } else {
             setIsTurningIn(false);
         }
     }, [currentWordIndex]);
+
+    // Save the iteration and newBatch to sessionStorage
+    useEffect(() => {
+        sessionStorage.setItem('iteration', iteration);
+        if (iteration >= maxIterations && !sessionStorage.getItem('score')) {
+            const numericScore = testResults.match(/(\d+\.\d+)/)[0]; // Extracts the numeric part
+            sessionStorage.setItem('score', numericScore);
+        }
+    }, [iteration]);
+
+    useEffect(() => {
+        sessionStorage.setItem('newBatch', JSON.stringify(newBatch));
+    }, [newBatch]);
 
     useEffect(() => {
         const updateWidth = () => {
@@ -72,8 +101,16 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
     }, [shrinkButton, shrinkSpace, isTurningIn, newBatch]);
 
     useEffect(() => {
-        // Initialize newBatch with a random set of 10 words
-        if (!newWords) {
+        if (parseInt(sessionStorage.getItem('iteration'), 10) >= maxIterations) {
+            setProgress(100);
+            setExternalIsTraining(true);
+            setIsTraining(false);
+            setIsTurningIn(true);
+            setCurrentWordIndex(12);
+            return;
+        }
+
+        if (!newWords && (!sessionStorage.getItem('newBatch') || JSON.parse(sessionStorage.getItem('newBatch')).length === 0)) {
             setNewBatch(selectedElements);
         }
 
@@ -87,7 +124,9 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
     }, [selectedElements, iteration]);
 
     useEffect(() => {
-        handleExternalClick();
+        if (iteration < maxIterations) {
+            handleExternalClick();
+        }
     }, [ExternalCurrentWordIndexChange]);
 
     useEffect(() => {
@@ -116,7 +155,8 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         if (!isTurningIn) return;
 
         if (iteration == maxIterations) {
-            updateScore(getScoreFromTestResults());
+            updateScore(sessionStorage.getItem('score')); // Upload the score
+            sessionStorage.setItem('loggedInScore', sessionStorage.getItem("score")); // Update the score in sessionStorage
             return;
         }
         else {
@@ -261,15 +301,6 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         }, 270);
     };
 
-    const getScoreFromTestResults = () => {
-        const match = testResults.match(/Accuracy: (\d+\.\d+)%/);
-        if (match && match[1]) {
-            // Convert the percentage to a number with two decimal places
-            return parseFloat(match[1]).toFixed(2);
-        }
-        return "0.00"; // Default score if no match is found
-    };
-
 
     return (
         <div className='h-full'>
@@ -297,7 +328,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
 
                                 <div ref={shrinkSpace} className='grid grid-cols-3 col-span-3 justify-center mt-4 w-full'>
 
-                                    <div ref={shrinkButton} onClick={() => handleAnswerSubmit(newAnswer)} className={`grid grid-cols-3 col-span-3 turnInContainer ${isTurningIn ? 'buttonsShrink' : 'buttonsShrink2'} `}>
+                                    <div ref={shrinkButton} onClick={() => handleAnswerSubmit(newAnswer)} className={`grid mb-5 lg:mb-0 grid-cols-3 col-span-3 turnInContainer ${isTurningIn ? 'buttonsShrink' : 'buttonsShrink2'} `}>
 
                                         <div className={`animated-button-text ${isTurningIn ? 'turnInTransition2' : 'turnInTransition'}`} disabled={isTurningIn || isTraining} style={{ position: 'absolute', justifySelf: 'center', alignSelf: 'center' }}>
                                             Turn In
@@ -342,7 +373,6 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                         <div className='hidden lg:block lg:row-span-1'></div>
                         <div className='lg:block lg:row-span-1'>
                             {/* <div> {testResults || "[Test Results]"}</div> */}
-                            {/* <button onClick={() => updateScore(getScoreFromTestResults())}>Turn In</button> */}
                         </div>
                     </div>
                 )}

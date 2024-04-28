@@ -13,6 +13,20 @@ function TeacherResults({ navigate, classCode }) {
 
 
     useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === 'r' || event.key === 'R') {
+                handleReset();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
+
+    useEffect(() => {
         const initializeScrollbar = (ref) => {
             if (ref.current) {
                 const scrollbar = Scrollbar.init(ref.current, {
@@ -192,7 +206,7 @@ function TeacherResults({ navigate, classCode }) {
 
                 </div>
             </div>
-            <button onClick={handleReset}>Reset</button>
+            {/* <button onClick={handleReset}>Reset</button> */}
         </div >
     );
 }

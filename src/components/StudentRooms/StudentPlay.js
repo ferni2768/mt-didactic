@@ -18,6 +18,20 @@ function StudentPlay({ navigate, classCode }) {
 
 
     useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === 'r' || event.key === 'R') {
+                handleReset();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
+
+    useEffect(() => {
         if (scrollbarRef.current) {
             const scrollbar = Scrollbar.init(scrollbarRef.current, {
                 damping: 0.1,
@@ -74,7 +88,6 @@ function StudentPlay({ navigate, classCode }) {
                 },
                 body: JSON.stringify({ score: updatedScore }) // Updated score to database
             });
-            sessionStorage.setItem('loggedInScore', updatedScore); // Updated score to session storage
             navigate(`/student/${classCode}/results`);
         } catch (error) {
             console.error('Error updating score:', error);
@@ -101,6 +114,8 @@ function StudentPlay({ navigate, classCode }) {
         sessionStorage.removeItem('loggedInStudent');
         sessionStorage.removeItem('loggedInScore');
         sessionStorage.removeItem('classStarted');
+        sessionStorage.removeItem('iteration');
+        sessionStorage.removeItem('score');
         navigate('/student/ABC123');
         window.location.reload(); // Reload the page to reset the state
     };
@@ -142,7 +157,7 @@ function StudentPlay({ navigate, classCode }) {
                     </div>
                 </div>
             </div>
-            <button onClick={handleReset}>Reset</button>
+            {/* <button onClick={handleReset}>Reset</button> */}
         </div>
     );
 }

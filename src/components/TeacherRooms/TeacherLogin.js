@@ -28,7 +28,23 @@ function TeacherLogin({ navigate, classCode }) {
                 sessionStorage.setItem('createdClassCode', inputClassCode);
                 navigate(`/teacher/${inputClassCode}`);
 
-                // After successful login, set the class phase to 1
+                // Check the class phase in case the class already has finished
+                const checkPhaseResponse = await fetch(`http://localhost:3001/class/${inputClassCode}/phase`);
+                if (checkPhaseResponse.ok) {
+                    const checkPhaseData = await checkPhaseResponse.json();
+                    if (checkPhaseData.phase === 2) {
+                        // Go to results directly
+                        sessionStorage.setItem('isFinished', true);
+                        navigate(`/teacher/${classCode}/results`);
+                        return;
+                    }
+                } else {
+                    console.error('Error checking class phase:', checkPhaseResponse.statusText);
+                    alert('Error occurred while checking class phase');
+                    return; // Exit the function if there's an error checking the phase
+                }
+
+                // After successful login and checking the class phase, set the class phase to 1
                 const phaseResponse = await fetch(`http://localhost:3001/class/${inputClassCode}/setPhase`, { // Set the class phase to 1
                     method: 'PUT',
                     headers: {

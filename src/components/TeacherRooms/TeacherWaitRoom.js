@@ -12,6 +12,20 @@ function TeacherWaitRoom({ navigate, classCode }) {
 
 
     useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === 'r' || event.key === 'R') {
+                handleReset();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
+
+    useEffect(() => {
         if (scrollbarRef.current) {
             const scrollbar = Scrollbar.init(scrollbarRef.current, {
                 damping: 0.1,
@@ -46,7 +60,7 @@ function TeacherWaitRoom({ navigate, classCode }) {
         return () => clearInterval(intervalId);
     }, []);
 
-    const handleLogout = () => {
+    const handleReset = () => {
         // Reset the session
         sessionStorage.removeItem('createdClassCode');
         sessionStorage.removeItem('isAuthenticated');
@@ -127,11 +141,7 @@ function TeacherWaitRoom({ navigate, classCode }) {
                             </ul>
                         </div>
                     </div>
-
-                    {/* <div>
-                        <button onClick={handleLogout}>Reset</button>
-                    </div> */}
-
+                    {/* <button onClick={handleReset}>Reset</button> */}
                 </div>
             </div>
         </div >
