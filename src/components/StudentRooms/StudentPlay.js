@@ -5,6 +5,15 @@ import Scrollbar from 'smooth-scrollbar';
 import OverscrollPlugin from 'smooth-scrollbar/plugins/overscroll';
 
 function StudentPlay({ navigate, classCode }) {
+    const maxIterations = 5; // Maximum training times
+
+    const [iteration, setIteration] = useState(() => {
+        // To keep track of the training iterations
+        const storedIteration = sessionStorage.getItem('iteration');
+        const parsedIteration = storedIteration ? parseInt(storedIteration, 10) : 0;
+        return parsedIteration;
+    });
+
     const [student, setStudent] = useState({});
     const [classPhase, setClassPhase] = useState(null); // State to track the class phase
     const { isTransitioning, isEntering } = useContext(TransitionContext);
@@ -88,7 +97,6 @@ function StudentPlay({ navigate, classCode }) {
                 },
                 body: JSON.stringify({ score: updatedScore }) // Updated score to database
             });
-            navigate(`/student/${classCode}/results`);
         } catch (error) {
             console.error('Error updating score:', error);
         }
@@ -133,25 +141,35 @@ function StudentPlay({ navigate, classCode }) {
                     <div className='col-span-2'>
                         <h1 className='hidden lg:block'>Student Play</h1>
                         <div className='h-full'>
-                            <PlayWordSelector updateScore={updateScore} setProgress={setProgress} setWords={setWords} ExternalCurrentWordIndex={ExternalCurrentWordIndex} ExternalCurrentWordIndexChange={ExternalCurrentWordIndexChange} setExternalIsTraining={setIsTraining} />
+                            <PlayWordSelector updateScore={updateScore} setProgress={setProgress} setWords={setWords}
+                                ExternalCurrentWordIndex={ExternalCurrentWordIndex} ExternalCurrentWordIndexChange={ExternalCurrentWordIndexChange}
+                                setExternalIsTraining={setIsTraining} maxIterations={maxIterations} iteration={iteration} setIteration={setIteration}
+                                classCode={classCode} navigate={navigate} />
                         </div>
                     </div>
                     <div>
                         <div className="col-span-full md:col-span-full lg:col-span-2 lg:pl-7">
-                            <div className="inside-card-2 p-6 pt-4" ref={scrollbarRef}>
-                                <div className='grid grid-rows-10'>
-                                    {words.map(([word, label], index) => (
-                                        <button key={index} className={`animated-word p-1 text-center mt-1.5 ${isTraining ? 'out' : 'entering'} ${label === 'H' ? 'hiatus assigned' : label === 'D' ? 'diphthong assigned' : label === 'G' ? 'general assigned' : ''}`}
-                                            onClick={() => {
-                                                setExternalCurrentWordIndex(index);
-                                                setExternalCurrentWordIndexChange(ExternalCurrentWordIndexChange * (-1)); // To notify the child component that the current word index has changed
-                                            }}>
-                                            <div className="animated-word-bg"></div>
-                                            <div className="animated-word-text">
-                                                {word}
-                                            </div>
-                                        </button>
-                                    ))}
+                            <div className='contain'>
+                                <div className='inside-card-2-header justify-center text-white'> {/* Header */}
+                                    <div className={isTraining ? "progress out" : "progress entering"}>
+                                        {iteration >= maxIterations ? `${maxIterations}/${maxIterations}` : `${iteration + 1}/${maxIterations}`}
+                                    </div>
+                                </div>
+                                <div className="inside-card-2 p-5 pt-14 mb-0.5" ref={scrollbarRef}>
+                                    <div className='grid grid-rows-10'>
+                                        {words.map(([word, label], index) => (
+                                            <button key={index} className={`animated-word p-0.5 text-center mt-1.5 ${isTraining ? 'out' : 'entering'} ${label === 'H' ? 'hiatus assigned' : label === 'D' ? 'diphthong assigned' : label === 'G' ? 'general assigned' : ''}`}
+                                                onClick={() => {
+                                                    setExternalCurrentWordIndex(index);
+                                                    setExternalCurrentWordIndexChange(ExternalCurrentWordIndexChange * (-1)); // To notify the child component that the current word index has changed
+                                                }}>
+                                                <div className="animated-word-bg"></div>
+                                                <div className="animated-word-text">
+                                                    {word}
+                                                </div>
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -1,22 +1,17 @@
 import React, { useEffect, useState, useRef } from 'react';
 import useDataFetcher from './database/dataFetcher'; // To fetch the data from the csv files
 
-function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentWordIndex, ExternalCurrentWordIndexChange, setExternalIsTraining }) {
-    const maxIterations = 5; // Maximum training times
+function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentWordIndex, ExternalCurrentWordIndexChange,
+    setExternalIsTraining, maxIterations, iteration, setIteration, navigate, classCode }) {
     const [currentWordIndex, setCurrentWordIndex] = useState(0); // To keep track of the current word index
     const [isTurningIn, setIsTurningIn] = useState(false);
     const [isTraining, setIsTraining] = useState(false);
+    const [buttonWait, setButtonWait] = useState(true);
 
     const [selectedModel,] = useState(() => {
         // Get the name of the model that the student is going to train
         const loggedInStudent = sessionStorage.getItem('loggedInStudent');
         return loggedInStudent ? JSON.parse(loggedInStudent).model : '';
-    });
-
-    const [testResults, setTestResults] = useState(() => {
-        // Check if 'score' exists in sessionStorage
-        const storedScore = sessionStorage.getItem('score');
-        return storedScore ? storedScore : "";
     });
 
     const [newAnswer, setNewAnswer] = useState([]); // To store the input answers
@@ -30,13 +25,6 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
 
     const shrinkButton = useRef(null);
     const shrinkSpace = useRef(null);
-
-    const [iteration, setIteration] = useState(() => {
-        // To keep track of the training iterations
-        const storedIteration = sessionStorage.getItem('iteration');
-        const parsedIteration = storedIteration ? parseInt(storedIteration, 10) : 0;
-        return parsedIteration;
-    });
 
     const [newBatch, setNewBatch] = useState(() => {
         // To store the new batch of recommended words
@@ -61,6 +49,15 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
     useEffect(() => {
         sessionStorage.setItem('newBatch', JSON.stringify(newBatch));
     }, [newBatch]);
+
+    useEffect(() => {
+        if (isTurningIn) {
+            setButtonWait(true);
+            setTimeout(() => {
+                setButtonWait(false);
+            }, 500);
+        }
+    }, [isTurningIn]);
 
     useEffect(() => {
         const updateWidth = () => {
@@ -148,11 +145,10 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
 
 
     const handleAnswerSubmit = async (newAnswer) => {
-        if (!isTurningIn) return;
+        if (!isTurningIn || buttonWait) return;
 
         if (iteration == maxIterations) {
-            updateScore(sessionStorage.getItem('score')); // Upload the score
-            sessionStorage.setItem('loggedInScore', sessionStorage.getItem("score")); // Update the score in sessionStorage
+            navigate(`/student/${classCode}/results`); // Redirect to the results page
             return;
         }
         else {
@@ -237,9 +233,9 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
             console.log('Processed Data for State:', processedData);
 
             if (processedData.length > 0) {
-                setTestResults(`${processedData[0].accuracy.toFixed(2)}`);
                 if (iteration + 1 === maxIterations) {
-                    sessionStorage.setItem('score', processedData[0].accuracy.toFixed(2)); // Save the score
+                    updateScore(processedData[0].accuracy.toFixed(2)); // Upload the score to the database
+                    sessionStorage.setItem('loggedInScore', processedData[0].accuracy.toFixed(2)); // Update the score in sessionStorage
                 }
             }
         } catch (error) {
@@ -370,9 +366,6 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                             </div>
                         </div>
                         <div className='hidden lg:block lg:row-span-1'></div>
-                        <div className='lg:block lg:row-span-1'>
-                            {/* <div> {testResults || "[Test Results]"}</div> */}
-                        </div>
                     </div>
                 )}
             </div>

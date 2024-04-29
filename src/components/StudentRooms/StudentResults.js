@@ -46,7 +46,7 @@ function StudentResults({ navigate, classCode }) {
     useEffect(() => {
         // Get the data from sessionStorage
         const loggedInStudent = JSON.parse(sessionStorage.getItem('loggedInStudent'));
-        const loggedInScore = JSON.parse(sessionStorage.getItem('score'));
+        const loggedInScore = JSON.parse(sessionStorage.getItem('loggedInScore'));
         setStudent(loggedInStudent);
         setScore(loggedInScore);
     }, []);

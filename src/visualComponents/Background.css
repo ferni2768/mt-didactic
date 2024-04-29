@@ -717,11 +717,13 @@
     animation: inverseBounce 0.45s ease-in-out;
 }
 
-.animated-word.entering {
+.animated-word.entering,
+.progress.entering {
     animation: animatedWordEntering 0.65s ease-in-out;
 }
 
-.animated-word.out {
+.animated-word.out,
+.progress.out {
     animation: animatedWordOut 0.65s ease-in-out forwards;
 }
 
