@@ -81,6 +81,7 @@ function TeacherLogin({ navigate, classCode }) {
                                 placeholder=""
                                 value={inputClassCode}
                                 onChange={(e) => setInputClassCode(e.target.value)}
+                                maxLength={100}
                                 className="mt-8 border-custom_black focus:border-accent border-2 rounded-lg
                                                outline-none block w-full shadow-sm text-custom_black p-2"
                             />
@@ -95,6 +96,7 @@ function TeacherLogin({ navigate, classCode }) {
                                 placeholder=""
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
+                                maxLength={20}
                                 className="mt-3 border-custom_black focus:border-accent border-2 rounded-lg
                                                outline-none block w-full shadow-sm text-custom_black p-2"
                             />

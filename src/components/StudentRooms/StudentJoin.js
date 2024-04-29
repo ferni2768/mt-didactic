@@ -3,12 +3,16 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import { TransitionContext } from '../../visualComponents/TransitionContext';
 
 function StudentJoin({ navigate, classCode }) {
+    const maxLength = 15; // Set the maximum length of the name of the student
     const [name, setName] = useState('student1');
+    const [nameExceedsLimit, setNameExceedsLimit] = useState(false);
+    const [isNameInputFocused, setIsNameInputFocused] = useState(false);
     const [inputClassCode, setInputClassCode] = useState(classCode);
     const [wantsToJoin, setWantsToJoin] = useState(false);
     const { isTransitioning, isEntering } = useContext(TransitionContext);
 
     const shrinkCard = useRef(null);
+
 
     useEffect(() => {
         const updateHeight = () => {
@@ -40,7 +44,6 @@ function StudentJoin({ navigate, classCode }) {
             window.removeEventListener('resize', updateHeight);
         };
     }, [shrinkCard, wantsToJoin]);
-
 
     useEffect(() => {
         setInputClassCode(classCode);
@@ -74,6 +77,7 @@ function StudentJoin({ navigate, classCode }) {
             return () => clearInterval(intervalId);
         }
     }, [wantsToJoin, inputClassCode, navigate]);
+
 
     const handleJoin = async (event) => {
         event.preventDefault();
@@ -117,6 +121,24 @@ function StudentJoin({ navigate, classCode }) {
         }
     };
 
+    // Handle max length of the student name
+    const handleNameChange = (e) => {
+        if (isNameInputFocused == false) {
+            setNameExceedsLimit(false);
+            return;
+        }
+        const newName = e.target.value;
+        // Limit the name characters to maxLength
+        if (newName.length > maxLength) {
+            const trimmedName = newName.slice(0, -1);
+            setName(trimmedName);
+            setNameExceedsLimit(true);
+        } else {
+            setName(newName);
+            setNameExceedsLimit(false);
+        }
+    };
+
 
     return (
         <div>
@@ -129,7 +151,6 @@ function StudentJoin({ navigate, classCode }) {
 
                     <div className={`${wantsToJoin ? 'form-animated' : ''}`}>
                         <form onSubmit={handleJoin} className="space-y-4">
-
                             <div className="flex justify-center relative">
                                 <input
                                     id="name"
@@ -137,13 +158,24 @@ function StudentJoin({ navigate, classCode }) {
                                     placeholder=""
                                     value={name}
                                     disabled={wantsToJoin}
-                                    onChange={(e) => setName(e.target.value)}
+                                    onChange={handleNameChange}
+                                    maxLength={maxLength + 1}
+                                    onFocus={() => {
+                                        setIsNameInputFocused(true);
+                                        handleNameChange();
+                                    }}
+                                    onBlur={() => setIsNameInputFocused(false)}
                                     className="mt-8 border-custom_black focus:border-accent border-2 rounded-lg
                                                outline-none block w-full shadow-sm text-custom_black p-2"
                                 />
                                 <span className='text-2xl text-gray-300 bg-white absolute left-5 top-11 px-1
-                                transition duration-200 input-text pointer-events-none'>Name</span>
+                                                transition duration-200 input-text pointer-events-none'>Name</span>
                             </div>
+                            {nameExceedsLimit && isNameInputFocused && (
+                                <div className='pb-0.5'>
+                                    <p className="text-sm text-accent slideUpFadeIn">Name cannot be more than 15 characters</p>
+                                </div>
+                            )}
                             <div className="flex justify-center relative">
                                 <input
                                     id="classCode"
@@ -152,11 +184,12 @@ function StudentJoin({ navigate, classCode }) {
                                     value={inputClassCode}
                                     disabled={wantsToJoin}
                                     onChange={(e) => setInputClassCode(e.target.value)}
+                                    maxLength={100}
                                     className="mt-3 border-custom_black focus:border-accent border-2 rounded-lg
-                                               outline-none block w-full shadow-sm text-custom_black p-2"
+                                              outline-none block w-full shadow-sm text-custom_black p-2"
                                 />
                                 <span className='text-2xl text-gray-300 bg-white absolute left-3 top-6 px-1
-                                transition duration-200 input-text pointer-events-none'>Class code</span>
+                                                 transition duration-200 input-text pointer-events-none'>Class code</span>
                             </div>
                             <div>
                                 <button type="submit" className="animated-button p-2 text-center mt-4" disabled={wantsToJoin}>

@@ -336,6 +336,26 @@
     overflow: hidden;
 }
 
+/* Animation for the warning below */
+@keyframes slideUpFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(calc(-0.7rem + 20px));
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(-0.7rem);
+    }
+}
+
+/* Warning for the student name exceeding maximum length */
+.slideUpFadeIn {
+    animation: slideUpFadeIn 0.3s ease-in-out;
+    position: absolute;
+    transform: translateY(-0.7rem);
+}
+
 .shrink {
     animation: smallTransition 0.8s ease-in-out forwards;
     overflow: hidden;
