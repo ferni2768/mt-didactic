@@ -2,6 +2,7 @@ const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors'); // Import the cors middleware
 const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt'); // To hash the password
 
 const app = express();
 const port = 3001;
@@ -12,6 +13,9 @@ const db = mysql.createConnection({
     password: 'root',
     database: 'tfg_db'
 });
+
+// Get a hashed password
+// bcrypt.hash('password', 10, function (err, hash) { console.log(hash); });
 
 // Connect to MySQL
 db.connect(err => {
@@ -35,14 +39,24 @@ app.use(bodyParser.json());
 // API endpoint for teacher authentication
 app.post('/teacher/authenticate', (req, res) => {
     const { code, password } = req.body;
-    const query = 'SELECT * FROM class WHERE code = ? AND password = ?';
-    db.query(query, [code, password], (err, result) => {
+    const query = 'SELECT * FROM class WHERE code = ?';
+    db.query(query, [code], (err, result) => {
         if (err) {
             console.error('Error authenticating teacher:', err);
             res.status(500).json({ error: 'Internal server error' });
         } else {
             if (result.length === 1) {
-                res.status(200).json({ message: 'Authentication successful' });
+                const storedHash = result[0].password;
+                bcrypt.compare(password, storedHash, function (err, isMatch) {
+                    if (err) {
+                        console.error('Error comparing passwords:', err);
+                        res.status(500).json({ error: 'Internal server error' });
+                    } else if (isMatch) {
+                        res.status(200).json({ message: 'Authentication successful' });
+                    } else {
+                        res.status(401).json({ error: 'Invalid credentials' });
+                    }
+                });
             } else {
                 res.status(401).json({ error: 'Invalid credentials' });
             }
