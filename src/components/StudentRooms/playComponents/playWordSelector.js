@@ -148,7 +148,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         if (!isTurningIn || buttonWait) return;
 
         if (iteration == maxIterations) {
-            navigate(`/student/${sessionStorage.getItem('createdClassCode')}/results`); // Redirect to the results page
+            navigate(`/student/${sessionStorage.getItem('loggedInClassCode')}/results`); // Redirect to the results page
             return;
         }
         else {

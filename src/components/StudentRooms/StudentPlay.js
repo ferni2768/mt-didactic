@@ -64,7 +64,7 @@ function StudentPlay({ navigate, classCode }) {
 
         const checkClassPhase = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/class/${sessionStorage.getItem('createdClassCode')}/phase`);
+                const response = await fetch(`http://localhost:3001/class/${sessionStorage.getItem('loggedInClassCode')}/phase`);
                 if (response.ok) {
                     const data = await response.json();
                     setClassPhase(data.phase);

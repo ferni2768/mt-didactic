@@ -121,16 +121,18 @@ function StudentJoin({ navigate, classCode }) {
         }
     };
 
-    // Handle max length of the student name
+    // Handle max length of the student name and filter out special characters
     const handleNameChange = (e) => {
         if (isNameInputFocused == false) {
             setNameExceedsLimit(false);
             return;
         }
-        const newName = e.target.value;
+        let newName = e.target.value;
+        // Filter out special characters
+        newName = newName.replace(/[^a-zA-Z0-9 ]/g, '');
         // Limit the name characters to maxLength
         if (newName.length > maxLength) {
-            const trimmedName = newName.slice(0, -1);
+            const trimmedName = newName.slice(0, maxLength);
             setName(trimmedName);
             setNameExceedsLimit(true);
         } else {
@@ -203,7 +205,7 @@ function StudentJoin({ navigate, classCode }) {
                     </div>
                 </div>
             </div>
-        </div >
+        </div>
     );
 }
 
