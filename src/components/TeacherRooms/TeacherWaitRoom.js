@@ -116,29 +116,35 @@ function TeacherWaitRoom({ navigate, classCode }) {
                     </div>
 
                     <div className="col-span-full md:col-span-full lg:col-span-2 lg:pl-7">
-                        <div className="inside-card-2 p-6" ref={scrollbarRef}>
-                            <ul>
-                                {students.slice(0, 99).map(student => (
-                                    <li key={student.id} className="student-item">
+                        <div className='contain'>
+                            <div className='inside-card-2-header text-white'> {/* Header */}
+                                <div className='hidden md:block lg:block'>Name</div>
+                                <div className='hidden md:block lg:block'>Progress</div>
+                                <div className='hidden md:block lg:block'></div>
+                                <div className='md:hidden lg:hidden'>Names and progress</div>
+                            </div>
+                            <div className="inside-card-2 p-6 pt-14" ref={scrollbarRef}>
+                                <ul className='pt-1'>
+                                    {students.slice(0, 99).reverse().map(student => (
+                                        <li key={student.id} className="student-item">
+                                            <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 lg:gap-4 md:gap-4 gap-0.5'>
+                                                <div className="col-span-full md:col-span-1 lg:col-span-1">
+                                                    <span>
+                                                        {student.name.length > 16 ? student.name.substring(0, 16) + "..." : student.name}
+                                                    </span>
+                                                </div>
 
-                                        <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 lg:gap-4 md:gap-4 gap-0.5'>
-                                            <div className="col-span-full md:col-span-1 lg:col-span-1">
-                                                <span>
-                                                    {student.name.length > 16 ? student.name.substring(0, 16) + "..." : student.name}
-                                                </span>
-                                            </div>
-
-                                            <div className="col-span-full md:col-span-2 lg:col-span-2 flex items-center justify-start md:justify-end lg:justify-end
+                                                <div className="col-span-full md:col-span-2 lg:col-span-2 flex items-center justify-start md:justify-end lg:justify-end
                                             pr-0 md:pr-3 lg:pr-3">
-                                                <div className="progress-bar-container h-2.5">
-                                                    <div className="progress-bar" style={{ width: `${student.progress}%` }}></div>
+                                                    <div className="progress-bar-container h-2.5">
+                                                        <div className="progress-bar" style={{ width: `${student.progress}%` }}></div>
+                                                    </div>
                                                 </div>
                                             </div>
-
-                                        </div>
-                                    </li>
-                                ))}
-                            </ul>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     {/* <button onClick={handleReset}>Reset</button> */}

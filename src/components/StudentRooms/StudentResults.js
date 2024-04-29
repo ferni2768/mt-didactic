@@ -58,6 +58,7 @@ function StudentResults({ navigate, classCode }) {
         sessionStorage.removeItem('loggedInScore');
         sessionStorage.removeItem('classStarted');
         sessionStorage.removeItem('iteration');
+        sessionStorage.removeItem('newBatch');
         sessionStorage.removeItem('score');
         navigate('/student/ABC123');
         window.location.reload(); // Reload the page to reset the state

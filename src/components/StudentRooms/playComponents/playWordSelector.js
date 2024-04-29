@@ -56,10 +56,6 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
     // Save the iteration and newBatch to sessionStorage
     useEffect(() => {
         sessionStorage.setItem('iteration', iteration);
-        if (iteration >= maxIterations && !sessionStorage.getItem('score')) {
-            const numericScore = testResults.match(/(\d+\.\d+)/)[0]; // Extracts the numeric part
-            sessionStorage.setItem('score', numericScore);
-        }
     }, [iteration]);
 
     useEffect(() => {
@@ -204,7 +200,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                 setCurrentWordIndex(0);
                 setExternalIsTraining(false);
             } else {
-                setProgress((iteration + 1) * 20); // Update the student's progress by 20% for each iteration
+                setProgress(100);
                 setIsTraining(false);
                 setIsTurningIn(true);
                 setCurrentWordIndex(12);
@@ -241,7 +237,10 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
             console.log('Processed Data for State:', processedData);
 
             if (processedData.length > 0) {
-                setTestResults(`Accuracy: ${processedData[0].accuracy.toFixed(2)}%`);
+                setTestResults(`${processedData[0].accuracy.toFixed(2)}`);
+                if (iteration + 1 === maxIterations) {
+                    sessionStorage.setItem('score', processedData[0].accuracy.toFixed(2)); // Save the score
+                }
             }
         } catch (error) {
             console.error('Failed to fetch model evaluation results:', error);
