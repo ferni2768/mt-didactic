@@ -69,24 +69,39 @@ function StudentResults({ navigate, classCode }) {
             <div className={`inside-card ${isTransitioning ? 'transitioning' : ''} ${isEntering ? 'entering' : ''}`}>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 lg:h-80 gap-4'>
                     <div className="lg:col-span-1 col-span-full gap-4 max-w-17">
-                        <div className="col-span-1">
-                            <h1>Student Results</h1>
-                            <p>{student.name}</p>
-                            <p>{score}%</p>
-                        </div>
+                        <h1>Student Results</h1>
 
+                        <div className='hidden podium-student lg:flex justify-center items-center text-center'>
+                            <div className='top-bar-student py-8'>
+                                <div>
+                                    {student.name} <br />
+                                    {score}%
+                                </div>
+                            </div>
+                        </div>
+                        <div className='block lg:hidden'>
+                            {student.name} <br />
+                            {score}%
+                        </div>
                     </div>
 
                     <div className='col-span-full lg:col-span-1 lg:pl-7'>
-                        <div className="inside-card-2 p-6" ref={scrollbarRef}>
-                            Wrong/right words
+                        <div className='contain'>
+                            <div className='inside-card-2-header text-white'> {/* Header */}
+                                <div>Info</div>
+                            </div>
+
+                            <div className="inside-card-2 p-6 pt-14" ref={scrollbarRef}>
+                                <div className='pt-1'>
+                                    {/* Content */}
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                 </div>
 
             </div>
-            {/* <button onClick={handleReset}>Reset</button> */}
         </div>
     );
 }

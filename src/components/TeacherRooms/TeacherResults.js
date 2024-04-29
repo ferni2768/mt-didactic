@@ -61,7 +61,7 @@ function TeacherResults({ navigate, classCode }) {
     useEffect(() => {
         const fetchStudents = async () => {
             try {
-                const response = await fetch('http://localhost:3001/student');
+                const response = await fetch(`http://localhost:3001/students?classCode=${sessionStorage.getItem('createdClassCode')}`);
                 const data = await response.json();
                 // Sort students by score in descending order
                 const sortedStudents = data.sort((a, b) => b.score - a.score);
@@ -218,7 +218,6 @@ function TeacherResults({ navigate, classCode }) {
 
                 </div>
             </div>
-            {/* <button onClick={handleReset}>Reset</button> */}
         </div >
     );
 }

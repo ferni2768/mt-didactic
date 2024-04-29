@@ -8,8 +8,7 @@ import Background from '../visualComponents/Background';
 
 function TeacherView() {
     const { classCode: urlClassCode } = useParams();
-    const {
-        setIsTransitioning } = useContext(TransitionContext);
+    const { setIsTransitioning } = useContext(TransitionContext);
     const { setIsEntering } = useContext(TransitionContext);
     const navigate = useNavigate();
     const location = useLocation();

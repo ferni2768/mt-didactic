@@ -54,7 +54,7 @@ function TeacherWaitRoom({ navigate, classCode }) {
     useEffect(() => {
         const fetchStudents = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/students?classCode=${classCode}`);
+                const response = await fetch(`http://localhost:3001/students?classCode=${sessionStorage.getItem('createdClassCode')}`);
                 const data = await response.json();
                 setStudents(data);
             } catch (error) {
@@ -81,7 +81,7 @@ function TeacherWaitRoom({ navigate, classCode }) {
     const seeResults = async () => {
         try {
             // Set the class phase to 2
-            const response = await fetch(`http://localhost:3001/class/${classCode}/setPhase`, {
+            const response = await fetch(`http://localhost:3001/class/${sessionStorage.getItem('createdClassCode')}/setPhase`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ function TeacherWaitRoom({ navigate, classCode }) {
 
             if (response.ok) {
                 sessionStorage.setItem('isFinished', true);
-                navigate(`/teacher/${classCode}/results`);
+                navigate(`/teacher/${sessionStorage.getItem('createdClassCode')}/results`);
             } else {
                 console.error('Error setting class phase:', response.statusText);
                 alert('Error occurred while setting class phase');
@@ -111,6 +111,7 @@ function TeacherWaitRoom({ navigate, classCode }) {
                     <div className="col-span-full md:col-span-full lg:col-span-1">
                         <h1>List of Students</h1>
                         <p> {completedStudents}/{totalStudents} students finished</p>
+                        <p> Code: {sessionStorage.getItem('createdClassCode')} </p>
 
                         <button onClick={seeResults} className="animated-button p-2 text-center mt-4 align-bottom">
                             <div className="animated-button-bg"></div>
@@ -152,7 +153,6 @@ function TeacherWaitRoom({ navigate, classCode }) {
                             </div>
                         </div>
                     </div>
-                    {/* <button onClick={handleReset}>Reset</button> */}
                 </div>
             </div>
         </div >
