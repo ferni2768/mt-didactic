@@ -8,6 +8,15 @@ function TeacherWaitRoom({ navigate, classCode }) {
     const { isEntering, isTransitioning } = useContext(TransitionContext);
     const scrollbarRef = useRef(null);
 
+    let completedStudents = 0;
+    let totalStudents = 0;
+
+    if (students) {
+        // Calculate the number of students with progress of 100%
+        completedStudents = students.filter(student => student.progress === 100).length;
+        totalStudents = students.length;
+    }
+
     Scrollbar.use(OverscrollPlugin);
 
 
@@ -42,11 +51,10 @@ function TeacherWaitRoom({ navigate, classCode }) {
         }
     }, []);
 
-
     useEffect(() => {
         const fetchStudents = async () => {
             try {
-                const response = await fetch('http://localhost:3001/student');
+                const response = await fetch(`http://localhost:3001/students?classCode=${classCode}`);
                 const data = await response.json();
                 setStudents(data);
             } catch (error) {
@@ -58,7 +66,8 @@ function TeacherWaitRoom({ navigate, classCode }) {
         const intervalId = setInterval(fetchStudents, 3000); // Reload students every 3 seconds
 
         return () => clearInterval(intervalId);
-    }, []);
+    }, [classCode]); // Add classCode as a dependency to re-fetch when it changes
+
 
     const handleReset = () => {
         // Reset the session
@@ -93,10 +102,6 @@ function TeacherWaitRoom({ navigate, classCode }) {
         }
     };
 
-    // Calculate the number of students with progress of 100%
-    const completedStudents = students.filter(student => student.progress === 100).length;
-    const totalStudents = students.length;
-
 
     return (
         <div>
@@ -125,7 +130,7 @@ function TeacherWaitRoom({ navigate, classCode }) {
                             </div>
                             <div className="inside-card-2 p-6 pt-14" ref={scrollbarRef}>
                                 <ul className='pt-1'>
-                                    {students.slice(0, 99).reverse().map(student => (
+                                    {students && students.slice(0, 99).reverse().map(student => (
                                         <li key={student.id} className="student-item">
                                             <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 lg:gap-4 md:gap-4 gap-0.5'>
                                                 <div className="col-span-full md:col-span-1 lg:col-span-1">

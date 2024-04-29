@@ -82,10 +82,14 @@ app.get('/class/:code/phase', (req, res) => {
     });
 });
 
-// API endpoint to fetch list of students
-app.get('/student', (req, res) => {
-    const query = 'SELECT * FROM student';
-    db.query(query, (err, result) => {
+// API endpoint to fetch list of students from a specific class
+app.get('/students', (req, res) => {
+    // Extract classCode from query parameters
+    const classCode = req.query.classCode;
+
+    // Filter students by classCode
+    const query = `SELECT * FROM student WHERE class_code = ?`;
+    db.query(query, [classCode], (err, result) => {
         if (err) {
             console.error('Error executing MySQL query:', err);
             res.status(500).json({ error: 'Internal server error' });
