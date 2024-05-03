@@ -14,6 +14,8 @@ function StudentPlay({ navigate, classCode }) {
         return parsedIteration;
     });
 
+    const [matrix, setMatrix] = useState(null);
+    const [, setScore] = useState();
     const [student, setStudent] = useState({});
     const [classPhase, setClassPhase] = useState(null); // State to track the class phase
     const { isTransitioning, isEntering } = useContext(TransitionContext);
@@ -125,8 +127,61 @@ function StudentPlay({ navigate, classCode }) {
         sessionStorage.removeItem('iteration');
         sessionStorage.removeItem('newBatch');
         sessionStorage.removeItem('score');
+        sessionStorage.removeItem('mistakes');
         navigate('/student/ABC123');
         window.location.reload(); // Reload the page to reset the state
+    };
+
+    useEffect(() => {
+        // Retrieve the loggedInStudent object from sessionStorage
+        const loggedInStudentString = sessionStorage.getItem('loggedInStudent');
+        const loggedInScoreString = sessionStorage.getItem('loggedInScore');
+
+        if (loggedInStudentString) {
+            const loggedInStudent = JSON.parse(loggedInStudentString);
+            const loggedInScore = loggedInScoreString ? JSON.parse(loggedInScoreString) : null;
+
+            // Set the student and score state
+            setStudent(loggedInStudent);
+            setScore(loggedInScore);
+
+            // Fetch the matrix data using the model name from loggedInStudent
+            const fetchAndSetMatrix = async () => {
+                const modelName = loggedInStudent.model;
+                await fetchModelMatrix(modelName, setMatrix);
+            };
+
+            fetchAndSetMatrix();
+        } else {
+            console.log('No loggedInStudent found in sessionStorage.');
+        }
+    }, [iteration]); // Empty dependency array ensures this runs only once after the initial render
+
+
+    const fetchModelMatrix = async (modelName, setMatrix) => {
+        try {
+            const response = await fetch(`http://127.0.0.1:5000/models/${modelName}/matrix`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log('API Response:', data);
+
+            const matrix = data;
+            console.log('Matrix Data for Model:', matrix);
+
+            setMatrix(matrix);
+
+        } catch (error) {
+            console.error('Failed to fetch model matrix:', error);
+        }
     };
 
     if (classPhase === 2) {
@@ -140,11 +195,19 @@ function StudentPlay({ navigate, classCode }) {
                 <div className="grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-1">
                     <div className='col-span-2'>
                         <h1 className='hidden lg:block'>Student Play</h1>
+
+                        {/* {matrix && matrix.map((row, rowIndex) => (
+                            <div key={rowIndex}>
+                                {row.map((value, colIndex) => (
+                                    <span key={colIndex}>{value} </span>
+                                ))}
+                            </div>
+                        ))} */}
                         <div className='h-full'>
                             <PlayWordSelector updateScore={updateScore} setProgress={setProgress} setWords={setWords}
                                 ExternalCurrentWordIndex={ExternalCurrentWordIndex} ExternalCurrentWordIndexChange={ExternalCurrentWordIndexChange}
                                 setExternalIsTraining={setIsTraining} maxIterations={maxIterations} iteration={iteration} setIteration={setIteration}
-                                classCode={classCode} navigate={navigate} />
+                                classCode={classCode} navigate={navigate} matrix={matrix} />
                         </div>
                     </div>
                     <div>

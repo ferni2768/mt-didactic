@@ -2,11 +2,13 @@ import React, { useEffect, useState, useRef } from 'react';
 import useDataFetcher from './database/dataFetcher'; // To fetch the data from the csv files
 
 function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentWordIndex, ExternalCurrentWordIndexChange,
-    setExternalIsTraining, maxIterations, iteration, setIteration, navigate, classCode }) {
+    setExternalIsTraining, maxIterations, iteration, setIteration, navigate, matrix, classCode }) {
     const [currentWordIndex, setCurrentWordIndex] = useState(0); // To keep track of the current word index
     const [isTurningIn, setIsTurningIn] = useState(false);
     const [isTraining, setIsTraining] = useState(false);
     const [buttonWait, setButtonWait] = useState(true);
+
+    const trainingIterations = 5; // Number of iterations to train the model
 
     const [selectedModel,] = useState(() => {
         // Get the name of the model that the student is going to train
@@ -17,7 +19,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
     const [newAnswer, setNewAnswer] = useState([]); // To store the input answers
     const [newWords, setNewWords] = useState(false); // To trigger the new batch of words
     const [trainingData, setTrainingData] = useState([]);
-    const { selectedElements, processTrainingData } = useDataFetcher();
+    const { selectedElements, processTrainingData, processTrainingDataMatrix } = useDataFetcher();
 
     const [animationClass, setAnimationClass] = useState(''); // To trigger the transition animation between words
     const [isAnimating, setIsAnimating] = useState(false);
@@ -108,13 +110,13 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         }
 
         if (newWords) {
-            const updatedNewBatch = processTrainingData(trainingData);
+            const updatedNewBatch = processTrainingDataMatrix(matrix);
             setNewBatch(updatedNewBatch); // Set new batch of words
             console.log('Updated NewBatch:', updatedNewBatch);
             setCurrentWordIndex(0);
             setNewWords(false);
         }
-    }, [selectedElements, iteration]);
+    }, [matrix]);
 
     useEffect(() => {
         if (iteration < maxIterations) {
@@ -170,8 +172,8 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         const config = { method: 'post', body: JSON.stringify(answersObj), headers: { 'Content-Type': 'application/json' } };
 
         try {
-            // Loop to train the model 5 times
-            for (let i = 0; i < 5; i++) {
+            // Loop the the training
+            for (let i = 0; i < trainingIterations; i++) {
                 const response = await fetch(url, config);
 
                 if (!response.ok) {
@@ -186,10 +188,13 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                 setTrainingData(transformedData);
             }
 
-            handleTestModel([selectedModel]);
+            await handleTestModel([selectedModel]);
+
+            // Update the session storage with the mistakes
+            updateMistakesInSessionStorage();
 
             if (iteration + 1 != maxIterations) {
-                setProgress((iteration + 1) * 20); // Update the student's progress by 20% for each iteration
+                setProgress((iteration + 1) * (100 / maxIterations)); // Update the student's progress for each iteration
                 setNewWords(true);
                 setIsTraining(false);
                 setIsTurningIn(false);
@@ -243,6 +248,28 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         }
     };
 
+    const updateMistakesInSessionStorage = () => {
+        // Retrieve the current mistakes from session storage, if any
+        const currentMistakes = sessionStorage.getItem('mistakes') ? JSON.parse(sessionStorage.getItem('mistakes')) : [];
+
+        // Find mistakes by comparing newAnswer with newBatch, ignoring case
+        const newMistakes = newBatch.map(([word, correctLabel], index) => {
+            const [, inputLabel] = newAnswer[index];
+            // Convert both labels to lowercase before comparing
+            if (inputLabel.toUpperCase() !== correctLabel.toUpperCase()) {
+                // Convert both labels to lowercase before adding to mistakes
+                return [word, inputLabel.toUpperCase(), correctLabel.toUpperCase()];
+            }
+            return null; // No mistake for this word
+        }).filter(mistake => mistake !== null); // Filter out null values (no mistakes)
+
+        // Combine the current mistakes with the new mistakes
+        const updatedMistakes = [...currentMistakes, ...newMistakes];
+
+        // Update the session storage with the updated mistakes array
+        sessionStorage.setItem('mistakes', JSON.stringify(updatedMistakes));
+    };
+
     // Function to find the next non-set word index
     const findNextNonSetWordIndex = (updatedNewAnswer) => {
         for (let i = 0; i < updatedNewAnswer.length; i++) {
@@ -277,7 +304,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
             // Add the class for the new word animation
             setAnimationClass('move-new');
             setIsAnimating(false);
-        }, 270);
+        }, 270); // 270ms is the duration of the transition
     };
 
     const handleExternalClick = () => {
@@ -295,6 +322,25 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
             setIsAnimating(false);
         }, 270);
     };
+
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === 'W' || event.key === 'w') {
+                if (isTraining || iteration >= maxIterations) return;
+                if (currentWordIndex === 11) {
+                    handleAnswerSubmit(newAnswer);
+                    return;
+                }
+                const [, label] = newBatch[currentWordIndex];
+                handleButtonClick(label.toUpperCase());
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [newBatch, currentWordIndex, handleButtonClick]);
 
 
     return (

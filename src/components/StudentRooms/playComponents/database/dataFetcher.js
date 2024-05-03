@@ -45,6 +45,107 @@ function useDataFetcher() {
         return shuffleArray(selectNewWords(detectErrors(response)));
     };
 
+    const processTrainingDataMatrix = (response) => {
+        return shuffleArray(selectNewWordsMatrix(detectErrorsMatrix(response)));
+    };
+
+    const adjustErrorCounts = (errorCounts) => {
+        // Round the error counts to the nearest whole number
+        const roundedCounts = Object.entries(errorCounts).map(([category, count]) => [category, Math.round(count)]);
+
+        // Calculate the total of the rounded counts
+        const totalRounded = roundedCounts.reduce((sum, [_, count]) => sum + count, 0);
+
+        // Calculate how many points are left to distribute to reach a total of 10
+        let pointsToDistribute = 10 - totalRounded;
+
+        // Sort the categories by their rounded counts in descending order
+        const sortedCounts = roundedCounts.sort((a, b) => b[1] - a[1]);
+
+        // Distribute the remaining points to the categories with the highest rounded counts
+        sortedCounts.forEach(([category, count], index) => {
+            if (pointsToDistribute > 0) {
+                const additionalPoints = Math.min(pointsToDistribute, 1);
+                sortedCounts[index][1] += additionalPoints;
+                pointsToDistribute -= additionalPoints;
+            }
+        });
+
+        // Convert back to an object
+        const adjustedCounts = Object.fromEntries(sortedCounts);
+
+        return adjustedCounts;
+    };
+
+    const detectErrorsMatrix = (confusionMatrix) => {
+        const errorCounts = { "d": 0, "h": 0, "g": 0 };
+        const categories = ['d', 'h', 'g']; // Assuming 'd' for diphthongs, 'h' for hiatuses, and 'g' for generals
+
+        // Calculate error counts for each category based on incorrect predictions
+        confusionMatrix.forEach((row, i) => {
+            row.forEach((value, j) => {
+                if (i !== j) { // Exclude diagonal elements (correct predictions)
+                    errorCounts[categories[i]] += value; // Use the row index to categorize the error
+                }
+            });
+        });
+
+        // Normalize error counts if total exceeds 10
+        const totalErrors = Object.values(errorCounts).reduce((a, b) => a + b, 0);
+        if (totalErrors > 10) {
+            const normalizationFactor = 10 / totalErrors;
+            Object.keys(errorCounts).forEach(category => {
+                errorCounts[category] *= normalizationFactor;
+            });
+        }
+
+        // Adjust the error counts to be integers and sum to 10
+        const adjustedErrorCounts = adjustErrorCounts(errorCounts);
+
+
+        // Convert to array of tuples, ensuring at most 10 elements
+        const errorArray = Object.entries(adjustedErrorCounts).map(([category, count]) => [category, count]);
+
+        console.log("HEEEERE ERRORRRRS", errorArray);
+        return errorArray;
+    };
+
+
+
+    const selectNewWordsMatrix = (errorCountsArray) => {
+        const categories = { "d": diphthongs, "h": hiatuses, "g": generals };
+        let selectedWords = [];
+
+        // Iterate over the errorCountsArray to select words based on the specified counts
+        errorCountsArray.forEach(([category, count]) => {
+            // Ensure the category is present in the categories object
+            if (categories[category] !== undefined) {
+                const shuffledWords = shuffleArray(categories[category]);
+                // Select the specified number of words from the shuffled array
+                selectedWords = selectedWords.concat(shuffledWords.slice(0, count));
+            } else {
+                console.error(`Category ${category} is missing in the categories object.`);
+            }
+        });
+
+        // If the total number of selected words is less than 10, fill the rest with random words
+        while (selectedWords.length < 10) {
+            const randomCategory = errorCountsArray[Math.floor(Math.random() * errorCountsArray.length)][0];
+            const shuffledWords = shuffleArray(categories[randomCategory]);
+            selectedWords.push(shuffledWords[0]);
+        }
+
+        return selectedWords;
+    };
+
+
+
+
+
+
+
+
+
     const parseCSV = (data, type) => {
         return new Promise((resolve, reject) => {
             Papa.parse(data, {
@@ -143,7 +244,7 @@ function useDataFetcher() {
         return selectedWords;
     };
 
-    return { selectedElements, processTrainingData };
+    return { selectedElements, processTrainingData, processTrainingDataMatrix };
 
 }
 
