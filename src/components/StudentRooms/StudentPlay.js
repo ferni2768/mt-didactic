@@ -226,9 +226,9 @@ function StudentPlay({ navigate, classCode }) {
                                                     setExternalCurrentWordIndex(index);
                                                     setExternalCurrentWordIndexChange(ExternalCurrentWordIndexChange * (-1)); // To notify the child component that the current word index has changed
                                                 }}>
-                                                <div className="animated-word-bg"></div>
+                                                <div className="animated-word-bg md:pl-56 lg:pl-0"></div>
                                                 <div className="animated-word-text">
-                                                    {word}
+                                                    {word} {label !== "" && `(${label})`}
                                                 </div>
                                             </button>
                                         ))}

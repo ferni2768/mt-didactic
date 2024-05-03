@@ -110,8 +110,6 @@ function useDataFetcher() {
         return errorArray;
     };
 
-
-
     const selectNewWordsMatrix = (errorCountsArray) => {
         const categories = { "d": diphthongs, "h": hiatuses, "g": generals };
         let selectedWords = [];
@@ -137,14 +135,6 @@ function useDataFetcher() {
 
         return selectedWords;
     };
-
-
-
-
-
-
-
-
 
     const parseCSV = (data, type) => {
         return new Promise((resolve, reject) => {

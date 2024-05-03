@@ -369,7 +369,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
 
                                 <div ref={shrinkSpace} className='grid grid-cols-3 col-span-3 justify-center mt-4 w-full'>
 
-                                    <div ref={shrinkButton} onClick={() => handleAnswerSubmit(newAnswer)} className={`grid mb-5 lg:mb-0 grid-cols-3 col-span-3 turnInContainer ${isTurningIn ? 'buttonsShrink' : 'buttonsShrink2'} `}>
+                                    <div ref={shrinkButton} onClick={() => handleAnswerSubmit(newAnswer)} className={`grid mb-5 lg:mb-0 grid-cols-3 col-span-3 turnInContainer ${isTurningIn ? 'buttonsShrink' : 'buttonsShrink2'}`} style={{ maxHeight: '3.5rem' }}>
 
                                         <div className={`animated-button-text ${isTurningIn ? 'turnInTransition2' : 'turnInTransition'}`} disabled={isTurningIn || isTraining} style={{ position: 'absolute', justifySelf: 'center', alignSelf: 'center' }}>
                                             Turn In

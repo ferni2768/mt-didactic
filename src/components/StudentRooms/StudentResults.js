@@ -158,13 +158,13 @@ function StudentResults({ navigate, classCode }) {
     const getStyleForLabel = (label) => {
         switch (label) {
             case 'D':
-                return { color: '#ccb63b' };
+                return { color: '#cfb838', fontWeight: 450 };
             case 'H':
-                return { color: '#127edd' };
+                return { color: '#127edd', fontWeight: 450 };
             case 'G':
-                return { color: '#ee1212' };
+                return { color: '#ee1212', fontWeight: 450 };
             default:
-                return { color: '#1c1c1c' };
+                return { color: '#1c1c1c', fontWeight: 450 };
         }
     };
 
@@ -254,7 +254,7 @@ function StudentResults({ navigate, classCode }) {
                                             <div className='mistakes pt-1'>
                                                 {mistakes.map(([word, , correctLabel], index) => (
                                                     <div key={index} style={getStyleForLabel(correctLabel)}>
-                                                        {correctLabel} - {word}
+                                                        {word} ({correctLabel})
                                                     </div>
                                                 ))}
                                             </div>
@@ -320,7 +320,7 @@ function StudentResults({ navigate, classCode }) {
                                         <div className='mistakes pt-1'>
                                             {mistakes.map(([word, , correctLabel], index) => (
                                                 <div key={index} style={getStyleForLabel(correctLabel)}>
-                                                    {correctLabel} - {word}
+                                                    {word} ({correctLabel})
                                                 </div>
                                             ))}
                                         </div>
