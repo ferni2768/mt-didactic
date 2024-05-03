@@ -45,6 +45,7 @@ function StudentResults({ navigate, classCode }) {
                     }
                 }
             });
+            scrollbar.track.xAxis.element.remove();
             return () => scrollbar.destroy();
         }
     }, []);
@@ -62,6 +63,7 @@ function StudentResults({ navigate, classCode }) {
                     }
                 }
             });
+            scrollbar.track.xAxis.element.remove();
             return () => scrollbar.destroy();
         }
     }, []);
@@ -79,6 +81,7 @@ function StudentResults({ navigate, classCode }) {
                     }
                 }
             });
+            scrollbar.track.xAxis.element.remove();
             return () => scrollbar.destroy();
         }
     }, []);

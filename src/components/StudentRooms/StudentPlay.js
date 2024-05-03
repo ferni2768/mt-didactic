@@ -55,6 +55,7 @@ function StudentPlay({ navigate, classCode }) {
                     }
                 }
             });
+            scrollbar.track.xAxis.element.remove();
             return () => scrollbar.destroy();
         }
     }, []);
@@ -151,11 +152,15 @@ function StudentPlay({ navigate, classCode }) {
                 await fetchModelMatrix(modelName, setMatrix);
             };
 
-            fetchAndSetMatrix();
+            // Introduce a 5ms delay before fetching and setting the matrix to avoid synchronous issues
+            setTimeout(() => {
+                fetchAndSetMatrix();
+            }, 5); // 5ms delay
         } else {
             console.log('No loggedInStudent found in sessionStorage.');
         }
-    }, [iteration]); // Empty dependency array ensures this runs only once after the initial render
+    }, [iteration]); // Re-run the effect every iteration
+
 
 
     const fetchModelMatrix = async (modelName, setMatrix) => {
