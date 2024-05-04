@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 
 import { TransitionContext } from '../../visualComponents/TransitionContext';
+import { useTranslation } from 'react-i18next';
 
 function StudentJoin({ navigate, classCode }) {
     const maxLength = 15; // Set the maximum length of the name of the student
@@ -10,6 +11,8 @@ function StudentJoin({ navigate, classCode }) {
     const [inputClassCode, setInputClassCode] = useState(classCode);
     const [wantsToJoin, setWantsToJoin] = useState(false);
     const { isTransitioning, isEntering } = useContext(TransitionContext);
+
+    const { t } = useTranslation();
 
     const shrinkCard = useRef(null);
 
@@ -147,9 +150,9 @@ function StudentJoin({ navigate, classCode }) {
             <div ref={shrinkCard} className={`inside-login-card ${wantsToJoin ? 'shrink' : ''} ${isTransitioning ? 'transitioning' : ''} ${isEntering ? 'entering' : ''}`}>
                 <div className="form-container">
 
-                    {wantsToJoin && <p className={`waiting ${wantsToJoin ? 'form-animated-2' : ''}`} style={{ position: 'absolute' }}>Waiting...</p>}
+                    {wantsToJoin && <p className={`waiting ${wantsToJoin ? 'form-animated-2' : ''}`} style={{ position: 'absolute' }}>{t('waiting')}</p>}
 
-                    <h1 className={`text-2xl font-bold text-center ${wantsToJoin ? 'form-animated' : ''}`}>Student Join</h1>
+                    <h1 className={`text-2xl font-bold text-center ${wantsToJoin ? 'form-animated' : ''}`}>{t('studentJoin')}</h1>
 
                     <div className={`${wantsToJoin ? 'form-animated' : ''}`}>
                         <form onSubmit={handleJoin} className="space-y-4">
@@ -171,11 +174,11 @@ function StudentJoin({ navigate, classCode }) {
                                                outline-none block w-full shadow-sm text-custom_black p-2"
                                 />
                                 <span className='text-2xl text-gray-300 bg-white absolute left-5 top-11 px-1
-                                                transition duration-200 input-text pointer-events-none'>Name</span>
+                                                transition duration-200 input-text pointer-events-none'>{t('name')}</span>
                             </div>
                             {nameExceedsLimit && isNameInputFocused && (
                                 <div className='pb-0.5'>
-                                    <p className="text-sm text-accent slideUpFadeIn">Name cannot be more than 15 characters</p>
+                                    <p className="text-sm text-accent slideUpFadeIn">{t('charLimit')}</p>
                                 </div>
                             )}
                             <div className="flex justify-center relative">
@@ -191,13 +194,13 @@ function StudentJoin({ navigate, classCode }) {
                                               outline-none block w-full shadow-sm text-custom_black p-2"
                                 />
                                 <span className='text-2xl text-gray-300 bg-white absolute left-3 top-6 px-1
-                                                 transition duration-200 input-text pointer-events-none'>Class code</span>
+                                                 transition duration-200 input-text pointer-events-none'>{t('classCode')}</span>
                             </div>
                             <div>
                                 <button type="submit" className="animated-button p-2 text-center mt-4" disabled={wantsToJoin}>
                                     <div className="animated-button-bg"></div>
                                     <div className="animated-button-text">
-                                        Join
+                                        {t('join')}
                                     </div>
                                 </button>
                             </div>

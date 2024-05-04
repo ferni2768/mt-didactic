@@ -257,7 +257,7 @@
     font-size: 1.5rem;
     box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
     border-radius: 1rem;
-    top: 4rem;
+    top: 4.5rem;
     right: calc(100% + 2rem);
     position: relative;
     z-index: 20 !important;
@@ -277,7 +277,7 @@
     border-top-left-radius: 1rem;
     position: relative;
     z-index: 0 !important;
-    top: 5rem;
+    top: 5.5rem;
 
     transition: transform 0.05s ease-out;
 }
@@ -293,7 +293,7 @@
     box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
     border-top-right-radius: 1rem;
     position: relative;
-    top: 12rem;
+    top: 12.5rem;
     left: calc(100% + 1rem);
 
     transition: transform 0.05s ease-out;

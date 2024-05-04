@@ -2,11 +2,14 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import { TransitionContext } from '../../visualComponents/TransitionContext';
 import Scrollbar from 'smooth-scrollbar';
 import OverscrollPlugin from 'smooth-scrollbar/plugins/overscroll';
+import { useTranslation } from 'react-i18next';
 
 function TeacherWaitRoom({ navigate, classCode }) {
     const [students, setStudents] = useState([]);
     const { isEntering, isTransitioning } = useContext(TransitionContext);
     const scrollbarRef = useRef(null);
+
+    const { t } = useTranslation();
 
     let completedStudents = 0;
     let totalStudents = 0;
@@ -110,14 +113,14 @@ function TeacherWaitRoom({ navigate, classCode }) {
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:h-80 gap-4'>
 
                     <div className="col-span-full md:col-span-full lg:col-span-1">
-                        <h1>List of Students</h1>
-                        <p> {completedStudents}/{totalStudents} students finished</p>
-                        <p> Code: {sessionStorage.getItem('createdClassCode')} </p>
+                        <h1>{t('listOfStudents')}</h1>
+                        <p> {completedStudents}/{totalStudents} {t('studentsFinished')}</p>
+                        <p> {t('code')}: {sessionStorage.getItem('createdClassCode')} </p>
 
                         <button onClick={seeResults} className="animated-button p-2 text-center mt-4 align-bottom">
                             <div className="animated-button-bg"></div>
                             <div className="animated-button-text">
-                                See results
+                                {t('seeResults')}
                             </div>
                         </button>
                     </div>
@@ -125,10 +128,10 @@ function TeacherWaitRoom({ navigate, classCode }) {
                     <div className="col-span-full md:col-span-full lg:col-span-2 lg:pl-7">
                         <div className='contain'>
                             <div className='inside-card-2-header text-white'> {/* Header */}
-                                <div className='hidden md:block lg:block'>Name</div>
-                                <div className='hidden md:block lg:block'>Progress</div>
+                                <div className='hidden md:block lg:block'>{t('name')}</div>
+                                <div className='hidden md:block lg:block'>{t('progress')}</div>
                                 <div className='hidden md:block lg:block'></div>
-                                <div className='md:hidden lg:hidden'>Names and progress</div>
+                                <div className='md:hidden lg:hidden'>{t('nameAndProgress')}</div>
                             </div>
                             <div className="inside-card-2 p-6 pt-14" ref={scrollbarRef}>
                                 <ul className='pt-1'>

@@ -106,7 +106,6 @@ function useDataFetcher() {
         // Convert to array of tuples, ensuring at most 10 elements
         const errorArray = Object.entries(adjustedErrorCounts).map(([category, count]) => [category, count]);
 
-        console.log("HEEEERE ERRORRRRS", errorArray);
         return errorArray;
     };
 
@@ -182,7 +181,6 @@ function useDataFetcher() {
                 errorCounts[tuple[1]]++;
             }
         });
-        console.log(errorCounts);
         return errorCounts;
     };
 

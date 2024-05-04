@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import useDataFetcher from './database/dataFetcher'; // To fetch the data from the csv files
+import { useTranslation } from 'react-i18next';
 
 function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentWordIndex, ExternalCurrentWordIndexChange,
     setExternalIsTraining, maxIterations, iteration, setIteration, navigate, matrix, classCode }) {
@@ -33,6 +34,8 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         const storedNewBatch = sessionStorage.getItem('newBatch');
         return storedNewBatch ? JSON.parse(storedNewBatch) : [];
     });
+
+    const { t } = useTranslation();
 
 
     useEffect(() => {
@@ -351,15 +354,15 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                         <div className='hidden lg:block lg:row-span-1'></div>
                         <div className='row-span-2'>
                             <h1 className={`text-center ${isTraining ? 'trainingIn' : 'trainingOut'}`} style={{ position: 'absolute' }}>
-                                Training{'.'.repeat(periods)}
+                                {t('training')}{'.'.repeat(periods)}
                             </h1>
                             <div className={`grid grid-rows-2 grid-cols-3 ${isTraining ? 'buttonsOut' : 'buttonsIn'}`} style={{ position: 'relative' }}>
                                 <div className='col-span-full justify-center word-container'>
                                     <div className="word-container">
                                         {currentWordIndex === 11 ? (
-                                            <h1 className={`word ${animationClass}`}> Train? </h1>
+                                            <h1 className={`word ${animationClass}`}> {t('train?')} </h1>
                                         ) : currentWordIndex === 12 ? (
-                                            <h1 className={`word ${animationClass}`}> Turn in </h1>
+                                            <h1 className={`word ${animationClass}`}> {t('turnIn?')} </h1>
                                         ) : (
                                             <h1 className={`word ${animationClass}`}>{newBatch[currentWordIndex][0]}</h1>
                                         )}
@@ -372,7 +375,8 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                                     <div ref={shrinkButton} onClick={() => handleAnswerSubmit(newAnswer)} className={`grid mb-5 lg:mb-0 grid-cols-3 col-span-3 turnInContainer ${isTurningIn ? 'buttonsShrink' : 'buttonsShrink2'}`} style={{ maxHeight: '3.5rem' }}>
 
                                         <div className={`animated-button-text ${isTurningIn ? 'turnInTransition2' : 'turnInTransition'}`} disabled={isTurningIn || isTraining} style={{ position: 'absolute', justifySelf: 'center', alignSelf: 'center' }}>
-                                            Turn In
+                                            {currentWordIndex === 11 && t('okTrain')}
+                                            {currentWordIndex === 12 && t('okTurnIn')}
                                         </div>
 
                                         <div className={`animated-button-bg ${isTurningIn ? 'turnInTransition2' : 'turnInTransition'}`}></div>
@@ -380,30 +384,30 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                                         <button onClick={() => handleButtonClick('D')} disabled={isAnimating || isTurningIn} className={`animated-button-diphthong p-2 text-center`}>
                                             <div className={`animated-button-bg-diphthong ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}></div>
                                             <div className={`hidden lg:block md:block animated-button-text ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}>
-                                                Diphthong
+                                                {t('diphthong')}
                                             </div>
                                             <div className={`lg:hidden md:hidden animated-button-text ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}>
-                                                D
+                                                {t('d')}
                                             </div>
                                         </button>
 
                                         <button onClick={() => handleButtonClick('H')} disabled={isAnimating} className={`animated-button-hiatus p-2 text-center`}>
                                             <div className={`animated-button-bg-hiatus ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}></div>
                                             <div className={`hidden lg:block md:block animated-button-text  ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}>
-                                                Hiatus
+                                                {t('hiatus')}
                                             </div>
                                             <div className={`lg:hidden md:hidden animated-button-text  ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}>
-                                                H
+                                                {t('h')}
                                             </div>
                                         </button>
 
                                         <button onClick={() => handleButtonClick('G')} disabled={isAnimating || isTurningIn} className={`animated-button-general p-2 text-center`}>
                                             <div className={`animated-button-bg-general  ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}></div>
                                             <div className={`hidden lg:block md:block animated-button-text  ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}>
-                                                General
+                                                {t('general')}
                                             </div>
                                             <div className={`lg:hidden md:hidden animated-button-text  ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}>
-                                                G
+                                                {t('g')}
                                             </div>
                                         </button>
 

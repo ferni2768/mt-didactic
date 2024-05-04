@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import { TransitionContext } from '../../visualComponents/TransitionContext';
 import Scrollbar from 'smooth-scrollbar';
 import OverscrollPlugin from 'smooth-scrollbar/plugins/overscroll';
+import { useTranslation } from 'react-i18next';
 
 function StudentResults({ navigate, classCode }) {
     const [student, setStudent] = useState({});
@@ -16,6 +17,8 @@ function StudentResults({ navigate, classCode }) {
     const sum = matrix && matrix.length > 0 ? matrix[0][0] + matrix[1][1] + matrix[2][2] : null;
 
     Scrollbar.use(OverscrollPlugin);
+
+    const { t } = useTranslation();
 
 
     useEffect(() => {
@@ -191,7 +194,7 @@ function StudentResults({ navigate, classCode }) {
             <div className={`inside-card ${isTransitioning ? 'transitioning' : ''} ${isEntering ? 'entering' : ''}`}>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:h-80 gap-4'>
                     <div className="lg:col-span-1 col-span-full gap-4 max-w-17">
-                        <h1>Student Results</h1>
+                        <h1>{t('studentResults')}</h1>
 
                         <div className='hidden podium-student lg:flex justify-center items-center text-center'>
                             <div className='top-bar-student py-8'>
@@ -210,7 +213,7 @@ function StudentResults({ navigate, classCode }) {
                     <div className='col-span-full lg:col-span-2 lg:pl-7'>
                         <div className='contain hidden md:grid lg:grid grid-rows-3 grid-cols-2'>
                             <div className='inside-card-2-header text-white'> {/* Header */}
-                                <div>AI learning results</div>
+                                <div>{t('AIResults')}</div>
                             </div>
 
                             <div className="inside-card-2 p-7 lg:p-6 md:p-6 lg:pt-14 md:pt-14 pt-14 col-span-full grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 md:grid-rows-3 lg:grid-rows-3 grid-rows-0 justify-center">
@@ -218,16 +221,16 @@ function StudentResults({ navigate, classCode }) {
                                 <div className='contain-results md:ml-2 lg:ml-2 ml-0 mt-5 col-span-1 row-span-2'>
                                     <div className='inside-card-results-header text-white'> {/* Header */}
                                         <div></div>
-                                        <div className='matrix-bold-diphthong'>D</div>
-                                        <div className='matrix-bold-hiatus'>H</div>
-                                        <div className='matrix-bold-general'>G</div>
+                                        <div className='matrix-bold-diphthong'>{t('d')}</div>
+                                        <div className='matrix-bold-hiatus'>{t('h')}</div>
+                                        <div className='matrix-bold-general'>{t('g')}</div>
                                     </div>
 
                                     <div className='inside-card-results-header-side text-white'> {/* Side header */}
                                         <div></div>
-                                        <div className='matrix-bold-diphthong'>D</div>
-                                        <div className='matrix-bold-hiatus'>H</div>
-                                        <div className='matrix-bold-general'>G</div>
+                                        <div className='matrix-bold-diphthong'>{t('d')}</div>
+                                        <div className='matrix-bold-hiatus'>{t('h')}</div>
+                                        <div className='matrix-bold-general'>{t('g')}</div>
                                     </div>
 
                                     <div className="inside-card-matrix pt-9 pl-14 pb-2 pr-7">
@@ -244,14 +247,14 @@ function StudentResults({ navigate, classCode }) {
                                 </div>
 
                                 <div className='block md:hidden lg:hidden self-center pt-4 text-center'>
-                                    <div className='text-2xl pb-2 text-custom_black' style={{ fontWeight: 640 }}>Global accuracy </div>
+                                    <div className='text-2xl pb-2 text-custom_black' style={{ fontWeight: 640 }}>{t('globalAccuracy')} </div>
                                     <div className='text-custom_black'> {sum !== null ? `${matrix[0][0]} + ${matrix[1][1]} + ${matrix[2][2]} = ${sum}` : 'loading...'} </div>
                                 </div>
 
                                 <div className='col-span-1 row-span-3'>
                                     <div className='contain-mistakes pl-2'>
                                         <div className='inside-card-mistakes-header mt-5 text-white'> {/* Header */}
-                                            {mistakes.length} {mistakes.length === 1 ? 'Mistake' : 'Mistakes'}
+                                            {mistakes.length} {mistakes.length === 1 ? t('mistake') : t('mistakes')}
                                         </div>
                                         <div className='inside-card-mistakes p-7 pt-12 mt-5' ref={scrollbarRef}>
                                             <div className='mistakes pt-1'>
@@ -266,7 +269,7 @@ function StudentResults({ navigate, classCode }) {
                                 </div>
 
                                 <div className='hidden md:block lg:block self-center lg:pr-0 lg:pl-3 md:pr-8 lg:mr-10 lg:mt-3 md:mt-3 mt-8 row-span-2 col-span-1 text-center'>
-                                    <div className='text-2xl pb-2 text-custom_black' style={{ fontWeight: 640 }}>Global accuracy </div>
+                                    <div className='text-2xl pb-2 text-custom_black' style={{ fontWeight: 640 }}>{t('globalAccuracy')}</div>
                                     <div className='text-custom_black'> {sum !== null ? `${matrix[0][0]} + ${matrix[1][1]} + ${matrix[2][2]} = ${sum}` : 'loading...'} </div>
                                 </div>
                             </div>
@@ -276,7 +279,7 @@ function StudentResults({ navigate, classCode }) {
                         {/*For small screens*/}
                         <div className='contain grid md:hidden lg:hidden'>
                             <div className='inside-card-2-header text-white'> {/* Header */}
-                                <div>AI learning results</div>
+                                <div>{t('AIResultsShort')}</div>
                             </div>
 
                             <div ref={scrollbarRef2} className="inside-card-2 p-7 lg:pt-14 md:pt-14 pt-14 justify-center">
@@ -284,16 +287,16 @@ function StudentResults({ navigate, classCode }) {
                                 <div className='contain-results md:ml-2 lg:ml-2 ml-2 mt-5'>
                                     <div className='inside-card-results-header text-white'> {/* Header */}
                                         <div></div>
-                                        <div className='matrix-bold-diphthong'>D</div>
-                                        <div className='matrix-bold-hiatus'>H</div>
-                                        <div className='matrix-bold-general'>G</div>
+                                        <div className='matrix-bold-diphthong'>{t('d')}</div>
+                                        <div className='matrix-bold-hiatus'>{t('h')}</div>
+                                        <div className='matrix-bold-general'>{t('g')}</div>
                                     </div>
 
                                     <div className='inside-card-results-header-side text-white'> {/* Side header */}
                                         <div></div>
-                                        <div className='matrix-bold-diphthong'>D</div>
-                                        <div className='matrix-bold-hiatus'>H</div>
-                                        <div className='matrix-bold-general'>G</div>
+                                        <div className='matrix-bold-diphthong'>{t('d')}</div>
+                                        <div className='matrix-bold-hiatus'>{t('h')}</div>
+                                        <div className='matrix-bold-general'>{t('g')}</div>
                                     </div>
 
                                     <div className="inside-card-matrix pt-9 pl-14 pb-2 pr-7">
@@ -311,13 +314,13 @@ function StudentResults({ navigate, classCode }) {
                                 </div>
 
                                 <div className='self-center pt-2 pb-2 text-center'>
-                                    <div className='text-2xl pb-2 text-custom_black' style={{ fontWeight: 640 }}>Global accuracy </div>
+                                    <div className='text-2xl pb-2 text-custom_black' style={{ fontWeight: 640 }}>{t('globalAccuracy')}</div>
                                     <div className='text-custom_black'> {sum !== null ? `${matrix[0][0]} + ${matrix[1][1]} + ${matrix[2][2]} = ${sum}` : 'loading...'} </div>
                                 </div>
 
                                 <div className='contain-mistakes-slim pl-2'>
                                     <div className='inside-card-mistakes-header mt-5 text-white'> {/* Header */}
-                                        {mistakes.length} {mistakes.length === 1 ? 'Mistake' : 'Mistakes'}
+                                        {mistakes.length} {mistakes.length === 1 ? t('mistake') : t('mistakes')}
                                     </div>
                                     <div className='inside-card-mistakes-slim p-7 pt-12 mt-5' ref={scrollbarRef3} >
                                         <div className='mistakes pt-1'>

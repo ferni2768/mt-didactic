@@ -3,6 +3,7 @@ import { TransitionContext } from '../../visualComponents/TransitionContext';
 import PlayWordSelector from './playComponents/playWordSelector';
 import Scrollbar from 'smooth-scrollbar';
 import OverscrollPlugin from 'smooth-scrollbar/plugins/overscroll';
+import { useTranslation } from 'react-i18next';
 
 function StudentPlay({ navigate, classCode }) {
     const maxIterations = 5; // Maximum training times
@@ -24,6 +25,8 @@ function StudentPlay({ navigate, classCode }) {
     const [ExternalCurrentWordIndexChange, setExternalCurrentWordIndexChange] = useState(1); // State to track/modify the current word index
     const [isTraining, setIsTraining] = useState(false);
     const scrollbarRef = useRef(null);
+
+    const { t } = useTranslation();
 
     Scrollbar.use(OverscrollPlugin);
 
@@ -199,8 +202,7 @@ function StudentPlay({ navigate, classCode }) {
             <div className={`inside-card ${isTransitioning ? 'transitioning' : ''} ${isEntering ? 'entering' : ''}`}>
                 <div className="grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-1">
                     <div className='col-span-2'>
-                        <h1 className='hidden lg:block'>Student Play</h1>
-
+                        <h1 className='hidden lg:block'>{t('studentPlay')}</h1>
                         {/* {matrix && matrix.map((row, rowIndex) => (
                             <div key={rowIndex}>
                                 {row.map((value, colIndex) => (

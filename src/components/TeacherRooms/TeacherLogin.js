@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
 
 import { TransitionContext } from '../../visualComponents/TransitionContext';
+import { useTranslation } from 'react-i18next';
 
 function TeacherLogin({ navigate, classCode }) {
     const [password, setPassword] = useState('password');
     const [inputClassCode, setInputClassCode] = useState(classCode);
     const { isTransitioning, isEntering } = useContext(TransitionContext);
+
+    const { t } = useTranslation();
 
 
     useEffect(() => {
@@ -72,7 +75,7 @@ function TeacherLogin({ navigate, classCode }) {
         <div>
             <div className={`inside-login-card ${isTransitioning ? 'transitioning' : ''} ${isEntering ? 'entering' : ''}`}>
                 <div className="form-container">
-                    <h1 className="text-2xl font-bold text-center">Teacher Login</h1>
+                    <h1 className="text-2xl font-bold text-center">{t('teacherLogin')}</h1>
                     <form onSubmit={handleCreateClass} className="space-y-4">
                         <div className="flex justify-center relative">
                             <input
@@ -86,7 +89,7 @@ function TeacherLogin({ navigate, classCode }) {
                                                outline-none block w-full shadow-sm text-custom_black p-2"
                             />
                             <span className='text-2xl text-gray-300 bg-white absolute left-3 top-11 px-1
-                                transition duration-200 input-text pointer-events-none'>Class code</span>
+                                transition duration-200 input-text pointer-events-none'>{t('classCode')}</span>
                         </div>
 
                         <div className="flex justify-center relative">
@@ -101,13 +104,13 @@ function TeacherLogin({ navigate, classCode }) {
                                                outline-none block w-full shadow-sm text-custom_black p-2"
                             />
                             <span className='text-2xl text-gray-300 bg-white absolute left-4 top-6 px-1
-                                transition duration-200 input-text pointer-events-none'>Password</span>
+                                transition duration-200 input-text pointer-events-none'>{t('password')}</span>
                         </div>
                         <div>
                             <button type="submit" className="animated-button p-2 text-center mt-4">
                                 <div className="animated-button-bg"></div>
                                 <div className="animated-button-text">
-                                    Login
+                                    {t('login')}
                                 </div>
                             </button>
                         </div>

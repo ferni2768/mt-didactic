@@ -4,6 +4,7 @@ import StudentView from './components/StudentView';
 import TeacherView from './components/TeacherView';
 import { TransitionProvider } from './visualComponents/TransitionContext';
 import './App.css';
+import './i18n/i18n'; // Translations from i18n.js
 
 function App() {
   return (

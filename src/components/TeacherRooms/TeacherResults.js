@@ -2,12 +2,15 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import { TransitionContext } from '../../visualComponents/TransitionContext';
 import Scrollbar from 'smooth-scrollbar';
 import OverscrollPlugin from 'smooth-scrollbar/plugins/overscroll';
+import { useTranslation } from 'react-i18next';
 
 function TeacherResults({ navigate, classCode }) {
     const [students, setStudents] = useState([]);
     const { isEntering, isTransitioning } = useContext(TransitionContext);
     const scrollbarRef = useRef(null);
     const scrollbarRef2 = useRef(null);
+
+    const { t } = useTranslation();
 
     Scrollbar.use(OverscrollPlugin);
 
@@ -91,7 +94,8 @@ function TeacherResults({ navigate, classCode }) {
 
                     <div className="grid lg:grid-cols-3 lg:col-span-1 gap-4 max-w-17">
                         <div className="col-span-1">
-                            <h1>Results</h1>
+                            <h1 style={{ position: 'absolute' }}>{t('results')}</h1>
+                            <h1 style={{ opacity: 0 }}>.</h1>
 
                             <div className='hidden lg:block podium-2 w-full'>
                                 <div className='top-bar-2 py-8'>
@@ -153,8 +157,8 @@ function TeacherResults({ navigate, classCode }) {
                         <div className="hidden lg:block">
                             <div className='contain'>
                                 <div className='inside-card-2-header text-white'> {/* Header */}
-                                    <div>Name</div>
-                                    <div>Score</div>
+                                    <div>{t('name')}</div>
+                                    <div>{t('score')}</div>
                                     <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
                                 </div>
                                 <div className="inside-card-2 p-6 pt-14" ref={scrollbarRef}>
@@ -185,10 +189,10 @@ function TeacherResults({ navigate, classCode }) {
                         <div className="block lg:hidden">
                             <div className='contain'>
                                 <div className='inside-card-2-header text-white'>
-                                    <div className='hidden md:block'>Name</div>
-                                    <div className='hidden md:block'>Score</div>
+                                    <div className='hidden md:block'>{t('name')}</div>
+                                    <div className='hidden md:block'>{t('score')}</div>
                                     <div className='hidden md:block'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-                                    <div className='md:hidden'>Names and scores</div>
+                                    <div className='md:hidden'>{t('namesAndScores')}</div>
                                 </div>
                                 <div className="inside-card-2 p-6 pt-14" ref={scrollbarRef2}>
                                     <ul className='pt-1'>
