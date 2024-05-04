@@ -1,0 +1,9 @@
+pandas
+numpy
+keras-preprocessing
+flask
+tensorflow
+matplotlib
+scikit-learn
+keras_tuner
+flask_cors

@@ -21,3 +21,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+educational-ai/models/
+educational-ai/machine_teaching_curriculum_cnn/
+educational-ai/machine_teaching_base_cnn/
+educational-ai/__pycache__/

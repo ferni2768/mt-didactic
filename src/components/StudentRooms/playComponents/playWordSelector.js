@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import useDataFetcher from './database/dataFetcher'; // To fetch the data from the csv files
+import useDataFetcher from './dataFetcher'; // To fetch the data from the csv files
 import { useTranslation } from 'react-i18next';
 
 function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentWordIndex, ExternalCurrentWordIndexChange,

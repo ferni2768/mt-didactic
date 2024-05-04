@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import Papa from 'papaparse';
-import diphthongsData from './diptongos.csv';
-import hiatusesData from './hiatos.csv';
-import generalsData from './general.csv';
+import diphthongsData from '../../../database/diptongos.csv';
+import hiatusesData from '../../../database/hiatos.csv';
+import generalsData from '../../../database/general.csv';
 
 // This file contains utility functions to fetch and parse data from CSV files
 function useDataFetcher() {
