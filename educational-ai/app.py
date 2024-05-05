@@ -166,8 +166,7 @@ def train_model(model_name):
     words = request.get_json()
     progress, mistakes = usecase.teach(model_name, words, tokenizer, padding) # aqui
     machine_teaching_progress.append(progress)
-    response = jsonify(mistakes.tolist()) # aqui (mio)
-    #response = jsonify(mistakes.tolist) # aqui (sergio)
+    response = jsonify(mistakes.tolist()) # aqui
     return response, 200, {'Content-Type': 'application/json'}
 
 
@@ -259,4 +258,5 @@ def jsonify_no_content():
 
 
 # Start listening to the served endpoints.
-app.run()
+if __name__ == '__main__':
+    app.run()

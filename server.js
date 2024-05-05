@@ -3,6 +3,7 @@ const mysql = require('mysql');
 const cors = require('cors'); // Import the cors middleware
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt'); // To hash the password
+const BASE_URL = 'http://127.0.0.1:8000';
 
 const app = express();
 const port = 3001;
@@ -150,7 +151,7 @@ app.post('/class/:code/join', async (req, res) => {
 
         // Create a new model in the external API
         try {
-            const modelResponse = await fetch(`http://localhost:5000/models/${model}`, {
+            const modelResponse = await fetch(`${BASE_URL}/models/${model}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -330,13 +330,13 @@ def curriculum_train_model_with_kfolds(model, model_name, x_train_list, y_train_
 
 
 # Get AI model.
-def get_pretrained_model(name="example", directory="models\\", extension=".keras"):
+def get_pretrained_model(name="example", directory="models/", extension=".keras"):
     filepath = os.path.join(os.path.dirname(__file__), directory, name + extension)
     return keras.models.load_model(filepath)
 
 
 # Save AI model.
-def save_pretrained_model(model, name="example", directory="models\\", extension=".keras"):
+def save_pretrained_model(model, name="example", directory="models/", extension=".keras"):
     if not name.endswith(extension):
         name += extension
     try:

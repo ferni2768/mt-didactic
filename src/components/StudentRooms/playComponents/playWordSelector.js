@@ -171,7 +171,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
 
         console.log(answersObj);
 
-        const url = `http://localhost:5000/models/${selectedModel}/train`;
+        const url = `${global.BASE_URL}/models/${selectedModel}/train`;
         const config = { method: 'post', body: JSON.stringify(answersObj), headers: { 'Content-Type': 'application/json' } };
 
         try {
@@ -219,7 +219,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
 
     const handleTestModel = async (selectedModelNames) => {
         try {
-            const response = await fetch('http://127.0.0.1:5000/models/test', {
+            const response = await fetch(`${global.BASE_URL}/models/test`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
