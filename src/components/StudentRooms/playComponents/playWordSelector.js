@@ -336,6 +336,14 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                 }
                 const [, label] = newBatch[currentWordIndex];
                 handleButtonClick(label.toUpperCase());
+            } else if (event.key === 'D' || event.key === 'd') {
+                handleButtonClick('D');
+            }
+            else if (event.key === 'H' || event.key === 'h') {
+                handleButtonClick('H');
+            }
+            else if (event.key === 'G' || event.key === 'g') {
+                handleButtonClick('G');
             }
         };
         window.addEventListener('keydown', handleKeyDown);

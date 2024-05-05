@@ -12,7 +12,6 @@ from sklearn.metrics import confusion_matrix # aqui
 
 import usecase
 import os
-from werkzeug.utils import secure_filename
 
 import tensorflow as tf
 import tokenizer_utils as ts_utils
@@ -28,9 +27,6 @@ machine_teaching_progress = []
 app.config['JSONIFY_MIMETYPE'] = 'application/json'
 CORS(app)
 
-# Path for custom csv training.
-custom_data_dir = os.path.join(os.getcwd(), '..', 'database', 'custom')
-os.makedirs(custom_data_dir, exist_ok=True)
 np.set_printoptions(threshold=sys.maxsize)
 plt.style.use('ggplot')
 tokenizer = Tokenizer(char_level=True, lower=True)
@@ -226,28 +222,6 @@ def get_history(model_name, extension='.keras'):
         return jsonify(model_histories[model_name]), 200
     else:
         return jsonify({"error": "Model not found"}), 404
-
-
-# Loads a csv file as dataset.
-@app.route('/load-csv', methods=['POST'])
-def load_custom_csv():
-    if 'file' not in request.files:
-        return jsonify({'message': 'No se ha proporcionado un archivo CSV'}), 400
-
-    file = request.files['file']
-
-    if file.filename == '':
-        return jsonify({'message': 'Nombre de archivo no válido'}), 400
-    if not file.filename.endswith('.csv'):
-        return jsonify({'message': 'El archivo debe ser un archivo CSV'}), 400
-    filename = secure_filename(file.filename)
-    file_path = os.path.join(custom_data_dir, filename)
-
-    try:
-        file.save(file_path)
-        return jsonify({'message': f'CSV file "{filename}" successfully loaded"'}), 200
-    except Exception as e:
-        return jsonify({'message': 'Error loading CSV file.', 'error': str(e)}), 500
 
 
 # Makes an application/json response for 204 in Flask.
