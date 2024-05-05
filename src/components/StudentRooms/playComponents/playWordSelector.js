@@ -3,9 +3,8 @@ import useDataFetcher from './dataFetcher'; // To fetch the data from the csv fi
 import { useTranslation } from 'react-i18next';
 
 function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentWordIndex, ExternalCurrentWordIndexChange,
-    setExternalIsTraining, maxIterations, iteration, setIteration, navigate, matrix, classCode }) {
+    setExternalIsTraining, maxIterations, iteration, setIteration, navigate, matrix, isTurningIn, setIsTurningIn, classCode }) {
     const [currentWordIndex, setCurrentWordIndex] = useState(0); // To keep track of the current word index
-    const [isTurningIn, setIsTurningIn] = useState(false);
     const [isTraining, setIsTraining] = useState(false);
     const [buttonWait, setButtonWait] = useState(true);
 
@@ -366,9 +365,15 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                                 <div className='col-span-full justify-center word-container'>
                                     <div className="word-container">
                                         {currentWordIndex === 11 ? (
-                                            <h1 className={`word ${animationClass}`}> {t('train?')} </h1>
+                                            <h1 className={`word ${animationClass}`}>
+                                                <div className='hidden md:block lg:block'>{t('train?')} </div>
+                                                <div className='block md:hidden lg:hidden'>{t('trainShort?')} </div>
+                                            </h1>
                                         ) : currentWordIndex === 12 ? (
-                                            <h1 className={`word ${animationClass}`}> {t('turnIn?')} </h1>
+                                            <h1 className={`word ${animationClass}`}>
+                                                <div className='hidden md:block lg:block'>{t('turnIn?')} </div>
+                                                <div className='block md:hidden lg:hidden'>{t('turnInShort?')} </div>
+                                            </h1>
                                         ) : (
                                             <h1 className={`word ${animationClass}`}>{newBatch[currentWordIndex][0]}</h1>
                                         )}

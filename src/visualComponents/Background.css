@@ -178,7 +178,7 @@
 
 @keyframes trainingIn {
     0% {
-        transform: translateX(-60vw);
+        transform: translateX(-80vw);
     }
 
     85% {
@@ -200,7 +200,7 @@
     }
 
     100% {
-        transform: translateX(-60vw);
+        transform: translateX(-80vw);
     }
 }
 
@@ -489,6 +489,7 @@
     padding-right: 1.5rem;
     z-index: 10;
     font-size: 1.4rem;
+    overflow: hidden;
 }
 
 .inside-card-matrix {
@@ -635,6 +636,7 @@
     padding-right: 1.5rem;
     z-index: 10;
     font-size: 1.3rem;
+    overflow: hidden;
 }
 
 .inside-card-results-header {
@@ -651,6 +653,7 @@
     padding-right: 1.6rem;
     z-index: 10;
     font-size: 1.4rem;
+    overflow: hidden;
 }
 
 .inside-card-results-header-side {
@@ -668,6 +671,7 @@
     padding-bottom: 1.1rem;
     z-index: 10;
     font-size: 1.4rem;
+    overflow: hidden;
 }
 
 .matrix-bold-diphthong {

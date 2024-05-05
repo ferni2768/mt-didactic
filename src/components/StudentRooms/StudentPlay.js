@@ -24,6 +24,7 @@ function StudentPlay({ navigate, classCode }) {
     const [ExternalCurrentWordIndex, setExternalCurrentWordIndex] = useState(0); // State to track/modify the current word index
     const [ExternalCurrentWordIndexChange, setExternalCurrentWordIndexChange] = useState(1); // State to track/modify the current word index
     const [isTraining, setIsTraining] = useState(false);
+    const [isTurningIn, setIsTurningIn] = useState(false);
     const scrollbarRef = useRef(null);
 
     const { t } = useTranslation();
@@ -211,7 +212,7 @@ function StudentPlay({ navigate, classCode }) {
                             <PlayWordSelector updateScore={updateScore} setProgress={setProgress} setWords={setWords}
                                 ExternalCurrentWordIndex={ExternalCurrentWordIndex} ExternalCurrentWordIndexChange={ExternalCurrentWordIndexChange}
                                 setExternalIsTraining={setIsTraining} maxIterations={maxIterations} iteration={iteration} setIteration={setIteration}
-                                classCode={classCode} navigate={navigate} matrix={matrix} />
+                                classCode={classCode} navigate={navigate} matrix={matrix} isTurningIn={isTurningIn} setIsTurningIn={setIsTurningIn} />
                         </div>
                     </div>
                     <div>
@@ -230,7 +231,8 @@ function StudentPlay({ navigate, classCode }) {
                                                     setExternalCurrentWordIndex(index);
                                                     setExternalCurrentWordIndexChange(ExternalCurrentWordIndexChange * (-1)); // To notify the child component that the current word index has changed
                                                 }}>
-                                                <div className="animated-word-bg md:pl-56 lg:pl-0"></div>
+                                                {isTurningIn && <div className="animated-word-bg lg:pl-0"></div>}
+                                                {!isTurningIn && <div className="animated-word-bg md:pl-56 lg:pl-0"></div>}
                                                 <div className="animated-word-text">
                                                     {word} {label !== "" && `(${label})`}
                                                 </div>

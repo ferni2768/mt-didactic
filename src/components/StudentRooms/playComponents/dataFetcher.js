@@ -132,6 +132,11 @@ function useDataFetcher() {
             selectedWords.push(shuffledWords[0]);
         }
 
+        // If the total number of selected words is more than 10, remove the last one
+        if (selectedWords.length > 10) {
+            selectedWords.pop();
+        }
+
         return selectedWords;
     };
 
