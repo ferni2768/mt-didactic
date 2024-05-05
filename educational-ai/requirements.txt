@@ -7,3 +7,4 @@ matplotlib
 scikit-learn
 keras_tuner
 flask_cors
+gunicorn

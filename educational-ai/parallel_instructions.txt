@@ -1,0 +1,7 @@
+Create a WSL Ubuntu Virtual Machine
+Go to the project's folder which is /mnt/c/...
+Install the requirements.txt dependencies
+Execute this command to get the different processes:
+gunicorn -w [Nproc] app:app
+
+*Normally there is 2..4 processes per CPU core
