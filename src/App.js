@@ -5,7 +5,7 @@ import TeacherView from './components/TeacherView';
 import { TransitionProvider } from './visualComponents/TransitionContext';
 import './App.css';
 import './i18n/i18n'; // Translations from i18n.js
-global.BASE_URL = 'http://127.0.0.1:8000';
+global.BASE_URL = 'http://127.0.0.1:3001'; // JavaScript server URL
 
 function App() {
   return (

@@ -115,7 +115,6 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         if (newWords) {
             const updatedNewBatch = processTrainingDataMatrix(matrix);
             setNewBatch(updatedNewBatch); // Set new batch of words
-            console.log('Updated NewBatch:', updatedNewBatch);
             setCurrentWordIndex(0);
             setNewWords(false);
         }
@@ -172,24 +171,25 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         console.log(answersObj);
 
         const url = `${global.BASE_URL}/models/${selectedModel}/train`;
-        const config = { method: 'post', body: JSON.stringify(answersObj), headers: { 'Content-Type': 'application/json' } };
+        const config = {
+            method: 'post',
+            body: JSON.stringify({ answers: answersObj, maxIterations: maxIterations }),
+            headers: { 'Content-Type': 'application/json' }
+        };
 
         try {
-            // Loop the the training
-            for (let i = 0; i < trainingIterations; i++) {
-                const response = await fetch(url, config);
+            const response = await fetch(url, config);
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const data = await response.json();
-
-                // Transform the data to the desired format
-                const transformedData = data.map(item => [item[1], item[2]]);
-
-                // Update the trainingData state with the transformed data
-                setTrainingData(transformedData);
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
             }
+            const data = await response.json();
+
+            // Transform the data to the desired format
+            const transformedData = data.map(item => [item[1], item[2]]);
+
+            // Update the trainingData state with the transformed data
+            setTrainingData(transformedData);
 
             await handleTestModel([selectedModel]);
 
@@ -232,13 +232,11 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
             }
 
             const data = await response.json();
-            console.log('API Response:', data);
             const processedData = data.map((modelResult) => ({
                 model: modelResult.model,
-                accuracy: modelResult.metrics.compile_metrics * 100,
-                loss: modelResult.metrics.loss * 100,
+                accuracy: modelResult.accuracy,
+                loss: modelResult.loss,
             }));
-            console.log('Processed Data for State:', processedData);
 
             if (processedData.length > 0) {
                 if (iteration + 1 === maxIterations) {

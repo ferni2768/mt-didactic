@@ -18,7 +18,7 @@ function TeacherLogin({ navigate, classCode }) {
     const handleCreateClass = async (event) => {
         event.preventDefault();
         try {
-            const response = await fetch('http://localhost:3001/teacher/authenticate', { // Teacher authenticates
+            const response = await fetch(`${global.BASE_URL}/teacher/authenticate`, { // Teacher authenticates
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ function TeacherLogin({ navigate, classCode }) {
                 navigate(`/teacher/${inputClassCode}`);
 
                 // Check the class phase in case the class already has finished
-                const checkPhaseResponse = await fetch(`http://localhost:3001/class/${inputClassCode}/phase`);
+                const checkPhaseResponse = await fetch(`${global.BASE_URL}/class/${inputClassCode}/phase`);
                 if (checkPhaseResponse.ok) {
                     const checkPhaseData = await checkPhaseResponse.json();
                     if (checkPhaseData.phase === 2) {
@@ -48,7 +48,7 @@ function TeacherLogin({ navigate, classCode }) {
                 }
 
                 // After successful login and checking the class phase, set the class phase to 1
-                const phaseResponse = await fetch(`http://localhost:3001/class/${inputClassCode}/setPhase`, { // Set the class phase to 1
+                const phaseResponse = await fetch(`${global.BASE_URL}/class/${inputClassCode}/setPhase`, { // Set the class phase to 1
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',

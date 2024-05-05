@@ -130,28 +130,7 @@ function StudentResults({ navigate, classCode }) {
             }
 
             const data = await response.json();
-            console.log('API Response:', data);
-
-            // Normalize the matrix to percentages and round to integers
-            const normalizeMatrix = (matrix) => {
-                const total = matrix.flat().reduce((acc, val) => acc + val, 0);
-                let roundedMatrix = matrix.map(row => row.map(val => Math.round((val / total) * 100)));
-
-                // Adjust values to ensure sum is exactly 100
-                let sum = roundedMatrix.flat().reduce((acc, val) => acc + val, 0);
-                let diff = 100 - sum;
-                if (diff !== 0) {
-                    // Find the index of the largest value in the matrix
-                    let maxIndex = roundedMatrix.flat().reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
-                    // Adjust the largest value by the difference to ensure sum is 100
-                    roundedMatrix.flat()[maxIndex] += diff;
-                }
-
-                return roundedMatrix;
-            };
-
-            const matrix = normalizeMatrix(data);
-            console.log('Normalized and Rounded Matrix Data for Model:', matrix);
+            const matrix = data;
 
             setMatrix(matrix);
 

@@ -56,7 +56,7 @@ function StudentJoin({ navigate, classCode }) {
         if (wantsToJoin) {
             const intervalId = setInterval(async () => {
                 try {
-                    const response = await fetch(`http://localhost:3001/class/${inputClassCode}/phase`);
+                    const response = await fetch(`${global.BASE_URL}/class/${inputClassCode}/phase`);
                     if (response.ok) {
                         const data = await response.json();
                         if (data.phase === 1) {
@@ -85,7 +85,7 @@ function StudentJoin({ navigate, classCode }) {
     const handleJoin = async (event) => {
         event.preventDefault();
         try {
-            const response = await fetch(`http://localhost:3001/class/${inputClassCode}/join`, {
+            const response = await fetch(`${global.BASE_URL}/class/${inputClassCode}/join`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

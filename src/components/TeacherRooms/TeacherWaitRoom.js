@@ -58,7 +58,7 @@ function TeacherWaitRoom({ navigate, classCode }) {
     useEffect(() => {
         const fetchStudents = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/students?classCode=${sessionStorage.getItem('createdClassCode')}`);
+                const response = await fetch(`${global.BASE_URL}/students?classCode=${sessionStorage.getItem('createdClassCode')}`);
                 const data = await response.json();
                 setStudents(data);
             } catch (error) {
@@ -85,7 +85,7 @@ function TeacherWaitRoom({ navigate, classCode }) {
     const seeResults = async () => {
         try {
             // Set the class phase to 2
-            const response = await fetch(`http://localhost:3001/class/${sessionStorage.getItem('createdClassCode')}/setPhase`, {
+            const response = await fetch(`${global.BASE_URL}/class/${sessionStorage.getItem('createdClassCode')}/setPhase`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

@@ -118,6 +118,7 @@ app.get('/student/:id', (req, res) => {
     });
 });
 
+// API endpoint to start a new class
 app.post('/class/:code/join', async (req, res) => {
     try {
         const classCode = req.params.code;
@@ -223,6 +224,113 @@ app.put('/student/:id/updateScore', (req, res) => {
             res.status(200).json({ message: 'Score updated successfully' });
         }
     });
+});
+
+// API endpoint to fetch model matrix
+app.post('/models/:modelName/matrix', async (req, res) => {
+    const modelName = req.params.modelName;
+    try {
+        const response = await fetch(`${BASE_URL}/models/${modelName}/matrix`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        // Normalize the matrix to percentages and round to integers
+        const normalizeMatrix = (matrix) => {
+            const total = matrix.flat().reduce((acc, val) => acc + val, 0);
+            let roundedMatrix = matrix.map(row => row.map(val => Math.round((val / total) * 100)));
+
+            // Adjust values to ensure sum is exactly 100
+            let sum = roundedMatrix.flat().reduce((acc, val) => acc + val, 0);
+            let diff = 100 - sum;
+            if (diff !== 0) {
+                // Find the index of the largest value in the matrix
+                let maxIndex = roundedMatrix.flat().reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
+                // Adjust the largest value by the difference to ensure sum is 100
+                roundedMatrix.flat()[maxIndex] += diff;
+            }
+
+            return roundedMatrix;
+        };
+
+        const processedMatrix = normalizeMatrix(data);
+        res.json(processedMatrix); // Return the processed data to the frontend
+    } catch (error) {
+        console.error('Failed to fetch and process model matrix:', error);
+        res.status(500).json({ error: 'Failed to fetch and process model matrix' });
+    }
+});
+
+// API endpoint to test models
+app.post('/models/test', async (req, res) => {
+    const { model_names } = req.body;
+    try {
+        const response = await fetch(`${BASE_URL}/models/test`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ model_names: model_names }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        // Process the data to calculate accuracy and loss as percentages
+        const processedData = data.map((modelResult) => ({
+            model: modelResult.model,
+            accuracy: modelResult.metrics.compile_metrics * 100,
+            loss: modelResult.metrics.loss * 100,
+        }));
+
+        res.json(processedData); // Return the processed data to the frontend
+    } catch (error) {
+        console.error('Failed to fetch and process model evaluation results:', error);
+        res.status(500).json({ error: 'Failed to fetch and process model evaluation results' });
+    }
+});
+
+// API endpoint to train models
+app.post('/models/:modelName/train', async (req, res) => {
+    const modelName = req.params.modelName;
+    const { answers, maxIterations } = req.body;
+    try {
+        const url = `${BASE_URL}/models/${modelName}/train`;
+        const config = { method: 'post', body: JSON.stringify(answers), headers: { 'Content-Type': 'application/json' } };
+
+        // Initialize a variable to hold the result of the last iteration
+        let lastResult = [];
+
+        // Loop the the training based on maxIterations from the request body
+        for (let i = 0; i < maxIterations; i++) {
+            const response = await fetch(url, config);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+
+            // Transform the data to the desired format
+            const transformedData = data.map(item => [item[1], item[2]]);
+
+            lastResult = transformedData;
+        }
+
+        // Response
+        res.json(lastResult);
+    } catch (error) {
+        console.error('Failed to fetch and process model training results:', error);
+        res.status(500).json({ error: 'Failed to fetch and process model training results' });
+    }
 });
 
 // API endpoint to update a student's progress

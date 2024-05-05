@@ -70,7 +70,7 @@ function StudentPlay({ navigate, classCode }) {
 
         const checkClassPhase = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/class/${sessionStorage.getItem('loggedInClassCode')}/phase`);
+                const response = await fetch(`${global.BASE_URL}/class/${sessionStorage.getItem('loggedInClassCode')}/phase`);
                 if (response.ok) {
                     const data = await response.json();
                     setClassPhase(data.phase);
@@ -96,7 +96,7 @@ function StudentPlay({ navigate, classCode }) {
         // Multiply the percentage score by 100 to get the actual score
         const updatedScore = score;
         try {
-            await fetch(`http://localhost:3001/student/${student.id}/updateScore`, {
+            await fetch(`${global.BASE_URL}/student/${student.id}/updateScore`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -110,7 +110,7 @@ function StudentPlay({ navigate, classCode }) {
 
     const setProgress = async (progress) => {
         try {
-            await fetch(`http://localhost:3001/student/${student.id}/setProgress`, {
+            await fetch(`${global.BASE_URL}/student/${student.id}/setProgress`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -165,7 +165,6 @@ function StudentPlay({ navigate, classCode }) {
     }, [iteration]); // Re-run the effect every iteration
 
 
-
     const fetchModelMatrix = async (modelName, setMatrix) => {
         try {
             const response = await fetch(`${global.BASE_URL}/models/${modelName}/matrix`, {
@@ -180,10 +179,7 @@ function StudentPlay({ navigate, classCode }) {
             }
 
             const data = await response.json();
-            console.log('API Response:', data);
-
             const matrix = data;
-            console.log('Matrix Data for Model:', matrix);
 
             setMatrix(matrix);
 
@@ -191,6 +187,7 @@ function StudentPlay({ navigate, classCode }) {
             console.error('Failed to fetch model matrix:', error);
         }
     };
+
 
     if (classPhase === 2) {
         return <div>The class already finished</div>;
