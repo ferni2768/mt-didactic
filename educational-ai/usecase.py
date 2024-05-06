@@ -380,8 +380,6 @@ def teach(model_name, word_dictionary, tokenizer, padding=16):
     predicted_labels = label_result(predictions_rounded)
 
     final_summary = np.column_stack((added_x, expected_labels, predicted_labels))
-    print('All predictions:')
-    print(final_summary)
     save_pretrained_model(model, model_name)
     return result, final_summary
 

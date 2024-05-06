@@ -3,7 +3,8 @@ import useDataFetcher from './dataFetcher'; // To fetch the data from the csv fi
 import { useTranslation } from 'react-i18next';
 
 function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentWordIndex, ExternalCurrentWordIndexChange,
-    setExternalIsTraining, maxIterations, iteration, setIteration, navigate, matrix, isTurningIn, setIsTurningIn, classCode }) {
+    setExternalIsTraining, maxIterations, iteration, setIteration, navigate, matrix, isTurningIn, setIsTurningIn, isMatrixLoading,
+    setIsMatrixLoading, classCode }) {
     const [currentWordIndex, setCurrentWordIndex] = useState(0); // To keep track of the current word index
     const [isTraining, setIsTraining] = useState(false);
     const [buttonWait, setButtonWait] = useState(true);
@@ -112,6 +113,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         }
 
         if (newWords) {
+            // setIsMatrixLoading(false);
             const updatedNewBatch = processTrainingDataMatrix(matrix);
             setNewBatch(updatedNewBatch); // Set new batch of words
             setCurrentWordIndex(0);

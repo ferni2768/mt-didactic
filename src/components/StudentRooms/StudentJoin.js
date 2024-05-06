@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
+import { Link } from 'react-router-dom';
 
 import { TransitionContext } from '../../visualComponents/TransitionContext';
 import { useTranslation } from 'react-i18next';
@@ -203,6 +204,10 @@ function StudentJoin({ navigate, classCode }) {
                                         {t('join')}
                                     </div>
                                 </button>
+
+                                <div className="text-center text-base pt-2" onClick={() => navigate('/teacher')}>
+                                    <span className="text-custom_black opacity-50 hover:text-accent hover:opacity-100 cursor-pointer">{t('imateacher')}</span>
+                                </div>
                             </div>
                         </form>
                     </div>

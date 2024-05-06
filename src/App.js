@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Routes, Navigate } from 'react-router-dom';
 import StudentView from './components/StudentView';
 import TeacherView from './components/TeacherView';
 import { TransitionProvider } from './visualComponents/TransitionContext';
@@ -35,6 +35,7 @@ function App() {
               <Route path="/teacher" element={<TeacherView />} />
               <Route path="/teacher/:classCode" element={<TeacherView />} />
               <Route path="/teacher/:classCode/results" element={<TeacherView />} />
+              <Route path="*" element={<Navigate to="/student" replace />} />
             </Routes>
           </div>
         </div>

@@ -1,0 +1,23 @@
+Install pm2:
+ npm install pm2 -g 
+
+Start the server:
+ pm2 start server.js
+
+
+USEFUL COMMANDS:
+
+*List all applications currently managed by PM2:
+ pm2 list
+
+*Stop the specified application:
+ pm2 stop server.js
+
+*Restart the specified application:
+ pm2 restart server.js
+
+*Remove the specified application from PM2's management:
+ pm2 delete server.js
+
+*Show the logs for all applications managed by PM2:
+ pm2 logs

@@ -113,6 +113,10 @@ function TeacherLogin({ navigate, classCode }) {
                                     {t('login')}
                                 </div>
                             </button>
+
+                            <div className="text-center text-base pt-2" onClick={() => navigate('/student')}>
+                                <span className="text-custom_black opacity-50 hover:text-accent hover:opacity-100 cursor-pointer">{t('imastudent')}</span>
+                            </div>
                         </div>
 
                     </form>
