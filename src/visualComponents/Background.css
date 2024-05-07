@@ -379,6 +379,7 @@
 .shrink {
     animation: smallTransition 0.8s ease-in-out forwards;
     overflow: hidden;
+    height: 6rem;
 }
 
 /* Go to 'waiting' state */
@@ -1129,7 +1130,7 @@
 .animated-word {
     border-radius: 0.5rem;
     width: 100%;
-    background-color: rgb(162, 162, 162);
+    background-color: rgb(134, 134, 134);
 
     overflow: hidden;
     position: relative;

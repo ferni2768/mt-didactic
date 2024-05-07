@@ -8,6 +8,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
     const [currentWordIndex, setCurrentWordIndex] = useState(0); // To keep track of the current word index
     const [isTraining, setIsTraining] = useState(false);
     const [buttonWait, setButtonWait] = useState(true);
+    const [textOpacity, setTextOpacity] = useState(1);
 
     const trainingIterations = 5; // Number of iterations to train the model
 
@@ -45,6 +46,22 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
             setIsTurningIn(false);
         }
     }, [currentWordIndex]);
+
+    // Effect to update the opacity of the buttons text when isTurningIn changes
+    useEffect(() => {
+        let timeoutId;
+        if (isTurningIn) {
+            timeoutId = setTimeout(() => {
+                setTextOpacity(0);
+            }, 270);
+        } else {
+            setTextOpacity(1);
+        }
+
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, [isTurningIn]);
 
     // Save the iteration and newBatch to sessionStorage
     useEffect(() => {
@@ -366,6 +383,8 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                             <div className={`grid grid-rows-2 grid-cols-3 ${isTraining ? 'buttonsOut' : 'buttonsIn'}`} style={{ position: 'relative' }}>
                                 <div className='col-span-full justify-center word-container'>
                                     <div className="word-container">
+                                        <div className='hidden md:block lg:hidden text-3xl opacity-0'> aaaaaaaaaaaaaaaaaaaaaaaaa</div>
+                                        <div className='block md:hidden lg:hidden text-3xl opacity-0'> aaaaaaaaaa</div>
                                         {currentWordIndex === 11 ? (
                                             <h1 className={`word ${animationClass}`}>
                                                 <div className='hidden md:block lg:block'>{t('train?')} </div>
@@ -396,30 +415,30 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
 
                                         <button onClick={() => handleButtonClick('D')} disabled={isAnimating || isTurningIn} className={`animated-button-diphthong p-2 text-center`}>
                                             <div className={`animated-button-bg-diphthong ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}></div>
-                                            <div className={`hidden lg:block md:block animated-button-text ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}>
+                                            <div className={`hidden lg:block md:block animated-button-text ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`} style={{ opacity: textOpacity }}>
                                                 {t('diphthong')}
                                             </div>
-                                            <div className={`lg:hidden md:hidden animated-button-text ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}>
+                                            <div className={`lg:hidden md:hidden animated-button-text ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`} style={{ opacity: textOpacity }}>
                                                 {t('d')}
                                             </div>
                                         </button>
 
                                         <button onClick={() => handleButtonClick('H')} disabled={isAnimating} className={`animated-button-hiatus p-2 text-center`}>
                                             <div className={`animated-button-bg-hiatus ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}></div>
-                                            <div className={`hidden lg:block md:block animated-button-text  ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}>
+                                            <div className={`hidden lg:block md:block animated-button-text ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`} style={{ opacity: textOpacity }}>
                                                 {t('hiatus')}
                                             </div>
-                                            <div className={`lg:hidden md:hidden animated-button-text  ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}>
+                                            <div className={`lg:hidden md:hidden animated-button-text ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`} style={{ opacity: textOpacity }}>
                                                 {t('h')}
                                             </div>
                                         </button>
 
                                         <button onClick={() => handleButtonClick('G')} disabled={isAnimating || isTurningIn} className={`animated-button-general p-2 text-center`}>
-                                            <div className={`animated-button-bg-general  ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}></div>
-                                            <div className={`hidden lg:block md:block animated-button-text  ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}>
+                                            <div className={`animated-button-bg-general ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}></div>
+                                            <div className={`hidden lg:block md:block animated-button-text ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`} style={{ opacity: textOpacity }}>
                                                 {t('general')}
                                             </div>
-                                            <div className={`lg:hidden md:hidden animated-button-text  ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`}>
+                                            <div className={`lg:hidden md:hidden animated-button-text ${isTurningIn ? 'turnInTransition' : 'turnInTransition2'}`} style={{ opacity: textOpacity }}>
                                                 {t('g')}
                                             </div>
                                         </button>
