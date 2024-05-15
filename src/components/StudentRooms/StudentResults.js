@@ -143,13 +143,13 @@ function StudentResults({ navigate, classCode }) {
     const getStyleForLabel = (label) => {
         switch (label) {
             case 'D':
-                return { color: '#cfb838', fontWeight: 450 };
+                return { color: '#cfb838', fontWeight: 500 };
             case 'H':
-                return { color: '#127edd', fontWeight: 450 };
+                return { color: '#127edd', fontWeight: 500 };
             case 'G':
-                return { color: '#ee1212', fontWeight: 450 };
+                return { color: '#ee1212', fontWeight: 500 };
             default:
-                return { color: '#1c1c1c', fontWeight: 450 };
+                return { color: '#1c1c1c', fontWeight: 500 };
         }
     };
 
@@ -237,9 +237,12 @@ function StudentResults({ navigate, classCode }) {
                                         </div>
                                         <div className='inside-card-mistakes p-7 pt-12 mt-5' ref={scrollbarRef}>
                                             <div className='mistakes pt-1'>
-                                                {mistakes.map(([word, , correctLabel], index) => (
-                                                    <div key={index} style={getStyleForLabel(correctLabel)}>
-                                                        {word} ({correctLabel})
+                                                {mistakes.map(([word, mistakenLabel, correctLabel], index) => (
+                                                    <div key={index}>
+                                                        <a>{word}: </a>
+                                                        <a style={getStyleForLabel(correctLabel)}>{correctLabel}</a>
+                                                        <a>, no </a>
+                                                        <a style={getStyleForLabel(mistakenLabel)}>{mistakenLabel}</a>
                                                     </div>
                                                 ))}
                                             </div>
@@ -303,9 +306,12 @@ function StudentResults({ navigate, classCode }) {
                                     </div>
                                     <div className='inside-card-mistakes-slim p-7 pt-12 mt-5' ref={scrollbarRef3} >
                                         <div className='mistakes pt-1'>
-                                            {mistakes.map(([word, , correctLabel], index) => (
-                                                <div key={index} style={getStyleForLabel(correctLabel)}>
-                                                    {word} ({correctLabel})
+                                            {mistakes.map(([word, mistakenLabel, correctLabel], index) => (
+                                                <div key={index}>
+                                                    <a>{word}: </a>
+                                                    <a style={getStyleForLabel(correctLabel)}>{correctLabel}</a>
+                                                    <a>, no </a>
+                                                    <a style={getStyleForLabel(mistakenLabel)}>{mistakenLabel}</a>
                                                 </div>
                                             ))}
                                         </div>

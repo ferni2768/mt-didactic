@@ -133,7 +133,13 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
             // setIsMatrixLoading(false);
             const updatedNewBatch = processTrainingDataMatrix(matrix);
             setNewBatch(updatedNewBatch); // Set new batch of words
+
             setCurrentWordIndex(0);
+            setProgress((iteration + 1) * (100 / maxIterations)); // Update the student's progress for each iteration
+            setIsTraining(false);
+            setIsTurningIn(false);
+
+            setExternalIsTraining(false);
             setNewWords(false);
         }
     }, [matrix]);
@@ -215,12 +221,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
             updateMistakesInSessionStorage();
 
             if (iteration + 1 != maxIterations) {
-                setProgress((iteration + 1) * (100 / maxIterations)); // Update the student's progress for each iteration
                 setNewWords(true);
-                setIsTraining(false);
-                setIsTurningIn(false);
-                setCurrentWordIndex(0);
-                setExternalIsTraining(false);
             } else {
                 setProgress(100);
                 setIsTraining(false);

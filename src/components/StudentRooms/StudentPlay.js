@@ -157,10 +157,9 @@ function StudentPlay({ navigate, classCode }) {
                 await fetchModelMatrix(modelName, setMatrix);
             };
 
-            // Introduce a 5ms delay before fetching and setting the matrix to avoid synchronous issues
-            setTimeout(() => {
-                fetchAndSetMatrix();
-            }, 5); // 5ms delay
+            (async () => {
+                await fetchAndSetMatrix();
+            })();
         } else {
             console.log('No loggedInStudent found in sessionStorage.');
         }
