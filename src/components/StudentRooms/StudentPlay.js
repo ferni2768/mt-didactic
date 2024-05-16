@@ -222,6 +222,14 @@ function StudentPlay({ navigate, classCode }) {
                                     <div className={isTraining ? "progress out" : "progress entering"}>
                                         {iteration >= maxIterations ? `${maxIterations}/${maxIterations}` : `${iteration + 1}/${maxIterations}`}
                                     </div>
+                                    <div className={`info-button ${isTraining ? 'hidden' : ''}`}>
+                                        i
+                                        <div className="tooltip bottom left">
+                                            {t('info-word-list-1')}
+                                            <div className='pt-1.5'></div>
+                                            {t('info-word-list-2')}
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="inside-card-2 p-5 pt-14 mb-0.5" ref={scrollbarRef}>
                                     <div className='grid grid-rows-10'>

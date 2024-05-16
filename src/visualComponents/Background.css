@@ -11,6 +11,11 @@
     background-image: radial-gradient(circle at bottom, #ff0081, #ff3102);
 }
 
+/* Necessary to support hidden overflow overwriting */
+.allow-info-overflow {
+    transform: scale(1);
+}
+
 .parent-container {
     display: flex;
     flex-direction: column;
@@ -341,7 +346,6 @@
 
 .inside-login-card {
     height: 100%;
-    transform: translateX(0);
     transition: transform 0.5s ease-in-out;
     border-radius: 2rem;
     background-color: white;
@@ -711,6 +715,75 @@
     :hover {
         cursor: pointer;
     }
+}
+
+.info-button {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    background-color: #19bd24;
+    color: white;
+    font-weight: bold;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    top: 10px;
+    right: 10px;
+    font-size: 14px;
+
+    position: fixed;
+
+    z-index: 1000;
+}
+
+.info-button.left {
+    right: auto;
+}
+
+.info-button:hover {
+    cursor: pointer;
+    background-color: #467d35;
+}
+
+.tooltip {
+    visibility: hidden;
+    width: 12rem;
+    background-color: #467d35;
+    color: #fff;
+    text-align: center;
+    border-radius: 1rem;
+    padding: 0.5rem;
+    position: absolute;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.2s;
+
+    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.5);
+
+    font-size: 1rem;
+}
+
+.info-button:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltip.top {
+    bottom: 105%;
+}
+
+.tooltip.bottom {
+    top: 105%;
+}
+
+.tooltip.left {
+    right: 105%;
+}
+
+.tooltip.right {
+    left: 105%;
 }
 
 .animated-button-diphthong {

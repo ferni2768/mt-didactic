@@ -160,6 +160,15 @@ function TeacherResults({ navigate, classCode }) {
                                     <div>{t('name')}</div>
                                     <div>{t('score')}</div>
                                     <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                                    <div className="info-button mt-1 mr-1">
+                                        i
+                                        <div className="tooltip bottom left">
+                                            <div className='text-xl'>{t('info-reset-1')}</div>
+                                            <div style={{ fontWeight: '400' }} className='mt-6'>{t('info-reset-2')}</div>
+                                            <div style={{ fontWeight: '400' }} className='mt-2'>{t('info-reset-3')}</div>
+                                            <div style={{ fontWeight: '400' }} className='mt-2'>{t('info-reset-4')}</div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="inside-card-2 p-6 pt-14" ref={scrollbarRef}>
                                     <ul className='pt-1'>
@@ -168,13 +177,13 @@ function TeacherResults({ navigate, classCode }) {
                                                 <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 lg:gap-4 md:gap-4 gap-0.5'>
                                                     <div className="col-span-full md:col-span-1 lg:col-span-1">
                                                         <span>
-                                                            {index + 4}. {student.name.length > 16 ? student.name.substring(0, 16) + "..." : student.name}
+                                                            <a className={`${student.score < 1 ? 'hidden' : ''}`}> {index + 4}.</a> {student.name.length > 16 ? student.name.substring(0, 16) + "..." : student.name}
                                                         </span>
                                                     </div>
 
                                                     <div className="col-span-full md:col-span-2 lg:col-span-2 flex items-center justify-start md:justify-end lg:justify-end
                                             pr-0 md:pr-3 lg:pr-3">
-                                                        <div className="progress-bar-container h-2.5">
+                                                        <div className={`progress-bar-container h-2.5 ${student.score < 1 ? 'hidden' : ''}`}>
                                                             <div className="progress-bar" style={{ width: `${student.score}%` }}></div>
                                                         </div>
                                                     </div>
@@ -193,6 +202,16 @@ function TeacherResults({ navigate, classCode }) {
                                     <div className='hidden md:block'>{t('score')}</div>
                                     <div className='hidden md:block'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
                                     <div className='md:hidden'>{t('namesAndScores')}</div>
+
+                                    <div className="info-button mt-1 mr-1">
+                                        i
+                                        <div className="tooltip bottom left">
+                                            <div className='text-xl'>{t('info-reset-1')}</div>
+                                            <div style={{ fontWeight: '400' }} className='mt-6'>{t('info-reset-2')}</div>
+                                            <div style={{ fontWeight: '400' }} className='mt-2'>{t('info-reset-3')}</div>
+                                            <div style={{ fontWeight: '400' }} className='mt-2'>{t('info-reset-4')}</div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="inside-card-2 p-6 pt-14" ref={scrollbarRef2}>
                                     <ul className='pt-1'>

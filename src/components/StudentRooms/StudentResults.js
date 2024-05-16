@@ -234,6 +234,13 @@ function StudentResults({ navigate, classCode }) {
                                     <div className='contain-mistakes pl-2'>
                                         <div className='inside-card-mistakes-header mt-5 text-white'> {/* Header */}
                                             {mistakes.length} {mistakes.length === 1 ? t('mistake') : t('mistakes')}
+
+                                            <div className="info-button mt-5 mr-2">
+                                                i
+                                                <div className="tooltip bottom left">
+                                                    {t('info-errors')}
+                                                </div>
+                                            </div>
                                         </div>
                                         <div className='inside-card-mistakes p-7 pt-12 mt-5' ref={scrollbarRef}>
                                             <div className='mistakes pt-1'>
@@ -250,9 +257,28 @@ function StudentResults({ navigate, classCode }) {
                                     </div>
                                 </div>
 
-                                <div className='hidden md:block lg:block self-center lg:pr-0 lg:pl-3 md:pr-8 lg:mr-10 lg:mt-3 md:mt-3 mt-8 row-span-2 col-span-1 text-center'>
-                                    <div className='text-2xl pb-2 text-custom_black' style={{ fontWeight: 640 }}>{t('globalAccuracy')}</div>
-                                    <div className='text-custom_black'> {sum !== null ? `${matrix[0][0]} + ${matrix[1][1]} + ${matrix[2][2]} = ${sum}` : 'loading...'} </div>
+                                <div className='hidden md:block lg:block self-center row-span-2 col-span-1 text-center'>
+                                    <div className='allow-info-overflow'>
+                                        <div className="info-button mr-4">
+                                            i
+                                            <div className="tooltip top left">
+                                                <div className="text-xl text-">{t('info-columns-1')}</div>
+                                                <div style={{ fontWeight: '400' }}>{t('info-columns-2')}</div>
+                                                <div className='pt-1.5'></div>
+                                                <div className="text-xl">{t('info-rows-1')}</div>
+                                                <div style={{ fontWeight: '400' }}>{t('info-rows-2')}</div>
+
+                                                <div className='pt-7'></div>
+                                                <div className="text-xl">{t('info-result-1')}</div>
+                                                <div style={{ fontWeight: '400' }}>{t('info-result-2')}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className='lg:pr-0 lg:pl-3 md:pr-8 lg:mr-10 lg:mt-3 md:mt-3 mt-8 '>
+                                        <div className='text-2xl pb-2 text-custom_black' style={{ fontWeight: 640 }}>{t('globalAccuracy')}</div>
+                                        <div className='text-custom_black'> {sum !== null ? `${matrix[0][0]} + ${matrix[1][1]} + ${matrix[2][2]} = ${sum}` : 'loading...'} </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -296,13 +322,39 @@ function StudentResults({ navigate, classCode }) {
                                 </div>
 
                                 <div className='self-center pt-2 pb-2 text-center'>
-                                    <div className='text-2xl pb-2 text-custom_black' style={{ fontWeight: 640 }}>{t('globalAccuracy')}</div>
-                                    <div className='text-custom_black'> {sum !== null ? `${matrix[0][0]} + ${matrix[1][1]} + ${matrix[2][2]} = ${sum}` : 'loading...'} </div>
+                                    <div className='allow-info-overflow mr-20'>
+                                        <div className="info-button mr-3">
+                                            i
+                                            <div className="tooltip top">
+                                                <div className="text-xl text-">{t('info-columns-1')}</div>
+                                                <div style={{ fontWeight: '400' }}>{t('info-columns-2')}</div>
+                                                <div className='pt-1.5'></div>
+                                                <div className="text-xl">{t('info-rows-1')}</div>
+                                                <div style={{ fontWeight: '400' }}>{t('info-rows-2')}</div>
+
+                                                <div className='pt-7'></div>
+                                                <div className="text-xl">{t('info-result-1')}</div>
+                                                <div style={{ fontWeight: '400' }}>{t('info-result-2')}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className='lg:pr-0 lg:pl-3 md:pr-8 lg:mr-10 lg:mt-3 md:mt-3 mt-8 '>
+                                        <div className='text-2xl pb-2 text-custom_black' style={{ fontWeight: 640 }}>{t('globalAccuracy')}</div>
+                                        <div className='text-custom_black'> {sum !== null ? `${matrix[0][0]} + ${matrix[1][1]} + ${matrix[2][2]} = ${sum}` : 'loading...'} </div>
+                                    </div>
                                 </div>
 
                                 <div className='contain-mistakes-slim pl-2'>
                                     <div className='inside-card-mistakes-header mt-5 text-white'> {/* Header */}
                                         {mistakes.length} {mistakes.length === 1 ? t('mistake') : t('mistakes')}
+
+                                        <div className="info-button mt-5 mr-2">
+                                            i
+                                            <div className="tooltip bottom left">
+                                                {t('info-errors')}
+                                            </div>
+                                        </div>
                                     </div>
                                     <div className='inside-card-mistakes-slim p-7 pt-12 mt-5' ref={scrollbarRef3} >
                                         <div className='mistakes pt-1'>
@@ -310,7 +362,7 @@ function StudentResults({ navigate, classCode }) {
                                                 <div key={index}>
                                                     <a>{word}: </a>
                                                     <a style={getStyleForLabel(correctLabel)}>{correctLabel}</a>
-                                                    <a>, no </a>
+                                                    <a>{t('no')}</a>
                                                     <a style={getStyleForLabel(mistakenLabel)}>{mistakenLabel}</a>
                                                 </div>
                                             ))}

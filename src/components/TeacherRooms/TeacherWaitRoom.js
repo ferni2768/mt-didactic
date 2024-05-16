@@ -114,7 +114,17 @@ function TeacherWaitRoom({ navigate, classCode }) {
 
                     <div className="col-span-full md:col-span-full lg:col-span-1">
                         <h1>{t('listOfStudents')}</h1>
-                        <p> {completedStudents}/{totalStudents} {t('studentsFinished')}</p>
+                        <p> {completedStudents}/{totalStudents} {t('studentsFinished')}
+
+                            <div className='allow-info-overflow block lg:hidden'>
+                                <div className="info-button mt-0.5">
+                                    i
+                                    <div className="tooltip top left">
+                                        {t('info-results')}
+                                    </div>
+                                </div>
+                            </div>
+                        </p>
                         <p> {t('code')}: {sessionStorage.getItem('createdClassCode')} </p>
 
                         <button onClick={seeResults} className="animated-button p-2 text-center mt-4 align-bottom">
@@ -123,6 +133,15 @@ function TeacherWaitRoom({ navigate, classCode }) {
                                 {t('seeResults')}
                             </div>
                         </button>
+
+                        <div className='allow-info-overflow hidden lg:block'>
+                            <div className="info-button left mt-0.5">
+                                i
+                                <div className="tooltip bottom right">
+                                    {t('info-results')}
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div className="col-span-full md:col-span-full lg:col-span-2 lg:pl-7">

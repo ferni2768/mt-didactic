@@ -444,6 +444,12 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                                             </div>
                                         </button>
 
+                                        <div className={`info-button ${currentWordIndex > 10 ? 'hidden' : ''}`}>
+                                            i
+                                            <div className="tooltip bottom left">
+                                                {t('info-play')}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
