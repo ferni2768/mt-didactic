@@ -261,7 +261,7 @@ function StudentResults({ navigate, classCode }) {
                                     <div className='allow-info-overflow'>
                                         <div className="info-button mr-4">
                                             i
-                                            <div className="tooltip top left">
+                                            <div className="tooltip top right">
                                                 <div className="text-xl text-">{t('info-columns-1')}</div>
                                                 <div style={{ fontWeight: '400' }}>{t('info-columns-2')}</div>
                                                 <div className='pt-1.5'></div>

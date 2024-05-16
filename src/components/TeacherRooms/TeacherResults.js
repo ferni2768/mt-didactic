@@ -19,6 +19,8 @@ function TeacherResults({ navigate, classCode }) {
         const handleKeyDown = (event) => {
             if (event.key === 'r' || event.key === 'R') {
                 handleReset();
+            } else if (event.key === 'd' || event.key === 'D') {
+                handleDownloadCSV();
             }
         };
 
@@ -27,7 +29,7 @@ function TeacherResults({ navigate, classCode }) {
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, []);
+    }, [students]);
 
     useEffect(() => {
         const initializeScrollbar = (ref) => {
@@ -85,6 +87,22 @@ function TeacherResults({ navigate, classCode }) {
         sessionStorage.removeItem('isFinished');
         navigate('/teacher/ABC123');
         window.location.reload(); // Reload the page to reset the state
+    };
+
+    const handleDownloadCSV = () => {
+        const header = t('csvHeader') + '\n';
+        const rows = students.map(student => `${student.name}, ${student.score}`).join('\n');
+        const csvContent = header + rows;
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', t('downloadName') + '_' + sessionStorage.getItem('createdClassCode'));
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     return (
@@ -171,6 +189,8 @@ function TeacherResults({ navigate, classCode }) {
                                             <div style={{ fontWeight: '400' }} className='mt-6'>{t('info-reset-2')}</div>
                                             <div style={{ fontWeight: '400' }} className='mt-2'>{t('info-reset-3')}</div>
                                             <div style={{ fontWeight: '400' }} className='mt-2'>{t('info-reset-4')}</div>
+
+                                            <div style={{ fontWeight: '300' }} className='mt-7'>{t('info-download-results')}</div>
                                         </div>
                                     </div>
                                 </div>
