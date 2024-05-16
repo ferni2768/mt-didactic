@@ -98,26 +98,27 @@ function TeacherResults({ navigate, classCode }) {
                             <h1 style={{ opacity: 0 }}>.</h1>
 
                             <div className='hidden lg:block podium-2 w-full'>
-                                <div className='top-bar-2 py-8'>
+                                <div className='top-bar-2 py-8 see-score'>
                                     <div className='flex justify-between text-center w-full'>
                                         {students.slice(1, 2).map(student => (
-                                            <div key={student.id} className='w-full'>
+                                            <div key={student.id} className='w-full see-score'>
                                                 {student.name} <br />
                                                 <div className="col-span-full md:col-span-2 lg:col-span-2 flex items-center justify-center pt-3">
                                                     <div className="progress-bar-container-dark h-2">
                                                         <div className='progress-bar-silver' style={{ width: `${student.score}%` }}></div>
                                                     </div>
+                                                    <div className='hover-score hover-score-silver text-center'>{student.score}%</div>
                                                 </div>
                                             </div>
                                         ))}
                                     </div>
-                                    <h3 className='pt-8 text-gray-400'>2</h3>
+                                    <h3 className='pt-8 text-gray-400' style={{ pointerEvents: 'none' }}>2</h3>
                                 </div>
                             </div>
                         </div>
 
                         <div className="hidden lg:block col-span-1 podium-3 w-full">
-                            <div className='top-bar-3 py-8'>
+                            <div className='top-bar-3 py-8 see-score'>
                                 <div className='flex justify-between text-center w-full'>
                                     {students.slice(2, 3).map(student => (
                                         <div key={student.id} className='w-full'>
@@ -126,16 +127,17 @@ function TeacherResults({ navigate, classCode }) {
                                                 <div className="progress-bar-container-dark h-2">
                                                     <div className='progress-bar-bronce' style={{ width: `${student.score}%` }}></div>
                                                 </div>
+                                                <div className='hover-score hover-score-bronce text-center'>{student.score}%</div>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
-                                <h3 className='pt-8 text-amber-800'>3</h3>
+                                <h3 className='pt-8 text-amber-800' style={{ pointerEvents: 'none' }}>3</h3>
                             </div>
                         </div>
 
                         <div className="hidden lg:block col-span-1 podium-2 w-full">
-                            <div className='top-bar-1 py-8'>
+                            <div className='top-bar-1 py-8 see-score'>
                                 <div className='flex justify-between text-center w-full'>
                                     {students.slice(0, 1).map(student => (
                                         <div key={student.id} className='w-full'>
@@ -144,14 +146,16 @@ function TeacherResults({ navigate, classCode }) {
                                                 <div className="progress-bar-container-dark h-2">
                                                     <div className='progress-bar-gold' style={{ width: `${student.score}%` }}></div>
                                                 </div>
+                                                <div className='hover-score hover-score-gold text-center'>{student.score}%</div>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
-                                <h2 className='pt-2 text-amber-500'>1</h2>
+                                <h2 className='pt-2 text-amber-500' style={{ pointerEvents: 'none' }}>1</h2>
                             </div>
                         </div>
                     </div>
+
 
                     <div className='col-span-full lg:col-span-1 lg:pl-7'>
                         <div className="hidden lg:block">
@@ -173,7 +177,7 @@ function TeacherResults({ navigate, classCode }) {
                                 <div className="inside-card-2 p-6 pt-14" ref={scrollbarRef}>
                                     <ul className='pt-1'>
                                         {students.slice(3, 99).map((student, index) => (
-                                            <li key={student.id} className='student-item'>
+                                            <li key={student.id} className='student-item see-score'>
                                                 <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 lg:gap-4 md:gap-4 gap-0.5'>
                                                     <div className="col-span-full md:col-span-1 lg:col-span-1">
                                                         <span>
@@ -181,9 +185,10 @@ function TeacherResults({ navigate, classCode }) {
                                                         </span>
                                                     </div>
 
-                                                    <div className="col-span-full md:col-span-2 lg:col-span-2 flex items-center justify-start md:justify-end lg:justify-end
-                                            pr-0 md:pr-3 lg:pr-3">
-                                                        <div className={`progress-bar-container h-2.5 ${student.score < 1 ? 'hidden' : ''}`}>
+                                                    <div className={`col-span-full md:col-span-2 lg:col-span-2 flex items-center
+                                                    justify-start md:justify-end lg:justify-end pr-0 md:pr-3 lg:pr-3 ${student.score < 1 ? 'hidden' : ''}`}>
+                                                        <div className='hover-score text-center'>{student.score}%</div>
+                                                        <div className="progress-bar-container score h-2.5">
                                                             <div className="progress-bar" style={{ width: `${student.score}%` }}></div>
                                                         </div>
                                                     </div>
@@ -216,16 +221,19 @@ function TeacherResults({ navigate, classCode }) {
                                 <div className="inside-card-2 p-6 pt-14" ref={scrollbarRef2}>
                                     <ul className='pt-1'>
                                         {students.slice(0, 99).map((student, index) => (
-                                            <li key={student.id} className='student-item'>
+                                            <li key={student.id} className='student-item see-score'>
                                                 <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 lg:gap-4 md:gap-4 gap-0.5'>
                                                     <div className="col-span-full md:col-span-1 lg:col-span-1">
                                                         <span>
-                                                            {index + 1}. {student.name.length > 16 ? student.name.substring(0, 16) + "..." : student.name}
+                                                            <a className={`${student.score < 1 ? 'hidden' : ''}`}> {index + 1}.</a> {student.name.length > 16 ? student.name.substring(0, 16) + "..." : student.name}
                                                         </span>
                                                     </div>
 
-                                                    <div className="col-span-full md:col-span-2 lg:col-span-2 flex items-center justify-start md:justify-end lg:justify-end
-                                                                pr-0 md:pr-3 lg:pr-3">
+                                                    <div className={`col-span-full md:col-span-2 lg:col-span-2 flex items-center
+                                                    justify-start md:justify-end lg:justify-end pr-0 md:pr-3 lg:pr-3 ${student.score < 1 ? 'hidden' : ''}`}>
+                                                        <div className={`hover-score text-center ${index === 0 ? 'hover-score-gold' : index === 1 ? 'hover-score-silver' : index === 2 ? 'hover-score-bronce' : ''}`}>
+                                                            {student.score}%
+                                                        </div>
                                                         <div className="progress-bar-container h-2.5">
                                                             <div className={`progress-bar ${index < 3 ? `progress-bar-${['gold', 'silver', 'bronce'][index]}` : ''}`} style={{ width: `${student.score}%` }}></div>
                                                         </div>
@@ -233,6 +241,7 @@ function TeacherResults({ navigate, classCode }) {
                                                 </div>
                                             </li>
                                         ))}
+
                                     </ul>
                                 </div>
                             </div>

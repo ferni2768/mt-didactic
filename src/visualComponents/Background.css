@@ -1126,6 +1126,45 @@
     transition: width 0.5s ease-in-out;
 }
 
+.hover-score {
+    visibility: hidden;
+    width: 5rem;
+    background-color: #467d35;
+    color: #fff;
+    text-align: center;
+    border-radius: 1rem;
+    padding: 0.2rem;
+    position: absolute;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.1s;
+    left: 50%;
+
+    cursor: default;
+    font-size: 1rem;
+}
+
+[class^="top-bar-"] .hover-score {
+    left: auto;
+}
+
+.see-score:hover .hover-score {
+    visibility: visible;
+    opacity: 1;
+}
+
+.hover-score-gold {
+    background-color: #a07f1c;
+}
+
+.hover-score-silver {
+    background-color: #636565;
+}
+
+.hover-score-bronce {
+    background-color: #643f21;
+}
+
 .word-container {
     overflow: hidden;
     width: 100%;
