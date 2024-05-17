@@ -417,9 +417,9 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
 
                             <div className={`grid grid-rows-2 grid-cols-3 ${isTraining ? 'buttonsOut' : 'buttonsIn'}`} style={{ position: 'relative' }}>
                                 <div className='col-span-full justify-center word-container'>
-                                    <div className="word-container">
-                                        <div className='hidden md:block lg:hidden text-3xl opacity-0'> aaaaaaaaaaaaaaaaaaaaaaaaa</div>
-                                        <div className='block md:hidden lg:hidden text-3xl opacity-0'> aaaaaaaaaa</div>
+                                    <div className="word-container align-text-bottom">
+                                        <div className='hidden md:block lg:hidden text-3xl opacity-0 h-0'> aaaaaaaaaaaaaaaaaaaaaaaaa</div>
+                                        <div className='block md:hidden lg:hidden text-3xl opacity-0 h-0'> aaaaaaaaaa</div>
                                         {currentWordIndex === 11 ? (
                                             <h1 className={`word ${animationClass}`}>
                                                 <div className='hidden md:block lg:block'>{t('train?')} </div>
@@ -437,9 +437,9 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                                     </div>
                                 </div>
 
-                                <div ref={shrinkSpace} className='grid grid-cols-3 col-span-3 justify-center mt-4 w-full'>
+                                <div ref={shrinkSpace} className='grid grid-cols-3 col-span-3 justify-center w-full mt-0 lg:mt-4'>
 
-                                    <div ref={shrinkButton} onClick={() => handleAnswerSubmit(newAnswer)} className={`grid mb-5 lg:mb-0 grid-cols-3 col-span-3 turnInContainer ${isTurningIn ? 'buttonsShrink' : 'buttonsShrink2'}`} style={{ maxHeight: '3.5rem' }}>
+                                    <div ref={shrinkButton} onClick={() => handleAnswerSubmit(newAnswer)} className={`grid mb-5 lg:mb-0 grid-cols-3 col-span-3 turnInContainer ${isTurningIn ? 'buttonsShrink' : 'buttonsShrink2'}`} style={{ maxHeight: '3.25rem' }}>
 
                                         <div className={`animated-button-text ${isTurningIn ? 'turnInTransition2' : 'turnInTransition'}`} disabled={isTurningIn || isTraining} style={{ position: 'absolute', justifySelf: 'center', alignSelf: 'center' }}>
                                             {currentWordIndex === 11 && t('okTrain')}

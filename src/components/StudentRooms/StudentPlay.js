@@ -244,7 +244,7 @@ function StudentPlay({ navigate, classCode }) {
                                 </div>
                             </div>
                             <div>
-                                <div className="col-span-full md:col-span-full lg:col-span-2 lg:pl-7">
+                                <div className="col-span-full md:col-span-full lg:col-span-2 lg:pl-7 mt-4 lg:mt-0">
                                     <div className='contain'>
                                         <div className='inside-card-2-header justify-center text-white'> {/* Header */}
                                             <div className={isTraining ? "progress out" : "progress entering"}>
