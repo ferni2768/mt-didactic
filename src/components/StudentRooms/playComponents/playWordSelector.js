@@ -3,12 +3,12 @@ import useDataFetcher from './dataFetcher'; // To fetch the data from the csv fi
 import { useTranslation } from 'react-i18next';
 
 function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentWordIndex, ExternalCurrentWordIndexChange,
-    setExternalIsTraining, maxIterations, iteration, setIteration, navigate, matrix, isTurningIn, setIsTurningIn, isMatrixLoading,
-    setIsMatrixLoading, classCode }) {
+    setExternalIsTraining, maxIterations, iteration, setIteration, navigate, matrix, isTurningIn, setIsTurningIn, classCode }) {
     const [currentWordIndex, setCurrentWordIndex] = useState(0); // To keep track of the current word index
     const [isTraining, setIsTraining] = useState(false);
     const [buttonWait, setButtonWait] = useState(true);
     const [textOpacity, setTextOpacity] = useState(1);
+    const [, setIsMatrixLoading] = useState(true); // To fix synchronous issues
 
     const trainingIterations = 5; // Number of iterations to train the model
 
@@ -116,32 +116,50 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
     }, [shrinkButton, shrinkSpace, isTurningIn, newBatch]);
 
     useEffect(() => {
-        if (parseInt(sessionStorage.getItem('iteration'), 10) >= maxIterations) {
-            setProgress(100);
-            setExternalIsTraining(true);
-            setIsTraining(false);
-            setIsTurningIn(true);
-            setCurrentWordIndex(12);
-            return;
+        let intervalId;
+
+        const checkMatrix = () => {
+            if (matrix === null) {
+                setIsMatrixLoading(true);
+            } else {
+                setIsMatrixLoading(false);
+                clearInterval(intervalId);
+
+                if (parseInt(sessionStorage.getItem('iteration'), 10) >= maxIterations) {
+                    setProgress(100);
+                    setExternalIsTraining(true);
+                    setIsTraining(false);
+                    setIsTurningIn(true);
+                    setCurrentWordIndex(12);
+                    return;
+                }
+
+                if (!newWords && (!sessionStorage.getItem('newBatch') || JSON.parse(sessionStorage.getItem('newBatch')).length === 0)) {
+                    setNewBatch(selectedElements);
+                }
+
+                if (newWords) {
+                    const updatedNewBatch = processTrainingDataMatrix(matrix);
+                    setNewBatch(updatedNewBatch); // Set new batch of words
+
+                    setCurrentWordIndex(0);
+                    setProgress((iteration) * (100 / maxIterations)); // Update the student's progress for each iteration
+                    setIsTraining(false);
+                    setIsTurningIn(false);
+
+                    setExternalIsTraining(false);
+                    setNewWords(false);
+                }
+            }
+        };
+
+        if (matrix === null) {
+            intervalId = setInterval(checkMatrix, 100);
+        } else {
+            checkMatrix();
         }
 
-        if (!newWords && (!sessionStorage.getItem('newBatch') || JSON.parse(sessionStorage.getItem('newBatch')).length === 0)) {
-            setNewBatch(selectedElements);
-        }
-
-        if (newWords) {
-            // setIsMatrixLoading(false);
-            const updatedNewBatch = processTrainingDataMatrix(matrix);
-            setNewBatch(updatedNewBatch); // Set new batch of words
-
-            setCurrentWordIndex(0);
-            setProgress((iteration + 1) * (100 / maxIterations)); // Update the student's progress for each iteration
-            setIsTraining(false);
-            setIsTurningIn(false);
-
-            setExternalIsTraining(false);
-            setNewWords(false);
-        }
+        return () => clearInterval(intervalId);
     }, [matrix]);
 
     useEffect(() => {
@@ -192,7 +210,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
             return acc;
         }, {});
 
-        console.log(answersObj);
+        // console.log(answersObj);
 
         const url = `${global.BASE_URL}/models/${selectedModel}/train`;
         const config = {

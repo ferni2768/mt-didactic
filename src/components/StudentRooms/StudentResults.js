@@ -14,6 +14,7 @@ function StudentResults({ navigate, classCode }) {
     const scrollbarRef3 = useRef(null);
 
     const [matrix, setMatrix] = useState(null);
+    const [matrixLoaded, setMatrixLoaded] = useState(false); // State to track if the matrix is loaded
     const mistakes = JSON.parse(sessionStorage.getItem('mistakes')) || [];
     const sum = matrix && matrix.length > 0 ? matrix[0][0] + matrix[1][1] + matrix[2][2] : null;
 
@@ -103,7 +104,8 @@ function StudentResults({ navigate, classCode }) {
             // Fetch the matrix data using the model name from loggedInStudent
             const fetchAndSetMatrix = async () => {
                 const modelName = loggedInStudent.model;
-                await fetchModelMatrix(modelName, setMatrix);
+                await fetchMatrixUntilClose(modelName, loggedInScore, setMatrix);
+                setMatrixLoaded(true);
             };
 
             fetchAndSetMatrix();
@@ -112,29 +114,38 @@ function StudentResults({ navigate, classCode }) {
         }
     }, []); // Empty dependency array ensures this runs only once after the initial render
 
+    const fetchMatrixUntilClose = async (modelName, score, setMatrix) => {
+        let matrix = null;
+        let diagonalSum = 0;
 
+        do {
+            try {
+                const response = await fetch(`${global.BASE_URL}/models/${modelName}/matrix`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
 
-    const fetchModelMatrix = async (modelName, setMatrix) => {
-        try {
-            const response = await fetch(`${global.BASE_URL}/models/${modelName}/matrix`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                const data = await response.json();
+                matrix = data;
+                diagonalSum = calculateDiagonalSum(matrix);
+
+            } catch (error) {
+                console.error('Failed to fetch model matrix:', error);
+                break;
             }
+        } while (Math.abs(diagonalSum - score) > 1.01);
 
-            const data = await response.json();
-            const matrix = data;
+        setMatrix(matrix);
+    };
 
-            setMatrix(matrix);
-
-        } catch (error) {
-            console.error('Failed to fetch model matrix:', error);
-        }
+    const calculateDiagonalSum = (matrix) => {
+        return matrix[0][0] + matrix[1][1] + matrix[2][2];
     };
 
     // Function to map labels to inline styles
@@ -164,7 +175,6 @@ function StudentResults({ navigate, classCode }) {
         navigate('/student/ABC123');
         window.location.reload(); // Reload the page to reset the state
     };
-
 
     if (classPhase === 0) {
         handleReset();
@@ -200,7 +210,7 @@ function StudentResults({ navigate, classCode }) {
 
                             <div className="inside-card-2 p-7 lg:p-6 md:p-6 lg:pt-14 md:pt-14 pt-14 col-span-full grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 md:grid-rows-3 lg:grid-rows-3 grid-rows-0 justify-center">
 
-                                <div className='contain-results md:ml-2 lg:ml-2 ml-0 mt-5 col-span-1 row-span-2'>
+                                <div className={`contain-results md:ml-2 lg:ml-2 ml-0 mt-5 col-span-1 row-span-2 ${matrixLoaded ? 'matrix-loaded' : ''}`}>
                                     <div className='inside-card-results-header text-white'> {/* Header */}
                                         <div></div>
                                         <div className='matrix-bold-diphthong'>{t('d')}</div>
@@ -280,7 +290,7 @@ function StudentResults({ navigate, classCode }) {
 
                                     <div className='lg:pr-0 lg:pl-3 md:pr-8 lg:mr-10 lg:mt-3 md:mt-3 mt-8 '>
                                         <div className='text-2xl pb-2 text-custom_black' style={{ fontWeight: 640 }}>{t('globalAccuracy')}</div>
-                                        <div className='text-custom_black'> {sum !== null ? `${matrix[0][0]} + ${matrix[1][1]} + ${matrix[2][2]} = ${sum}` : 'loading...'} </div>
+                                        <div className='text-custom_black'> {sum !== null ? `${matrix[0][0]} + ${matrix[1][1]} + ${matrix[2][2]} = ${sum}` : t('loading')} </div>
                                     </div>
                                 </div>
                             </div>
@@ -295,7 +305,7 @@ function StudentResults({ navigate, classCode }) {
 
                             <div ref={scrollbarRef2} className="inside-card-2 p-7 lg:pt-14 md:pt-14 pt-14 justify-center">
 
-                                <div className='contain-results md:ml-2 lg:ml-2 ml-2 mt-5'>
+                                <div className={`contain-results md:ml-2 lg:ml-2 ml-0 mt-5 col-span-1 row-span-2 ${matrixLoaded ? 'matrix-loaded' : ''}`}>
                                     <div className='inside-card-results-header text-white'> {/* Header */}
                                         <div></div>
                                         <div className='matrix-bold-diphthong'>{t('d')}</div>
@@ -344,7 +354,7 @@ function StudentResults({ navigate, classCode }) {
 
                                     <div className='lg:pr-0 lg:pl-3 md:pr-8 lg:mr-10 lg:mt-3 md:mt-3 mt-8 '>
                                         <div className='text-2xl pb-2 text-custom_black' style={{ fontWeight: 640 }}>{t('globalAccuracy')}</div>
-                                        <div className='text-custom_black'> {sum !== null ? `${matrix[0][0]} + ${matrix[1][1]} + ${matrix[2][2]} = ${sum}` : 'loading...'} </div>
+                                        <div className='text-custom_black'> {sum !== null ? `${matrix[0][0]} + ${matrix[1][1]} + ${matrix[2][2]} = ${sum}` : t('loading')} </div>
                                     </div>
                                 </div>
 

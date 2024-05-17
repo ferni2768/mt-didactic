@@ -533,12 +533,18 @@
     width: 2.45rem;
     height: 97%;
     background: #19bd24;
-    opacity: 0.375;
+    opacity: 0;
+    transition: opacity 0.05s ease-out;
     border-radius: 5rem;
     transform: rotate(-45deg);
     transform-origin: top left;
     z-index: 2;
     mix-blend-mode: multiply;
+}
+
+.contain-results.matrix-loaded::before {
+    opacity: 0.375;
+    /* Set to desired opacity when matrix is loaded */
 }
 
 .matrix-item {

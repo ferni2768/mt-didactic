@@ -264,6 +264,8 @@ function TeacherResults({ navigate, classCode }) {
                                             <div style={{ fontWeight: '400' }} className='mt-6'>{t('info-reset-2')}</div>
                                             <div style={{ fontWeight: '400' }} className='mt-2'>{t('info-reset-3')}</div>
                                             <div style={{ fontWeight: '400' }} className='mt-2'>{t('info-reset-4')}</div>
+
+                                            <div style={{ fontWeight: '300' }} className='mt-7'>{t('info-download-results')}</div>
                                         </div>
                                     </div>
                                 </div>

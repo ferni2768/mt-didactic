@@ -25,7 +25,6 @@ function StudentPlay({ navigate, classCode }) {
     const [ExternalCurrentWordIndexChange, setExternalCurrentWordIndexChange] = useState(1); // State to track/modify the current word index
     const [isTraining, setIsTraining] = useState(false);
     const [isTurningIn, setIsTurningIn] = useState(false);
-    // const [isMatrixLoading, setIsMatrixLoading] = useState(true); // To fix synchronous issues
     const scrollbarRef = useRef(null);
 
     const { t } = useTranslation();
