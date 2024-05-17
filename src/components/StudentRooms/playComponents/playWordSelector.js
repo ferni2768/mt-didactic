@@ -8,9 +8,6 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
     const [isTraining, setIsTraining] = useState(false);
     const [buttonWait, setButtonWait] = useState(true);
     const [textOpacity, setTextOpacity] = useState(1);
-    const [, setIsMatrixLoading] = useState(true); // To fix synchronous issues
-
-    const trainingIterations = 5; // Number of iterations to train the model
 
     const [selectedModel,] = useState(() => {
         // Get the name of the model that the student is going to train
@@ -21,7 +18,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
     const [newAnswer, setNewAnswer] = useState([]); // To store the input answers
     const [newWords, setNewWords] = useState(false); // To trigger the new batch of words
     const [trainingData, setTrainingData] = useState([]);
-    const { selectedElements, processTrainingData, processTrainingDataMatrix } = useDataFetcher();
+    const { selectedElements, processTrainingDataMatrix } = useDataFetcher();
 
     const [animationClass, setAnimationClass] = useState(''); // To trigger the transition animation between words
     const [isAnimating, setIsAnimating] = useState(false);
@@ -120,11 +117,8 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         console.log('Matrix 1:', matrix);
 
         const checkMatrix = () => {
-            if (matrix === null) {
-                setIsMatrixLoading(true);
-            } else {
+            if (matrix !== null && Array.isArray(matrix) && matrix.every(row => Array.isArray(row))) {
                 console.log('Matrix 2:', matrix);
-                setIsMatrixLoading(false);
                 clearInterval(intervalId);
 
                 if (parseInt(sessionStorage.getItem('iteration'), 10) >= maxIterations) {
@@ -406,13 +400,13 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                                 i
                                 <div className='block lg:hidden'>
                                     <div className="tooltip bottom left">
-                                        {t('info-play')}
+                                        <div style={{ fontWeight: '400' }}>{t('info-play')}</div>
                                     </div>
                                 </div>
 
                                 <div className='hidden lg:block'>
                                     <div className="tooltip top left">
-                                        {t('info-play')}
+                                        <div style={{ fontWeight: '400' }}>{t('info-play')}</div>
                                     </div>
                                 </div>
                             </div>

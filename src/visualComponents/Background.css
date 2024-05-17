@@ -1271,7 +1271,7 @@
 .animated-word {
     border-radius: 0.5rem;
     width: 100%;
-    background-color: rgb(134, 134, 134);
+    background-color: rgb(124, 124, 124);
 
     overflow: hidden;
     position: relative;
@@ -1314,7 +1314,7 @@
 .animated-word-text {
     overflow: hidden;
 
-    font-weight: bold;
+    font-weight: 450;
     font-size: medium;
     color: #ffffff;
 

@@ -274,7 +274,7 @@ function StudentResults({ navigate, classCode }) {
                                                     <div className="info-button mt-5 mr-2">
                                                         i
                                                         <div className="tooltip bottom left">
-                                                            {t('info-errors')}
+                                                            <div style={{ fontWeight: '400' }}>{t('info-errors')}</div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -326,7 +326,7 @@ function StudentResults({ navigate, classCode }) {
                                         <div>{t('AIResultsShort')}</div>
                                     </div>
 
-                                    <div ref={scrollbarRef2} className="inside-card-2 p-7 lg:pt-14 md:pt-14 pt-14 justify-center">
+                                    <div ref={scrollbarRef2} className="inside-card-2 lg:pt-14 md:pt-14 pt-14 pl-5 pb-5 justify-center">
 
                                         <div className={`contain-results md:ml-2 lg:ml-2 ml-0 mt-5 col-span-1 row-span-2 ${matrixLoaded ? 'matrix-loaded' : ''}`}>
                                             <div className='inside-card-results-header text-white'> {/* Header */}
@@ -357,12 +357,12 @@ function StudentResults({ navigate, classCode }) {
                                             </div>
                                         </div>
 
-                                        <div className='self-center pt-2 pb-2 text-center'>
-                                            <div className='allow-info-overflow mr-20'>
+                                        <div className='self-center pt-1 pb-2 text-center pr-8'>
+                                            <div className='allow-info-overflow mr-16'>
                                                 <div className="info-button mr-3">
                                                     i
                                                     <div className="tooltip top">
-                                                        <div className="text-xl text-">{t('info-columns-1')}</div>
+                                                        <div className="text-xl">{t('info-columns-1')}</div>
                                                         <div style={{ fontWeight: '400' }}>{t('info-columns-2')}</div>
                                                         <div className='pt-1.5'></div>
                                                         <div className="text-xl">{t('info-rows-1')}</div>
@@ -376,19 +376,19 @@ function StudentResults({ navigate, classCode }) {
                                             </div>
 
                                             <div className='lg:pr-0 lg:pl-3 md:pr-8 lg:mr-10 lg:mt-3 md:mt-3 mt-8 '>
-                                                <div className='text-2xl pb-2 text-custom_black' style={{ fontWeight: 640 }}>{t('globalAccuracy')}</div>
+                                                <div className='text-2xl pb-0 text-custom_black' style={{ fontWeight: 640 }}>{t('globalAccuracy')}</div>
                                                 <div className='text-custom_black'> {sum !== null ? `${matrix[0][0]} + ${matrix[1][1]} + ${matrix[2][2]} = ${sum}` : t('loading')} </div>
                                             </div>
                                         </div>
 
-                                        <div className='contain-mistakes-slim pl-2'>
-                                            <div className='inside-card-mistakes-header mt-5 text-white'> {/* Header */}
+                                        <div className='contain-mistakes-slim'>
+                                            <div className='inside-card-mistakes-header mt-4 text-white'> {/* Header */}
                                                 {mistakes.length} {mistakes.length === 1 ? t('mistake') : t('mistakes')}
 
-                                                <div className="info-button mt-5 mr-2">
+                                                <div className="info-button mt-4 mr-4">
                                                     i
                                                     <div className="tooltip bottom left">
-                                                        {t('info-errors')}
+                                                        <div style={{ fontWeight: '400' }}>{t('info-errors')}</div>
                                                     </div>
                                                 </div>
                                             </div>

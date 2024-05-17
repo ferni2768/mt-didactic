@@ -188,26 +188,31 @@ function StudentPlay({ navigate, classCode }) {
 
 
     const fetchModelMatrix = async (modelName, setMatrix) => {
-        try {
-            const response = await fetch(`${global.BASE_URL}/models/${modelName}/matrix`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+        const fetchMatrix = async () => {
+            try {
+                const response = await fetch(`${global.BASE_URL}/models/${modelName}/matrix`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    return data;
+                }
+            } catch (error) {
+                // Silently handle the error by returning null
             }
+            return null;
+        };
 
-            const data = await response.json();
-            const matrix = data;
-
-            setMatrix(matrix);
-
-        } catch (error) {
-            console.error('Failed to fetch model matrix:', error);
+        let matrix = null;
+        while (matrix === null) {
+            matrix = await fetchMatrix();
         }
+
+        setMatrix(matrix);
     };
 
 
@@ -248,9 +253,9 @@ function StudentPlay({ navigate, classCode }) {
                                             <div className={`info-button ${isTraining ? 'hidden' : ''}`}>
                                                 i
                                                 <div className="tooltip bottom left">
-                                                    {t('info-word-list-1')}
-                                                    <div className='pt-1.5'></div>
-                                                    {t('info-word-list-2')}
+                                                    <div style={{ fontWeight: '400' }}>{t('info-word-list-1')}</div>
+                                                    <div className='pt-2'></div>
+                                                    <div style={{ fontWeight: '400' }}>{t('info-word-list-2')}</div>
                                                 </div>
                                             </div>
                                         </div>

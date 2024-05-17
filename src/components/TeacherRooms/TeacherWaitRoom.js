@@ -144,7 +144,7 @@ function TeacherWaitRoom({ navigate, classCode }) {
                                         <div className="info-button mt-0.5">
                                             i
                                             <div className="tooltip top left">
-                                                {t('info-results')}
+                                                <div style={{ fontWeight: '400' }}>{t('info-results')}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -162,7 +162,7 @@ function TeacherWaitRoom({ navigate, classCode }) {
                                     <div className="info-button left mt-0.5">
                                         i
                                         <div className="tooltip bottom right">
-                                            {t('info-results')}
+                                            <div style={{ fontWeight: '400' }}>{t('info-results')}</div>
                                         </div>
                                     </div>
                                 </div>
