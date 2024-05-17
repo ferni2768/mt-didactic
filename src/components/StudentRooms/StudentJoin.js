@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { Link } from 'react-router-dom';
-
+import Scrollbar from 'smooth-scrollbar';
+import OverscrollPlugin from 'smooth-scrollbar/plugins/overscroll';
 import { TransitionContext } from '../../visualComponents/TransitionContext';
 import { useTranslation } from 'react-i18next';
 
@@ -12,11 +12,50 @@ function StudentJoin({ navigate, classCode }) {
     const [inputClassCode, setInputClassCode] = useState(classCode);
     const [wantsToJoin, setWantsToJoin] = useState(false);
     const { isTransitioning, isEntering } = useContext(TransitionContext);
+    const scrollbarRef = useRef(null);
 
     const { t } = useTranslation();
-
     const shrinkCard = useRef(null);
 
+    Scrollbar.use(OverscrollPlugin);
+
+    const initializeScrollbar = (ref) => {
+        if (ref.current) {
+            const scrollbar = Scrollbar.init(ref.current, {
+                damping: 0.1,
+                plugins: {
+                    overscroll: {
+                        enabled: true,
+                        maxOverscroll: 50,
+                        effect: 'bounce',
+                        damping: 0.1
+                    }
+                }
+            });
+            scrollbar.track.xAxis.element.remove();
+            return () => scrollbar.destroy();
+        }
+    };
+
+    useEffect(() => initializeScrollbar(scrollbarRef), []);
+
+    // Disable the scrollbar when the ctrl key is pressed in order to zoom in/out with the mouse wheel
+    useEffect(() => {
+        const handleKeyEvents = (event) => {
+            const state = event.ctrlKey ? 'none' : 'auto';
+            [scrollbarRef.current].forEach(ref => {
+                if (ref) ref.style.pointerEvents = state;
+            });
+        };
+
+        window.addEventListener('keydown', handleKeyEvents);
+        window.addEventListener('keyup', handleKeyEvents);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyEvents);
+            window.removeEventListener('keyup', handleKeyEvents);
+        };
+    }, []);
 
     useEffect(() => {
         const updateHeight = () => {
@@ -147,69 +186,73 @@ function StudentJoin({ navigate, classCode }) {
 
 
     return (
-        <div>
-            <div ref={shrinkCard} className={`inside-login-card ${wantsToJoin ? 'shrink' : ''} ${isTransitioning ? 'transitioning' : ''} ${isEntering ? 'entering' : ''}`}>
-                <div className="form-container">
+        <div class="overflowY-container" ref={scrollbarRef}>
+            <div className="overflowY-container-inside">
+                <div>
+                    <div ref={shrinkCard} className={`inside-login-card ${wantsToJoin ? 'shrink' : ''} ${isTransitioning ? 'transitioning' : ''} ${isEntering ? 'entering' : ''}`}>
+                        <div className="form-container">
 
-                    {wantsToJoin && <p className={`waiting ${wantsToJoin ? 'form-animated-2' : ''}`} style={{ position: 'absolute' }}>{t('waiting')}</p>}
+                            {wantsToJoin && <p className={`waiting ${wantsToJoin ? 'form-animated-2' : ''}`} style={{ position: 'absolute' }}>{t('waiting')}</p>}
 
-                    <h1 className={`text-2xl font-bold text-center ${wantsToJoin ? 'form-animated' : ''}`}>{t('studentJoin')}</h1>
+                            <h1 className={`text-2xl font-bold text-center ${wantsToJoin ? 'form-animated' : ''}`}>{t('studentJoin')}</h1>
 
-                    <div className={`${wantsToJoin ? 'form-animated' : ''}`}>
-                        <form onSubmit={handleJoin} className="space-y-4">
-                            <div className="flex justify-center relative">
-                                <input
-                                    id="name"
-                                    type="text"
-                                    placeholder=""
-                                    value={name}
-                                    disabled={wantsToJoin}
-                                    onChange={handleNameChange}
-                                    maxLength={maxLength + 1}
-                                    onFocus={() => {
-                                        setIsNameInputFocused(true);
-                                        handleNameChange();
-                                    }}
-                                    onBlur={() => setIsNameInputFocused(false)}
-                                    className="mt-8 border-custom_black focus:border-accent border-2 rounded-lg
+                            <div className={`${wantsToJoin ? 'form-animated' : ''}`}>
+                                <form onSubmit={handleJoin} className="space-y-4">
+                                    <div className="flex justify-center relative">
+                                        <input
+                                            id="name"
+                                            type="text"
+                                            placeholder=""
+                                            value={name}
+                                            disabled={wantsToJoin}
+                                            onChange={handleNameChange}
+                                            maxLength={maxLength + 1}
+                                            onFocus={() => {
+                                                setIsNameInputFocused(true);
+                                                handleNameChange();
+                                            }}
+                                            onBlur={() => setIsNameInputFocused(false)}
+                                            className="mt-8 border-custom_black focus:border-accent border-2 rounded-lg
                                                outline-none block w-full shadow-sm text-custom_black p-2"
-                                />
-                                <span className='text-2xl text-gray-300 bg-white absolute left-5 top-11 px-1
+                                        />
+                                        <span className='text-2xl text-gray-300 bg-white absolute left-5 top-11 px-1
                                                 transition duration-200 input-text pointer-events-none'>{t('name')}</span>
-                            </div>
-                            {nameExceedsLimit && isNameInputFocused && (
-                                <div className='pb-0.5'>
-                                    <p className="text-sm text-accent slideUpFadeIn">{t('charLimit')}</p>
-                                </div>
-                            )}
-                            <div className="flex justify-center relative">
-                                <input
-                                    id="classCode"
-                                    type="text"
-                                    placeholder=""
-                                    value={inputClassCode}
-                                    disabled={wantsToJoin}
-                                    onChange={(e) => setInputClassCode(e.target.value)}
-                                    maxLength={100}
-                                    className="mt-3 border-custom_black focus:border-accent border-2 rounded-lg
-                                              outline-none block w-full shadow-sm text-custom_black p-2"
-                                />
-                                <span className='text-2xl text-gray-300 bg-white absolute left-3 top-6 px-1
-                                                 transition duration-200 input-text pointer-events-none'>{t('classCode')}</span>
-                            </div>
-                            <div>
-                                <button type="submit" className="animated-button p-2 text-center mt-4" disabled={wantsToJoin}>
-                                    <div className="animated-button-bg"></div>
-                                    <div className="animated-button-text">
-                                        {t('join')}
                                     </div>
-                                </button>
+                                    {nameExceedsLimit && isNameInputFocused && (
+                                        <div className='pb-0.5'>
+                                            <p className="text-sm text-accent slideUpFadeIn">{t('charLimit')}</p>
+                                        </div>
+                                    )}
+                                    <div className="flex justify-center relative">
+                                        <input
+                                            id="classCode"
+                                            type="text"
+                                            placeholder=""
+                                            value={inputClassCode}
+                                            disabled={wantsToJoin}
+                                            onChange={(e) => setInputClassCode(e.target.value)}
+                                            maxLength={100}
+                                            className="mt-3 border-custom_black focus:border-accent border-2 rounded-lg
+                                              outline-none block w-full shadow-sm text-custom_black p-2"
+                                        />
+                                        <span className='text-2xl text-gray-300 bg-white absolute left-3 top-6 px-1
+                                                 transition duration-200 input-text pointer-events-none'>{t('classCode')}</span>
+                                    </div>
+                                    <div>
+                                        <button type="submit" className="animated-button p-2 text-center mt-4" disabled={wantsToJoin}>
+                                            <div className="animated-button-bg"></div>
+                                            <div className="animated-button-text">
+                                                {t('join')}
+                                            </div>
+                                        </button>
 
-                                <div className="text-center text-base pt-2" onClick={() => navigate('/teacher')}>
-                                    <span className="text-custom_black opacity-50 hover:text-accent hover:opacity-100 cursor-pointer">{t('imateacher')}</span>
-                                </div>
+                                        <div className="text-center text-base pt-2" onClick={() => navigate('/teacher')}>
+                                            <span className="text-custom_black opacity-50 hover:text-accent hover:opacity-100 cursor-pointer">{t('imateacher')}</span>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>

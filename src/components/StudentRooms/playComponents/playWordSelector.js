@@ -117,11 +117,13 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
 
     useEffect(() => {
         let intervalId;
+        console.log('Matrix 1:', matrix);
 
         const checkMatrix = () => {
             if (matrix === null) {
                 setIsMatrixLoading(true);
             } else {
+                console.log('Matrix 2:', matrix);
                 setIsMatrixLoading(false);
                 clearInterval(intervalId);
 
@@ -158,6 +160,8 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         } else {
             checkMatrix();
         }
+
+        console.log('Matrix 3:', matrix);
 
         return () => clearInterval(intervalId);
     }, [matrix]);
