@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 function StudentResults({ navigate, classCode }) {
     const [student, setStudent] = useState({});
     const [score, setScore] = useState();
+    const [classPhase, setClassPhase] = useState(null); // State to track the class phase
     const { isEntering, isTransitioning } = useContext(TransitionContext);
     const scrollbarRef = useRef(null);
     const scrollbarRef2 = useRef(null);
@@ -35,9 +36,9 @@ function StudentResults({ navigate, classCode }) {
         };
     }, []);
 
-    useEffect(() => {
-        if (scrollbarRef.current) {
-            const scrollbar = Scrollbar.init(scrollbarRef.current, {
+    const initializeScrollbar = (ref) => {
+        if (ref.current) {
+            const scrollbar = Scrollbar.init(ref.current, {
                 damping: 0.1,
                 plugins: {
                     overscroll: {
@@ -51,43 +52,40 @@ function StudentResults({ navigate, classCode }) {
             scrollbar.track.xAxis.element.remove();
             return () => scrollbar.destroy();
         }
-    }, []);
+    };
+
+    useEffect(() => initializeScrollbar(scrollbarRef), []);
+    useEffect(() => initializeScrollbar(scrollbarRef2), []);
+    useEffect(() => initializeScrollbar(scrollbarRef3), []);
 
     useEffect(() => {
-        if (scrollbarRef2.current) {
-            const scrollbar = Scrollbar.init(scrollbarRef2.current, {
-                damping: 0.1,
-                plugins: {
-                    overscroll: {
-                        enabled: true,
-                        maxOverscroll: 50,
-                        effect: 'bounce',
-                        damping: 0.1
-                    }
-                }
-            });
-            scrollbar.track.xAxis.element.remove();
-            return () => scrollbar.destroy();
-        }
-    }, []);
+        // Get the data from sessionStorage
+        const loggedInStudent = JSON.parse(sessionStorage.getItem('loggedInStudent'));
+        setStudent(loggedInStudent);
 
-    useEffect(() => {
-        if (scrollbarRef3.current) {
-            const scrollbar = Scrollbar.init(scrollbarRef3.current, {
-                damping: 0.1,
-                plugins: {
-                    overscroll: {
-                        enabled: true,
-                        maxOverscroll: 50,
-                        effect: 'bounce',
-                        damping: 0.1
-                    }
+        const checkClassPhase = async () => {
+            try {
+                const response = await fetch(`${global.BASE_URL}/class/${sessionStorage.getItem('loggedInClassCode')}/phase`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setClassPhase(data.phase);
+                } else {
+                    console.error('Error fetching class phase:', response.statusText);
                 }
-            });
-            scrollbar.track.xAxis.element.remove();
-            return () => scrollbar.destroy();
-        }
-    }, []);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
+        // Initial check
+        checkClassPhase();
+
+        // Set up an interval to check the class phase every second
+        const intervalId = setInterval(checkClassPhase, 1000);
+
+        // Cleanup function to clear the interval when the component unmounts
+        return () => clearInterval(intervalId);
+    }, [classCode]);
 
     useEffect(() => {
         // Retrieve the loggedInStudent object from sessionStorage
@@ -166,6 +164,11 @@ function StudentResults({ navigate, classCode }) {
         navigate('/student/ABC123');
         window.location.reload(); // Reload the page to reset the state
     };
+
+
+    if (classPhase === 0) {
+        handleReset();
+    }
 
 
     return (

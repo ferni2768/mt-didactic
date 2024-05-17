@@ -190,8 +190,8 @@ function StudentPlay({ navigate, classCode }) {
     };
 
 
-    if (classPhase === 2) {
-        return <div>The class already finished</div>;
+    if (classPhase === 0) {
+        handleReset();
     }
 
 

@@ -14,13 +14,14 @@ function TeacherResults({ navigate, classCode }) {
 
     Scrollbar.use(OverscrollPlugin);
 
-
     useEffect(() => {
         const handleKeyDown = (event) => {
             if (event.key === 'r' || event.key === 'R') {
-                handleReset();
+                restartClass();
             } else if (event.key === 'd' || event.key === 'D') {
                 handleDownloadCSV();
+            } else if (event.key === 'e' || event.key === 'E') {
+                handleReset();
             }
         };
 
@@ -64,21 +65,29 @@ function TeacherResults({ navigate, classCode }) {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    useEffect(() => {
-        const fetchStudents = async () => {
-            try {
-                const response = await fetch(`${global.BASE_URL}/students?classCode=${sessionStorage.getItem('createdClassCode')}`);
-                const data = await response.json();
-                // Sort students by score in descending order
-                const sortedStudents = data.sort((a, b) => b.score - a.score);
-                setStudents(sortedStudents);
-            } catch (error) {
-                console.error('Error fetching students:', error);
-            }
-        };
+    const fetchStudents = async () => {
+        try {
+            const response = await fetch(`${global.BASE_URL}/students?classCode=${sessionStorage.getItem('createdClassCode')}`);
+            const data = await response.json();
+            // Sort students by score in descending order
+            const sortedStudents = data.sort((a, b) => b.score - a.score);
+            setStudents(sortedStudents);
+        } catch (error) {
+            // Silently handle errors
+            console.error('Error fetching students:', error);
+        }
+    };
 
+    useEffect(() => {
         fetchStudents();
     }, []);
+
+    useEffect(() => {
+        fetchStudents(); // Fetch students initially
+        const intervalId = setInterval(fetchStudents, 3000); // Reload students every 3 seconds
+
+        return () => clearInterval(intervalId);
+    }, [classCode]);
 
     const handleReset = () => {
         // Reset the session
@@ -87,6 +96,26 @@ function TeacherResults({ navigate, classCode }) {
         sessionStorage.removeItem('isFinished');
         navigate('/teacher/ABC123');
         window.location.reload(); // Reload the page to reset the state
+    };
+
+    const restartClass = async () => {
+        try {
+            const classCode = sessionStorage.getItem('createdClassCode');
+            const response = await fetch(`${global.BASE_URL}/class/${classCode}/restart`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+                handleReset();
+            } else {
+                console.error('Error restarting class:', response.statusText); // Silently handle errors
+            }
+        } catch (error) {
+            console.error('Error:', error); // Silently handle errors
+        }
     };
 
     const handleDownloadCSV = () => {

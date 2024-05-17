@@ -60,7 +60,7 @@ function StudentJoin({ navigate, classCode }) {
                     const response = await fetch(`${global.BASE_URL}/class/${inputClassCode}/phase`);
                     if (response.ok) {
                         const data = await response.json();
-                        if (data.phase === 1) {
+                        if (data.phase > 0) {
                             clearInterval(intervalId); // Clear the interval when the phase is 1
                             sessionStorage.setItem('loggedInClassCode', inputClassCode);
                             sessionStorage.setItem('classStarted', true);

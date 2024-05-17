@@ -254,6 +254,7 @@
 .top-bar-1 {
     height: 100vh;
     width: calc(100% + 2rem);
+    min-width: 10rem;
     background-color: white;
     display: flex;
     flex-direction: column;

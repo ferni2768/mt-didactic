@@ -70,7 +70,7 @@ function TeacherWaitRoom({ navigate, classCode }) {
         const intervalId = setInterval(fetchStudents, 3000); // Reload students every 3 seconds
 
         return () => clearInterval(intervalId);
-    }, [classCode]); // Add classCode as a dependency to re-fetch when it changes
+    }, [classCode]);
 
 
     const handleReset = () => {

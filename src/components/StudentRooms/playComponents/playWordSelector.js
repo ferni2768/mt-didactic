@@ -377,10 +377,28 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                 {newBatch[0] && (
                     <div className='grid lg:grid-rows-5 grid-rows-2'>
                         <div className='hidden lg:block lg:row-span-1'></div>
-                        <div className='row-span-2'>
+
+                        <div className='row-span-2 allow-info-overflow'>
+
+                            <div className={`info-button ${currentWordIndex > 10 ? 'hidden' : ''}`}>
+                                i
+                                <div className='block lg:hidden'>
+                                    <div className="tooltip bottom left">
+                                        {t('info-play')}
+                                    </div>
+                                </div>
+
+                                <div className='hidden lg:block'>
+                                    <div className="tooltip top left">
+                                        {t('info-play')}
+                                    </div>
+                                </div>
+                            </div>
+
                             <h1 className={`text-center ${isTraining ? 'trainingIn' : 'trainingOut'}`} style={{ position: 'absolute' }}>
                                 {t('training')}{'.'.repeat(periods)}
                             </h1>
+
                             <div className={`grid grid-rows-2 grid-cols-3 ${isTraining ? 'buttonsOut' : 'buttonsIn'}`} style={{ position: 'relative' }}>
                                 <div className='col-span-full justify-center word-container'>
                                     <div className="word-container">
@@ -443,13 +461,6 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                                                 {t('g')}
                                             </div>
                                         </button>
-
-                                        <div className={`info-button ${currentWordIndex > 10 ? 'hidden' : ''}`}>
-                                            i
-                                            <div className="tooltip bottom left">
-                                                {t('info-play')}
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>

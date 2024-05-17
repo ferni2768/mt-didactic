@@ -349,6 +349,94 @@ app.put('/student/:id/setProgress', (req, res) => {
     });
 });
 
+// API endpoint to restart a class
+app.put('/class/:code/restart', async (req, res) => {
+    const classCode = req.params.code;
+    const newClassCode = `${classCode}_deleted`;
+
+    try {
+        await new Promise((resolve, reject) => {
+            db.beginTransaction(err => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
+        });
+
+        // Disable foreign key checks
+        await new Promise((resolve, reject) => {
+            db.query('SET FOREIGN_KEY_CHECKS = 0', (err, result) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+
+        // Update the class phase to 0
+        await new Promise((resolve, reject) => {
+            const query = 'UPDATE class SET phase = 0 WHERE code = ?';
+            db.query(query, [classCode], (err, result) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    if (result.affectedRows === 0) {
+                        reject(new Error('No class found with the provided code'));
+                    } else {
+                        resolve(result);
+                    }
+                }
+            });
+        });
+
+        // Update the class_code of all students in the class
+        await new Promise((resolve, reject) => {
+            const query = 'UPDATE student SET class_code = ? WHERE class_code = ?';
+            db.query(query, [newClassCode, classCode], (err, result) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+
+        // Re-enable foreign key checks
+        await new Promise((resolve, reject) => {
+            db.query('SET FOREIGN_KEY_CHECKS = 1', (err, result) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+
+        await new Promise((resolve, reject) => {
+            db.commit(err => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
+        });
+
+        res.status(200).json({ message: 'Class restarted successfully' });
+    } catch (error) {
+        await new Promise((resolve, reject) => {
+            db.rollback(() => {
+                resolve();
+            });
+        });
+
+        res.status(500).json({ error: 'Internal server error', details: error.message });
+    }
+});
+
 // Close MySQL connection when Node.js process exits
 process.on('SIGINT', () => {
     db.end(err => {
