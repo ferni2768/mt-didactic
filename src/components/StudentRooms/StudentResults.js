@@ -160,7 +160,7 @@ function StudentResults({ navigate, classCode }) {
                 console.error('Failed to fetch model matrix:', error);
                 break;
             }
-        } while (Math.abs(diagonalSum - score) > 1.01);
+        } while (Math.abs(diagonalSum - score) > 1.5);
 
         setMatrix(matrix);
     };

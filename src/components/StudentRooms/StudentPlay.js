@@ -159,62 +159,6 @@ function StudentPlay({ navigate, classCode }) {
         window.location.reload(); // Reload the page to reset the state
     };
 
-    useEffect(() => {
-        // Retrieve the loggedInStudent object from sessionStorage
-        const loggedInStudentString = sessionStorage.getItem('loggedInStudent');
-        const loggedInScoreString = sessionStorage.getItem('loggedInScore');
-
-        if (loggedInStudentString) {
-            const loggedInStudent = JSON.parse(loggedInStudentString);
-            const loggedInScore = loggedInScoreString ? JSON.parse(loggedInScoreString) : null;
-
-            // Set the student and score state
-            setStudent(loggedInStudent);
-            setScore(loggedInScore);
-
-            // Fetch the matrix data using the model name from loggedInStudent
-            const fetchAndSetMatrix = async () => {
-                const modelName = loggedInStudent.model;
-                await fetchModelMatrix(modelName, setMatrix);
-            };
-
-            (async () => {
-                await fetchAndSetMatrix();
-            })();
-        } else {
-            console.log('No loggedInStudent found in sessionStorage.');
-        }
-    }, [iteration]); // Re-run the effect every iteration
-
-
-    const fetchModelMatrix = async (modelName, setMatrix) => {
-        const fetchMatrix = async () => {
-            try {
-                const response = await fetch(`${global.BASE_URL}/models/${modelName}/matrix`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    return data;
-                }
-            } catch (error) {
-                // Silently handle the error by returning null
-            }
-            return null;
-        };
-
-        let matrix = null;
-        while (matrix === null) {
-            matrix = await fetchMatrix();
-        }
-
-        setMatrix(matrix);
-    };
-
 
     if (classPhase === 0) {
         handleReset();
@@ -230,18 +174,28 @@ function StudentPlay({ navigate, classCode }) {
                             <div className='col-span-2'>
                                 <h1 className='hidden lg:block'>{t('studentPlay')}</h1>
                                 {/* {matrix && matrix.map((row, rowIndex) => (
-                                <div key={rowIndex}>
-                                    {row.map((value, colIndex) => (
-                                        <span key={colIndex}>{value} </span>
-                                    ))}
-                                </div>
-                                ))} */}
+                                    <div key={rowIndex}>
+                                        {row.map((value, colIndex) => (
+                                            <span key={colIndex}>{value} </span>
+                                        ))}
+                                        <br />
+                                    </div>
+                                ))}
+
+                                {matrix && (
+                                    <div className='text-custom_black font-bold'>
+                                        {`${matrix[0][0] + matrix[1][1] + matrix[2][2]}`}
+                                    </div>
+                                )} */}
+
                                 <div className='h-full'>
                                     <PlayWordSelector updateScore={updateScore} setProgress={setProgress} setWords={setWords}
                                         ExternalCurrentWordIndex={ExternalCurrentWordIndex} ExternalCurrentWordIndexChange={ExternalCurrentWordIndexChange}
                                         setExternalIsTraining={setIsTraining} maxIterations={maxIterations} iteration={iteration} setIteration={setIteration}
-                                        classCode={classCode} navigate={navigate} matrix={matrix} isTurningIn={isTurningIn} setIsTurningIn={setIsTurningIn} />
+                                        classCode={classCode} navigate={navigate} matrix={matrix} setMatrix={setMatrix} isTurningIn={isTurningIn}
+                                        setIsTurningIn={setIsTurningIn} setStudent={setStudent} setScore={setScore} />
                                 </div>
+
                             </div>
                             <div>
                                 <div className="col-span-full md:col-span-full lg:col-span-2 lg:pl-7 mt-4 lg:mt-0">

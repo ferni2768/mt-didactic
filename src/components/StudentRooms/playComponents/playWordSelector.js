@@ -3,11 +3,14 @@ import useDataFetcher from './dataFetcher'; // To fetch the data from the csv fi
 import { useTranslation } from 'react-i18next';
 
 function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentWordIndex, ExternalCurrentWordIndexChange,
-    setExternalIsTraining, maxIterations, iteration, setIteration, navigate, matrix, isTurningIn, setIsTurningIn, classCode }) {
+    setExternalIsTraining, maxIterations, iteration, setIteration, navigate, matrix, setMatrix, isTurningIn, setIsTurningIn, classCode,
+    setStudent, setScore }) {
     const [currentWordIndex, setCurrentWordIndex] = useState(0); // To keep track of the current word index
     const [isTraining, setIsTraining] = useState(false);
     const [buttonWait, setButtonWait] = useState(true);
     const [textOpacity, setTextOpacity] = useState(1);
+
+    const trainingTimes = 3; // Number of times the model gets trained every iteration
 
     const [selectedModel,] = useState(() => {
         // Get the name of the model that the student is going to train
@@ -43,6 +46,62 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
             setIsTurningIn(false);
         }
     }, [currentWordIndex]);
+
+    useEffect(() => {
+        // Retrieve the loggedInStudent object from sessionStorage
+        const loggedInStudentString = sessionStorage.getItem('loggedInStudent');
+        const loggedInScoreString = sessionStorage.getItem('loggedInScore');
+
+        if (loggedInStudentString) {
+            const loggedInStudent = JSON.parse(loggedInStudentString);
+            const loggedInScore = loggedInScoreString ? JSON.parse(loggedInScoreString) : null;
+
+            // Set the student and score state
+            setStudent(loggedInStudent);
+            setScore(loggedInScore);
+
+            // Fetch the matrix data using the model name from loggedInStudent
+            const fetchAndSetMatrix = async () => {
+                const modelName = loggedInStudent.model;
+                await fetchModelMatrix(modelName, setMatrix);
+            };
+
+            (async () => {
+                await fetchAndSetMatrix();
+            })();
+        } else {
+            console.log('No loggedInStudent found in sessionStorage.');
+        }
+    }, [iteration]); // Re-run the effect every iteration
+
+
+    const fetchModelMatrix = async (modelName, setMatrix) => {
+        const fetchMatrix = async () => {
+            try {
+                const response = await fetch(`${global.BASE_URL}/models/${modelName}/matrix`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    return data;
+                }
+            } catch (error) {
+                // Silently handle the error by returning null
+            }
+            return null;
+        };
+
+        let matrix = null;
+        while (matrix === null) {
+            matrix = await fetchMatrix();
+        }
+
+        setMatrix(matrix);
+    };
 
     // Effect to update the opacity of the buttons text when isTurningIn changes
     useEffect(() => {
@@ -213,7 +272,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         const url = `${global.BASE_URL}/models/${selectedModel}/train`;
         const config = {
             method: 'post',
-            body: JSON.stringify({ answers: answersObj, maxIterations: maxIterations }),
+            body: JSON.stringify({ answers: answersObj, maxIterations: trainingTimes }),
             headers: { 'Content-Type': 'application/json' }
         };
 

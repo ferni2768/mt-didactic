@@ -359,7 +359,7 @@ def teach(model_name, word_dictionary, tokenizer, padding=16):
     mt_y_encoded = tf.keras.utils.to_categorical(added_y, num_classes=3)
 
     # Compile model again with lower learning rate to avoid over-adapting to new examples.
-    optimizer = tf.keras.optimizers.Adam(learning_rate=0.000053)
+    optimizer = tf.keras.optimizers.Adam(learning_rate=0.00005)
     model.compile(optimizer=optimizer,
                   loss='categorical_crossentropy',
                   metrics=['accuracy'])
