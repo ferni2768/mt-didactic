@@ -614,6 +614,12 @@
     z-index: 0;
 }
 
+.inside-card-mistakes.details {
+    min-width: 14rem;
+    max-width: 14rem;
+    height: 8.75rem;
+}
+
 .contain-mistakes {
     width: calc(100% - 2rem);
     min-width: 16rem;
@@ -626,6 +632,12 @@
     flex-direction: column;
     justify-content: flex-start;
     z-index: 0;
+}
+
+.contain-mistakes.details {
+    min-width: 14rem;
+    max-width: 14rem;
+    height: 8.75rem;
 }
 
 .inside-card-mistakes-slim {
@@ -674,6 +686,11 @@
     z-index: 10;
     font-size: 1.3rem;
     overflow: hidden;
+}
+
+.inside-card-mistakes-header.details {
+    height: 2.5rem;
+    width: calc(100%);
 }
 
 .inside-card-results-header {
@@ -1330,9 +1347,14 @@
     width: 4rem;
     height: 4rem;
     background-color: #d2d2d2;
-    border-radius: 10px;
+    border-radius: 0.85rem;
     overflow: hidden;
     position: relative;
+    font-size: 1.7rem;
+}
+
+.type-score-bar-container.light {
+    background-color: #dfdfdf;
 }
 
 .type-score-bar-container.diphthong {
@@ -1349,26 +1371,29 @@
     border-bottom-left-radius: 0%;
 }
 
-
 .type-score-bar {
     width: 100%;
     background-color: #19bd24;
     position: absolute;
     bottom: 0;
     height: 0;
-    transition: height 0.5s ease-in-out;
-    border-top-left-radius: 0.4rem;
-    border-top-right-radius: 0.4rem;
+    transition: height 1s ease-in-out;
+    border-top-left-radius: 0.6rem;
+    border-top-right-radius: 0.6rem;
 }
 
 .type-score-bar.hide {
     width: 100%;
     background-color: #d2d2d2;
     top: 0;
-    transition: height 0.5s ease-in-out;
+    transition: height 1s ease-in-out;
     border-radius: 0;
     z-index: 2;
     overflow: hidden;
+}
+
+.type-score-bar.hide.light {
+    background-color: #dfdfdf;
 }
 
 .type-score-bar.diphthong {
@@ -1390,7 +1415,7 @@
     z-index: 3;
     position: absolute;
     top: 0.75rem;
-    left: 1.45rem;
+    left: 1.37rem;
 }
 
 .type-score-bar-text-white {
@@ -1399,7 +1424,24 @@
     z-index: 1;
     position: absolute;
     top: 0.75rem;
-    left: 1.45rem;
+    left: 1.37rem;
+}
+
+.inside-card-results {
+    width: calc(100% - 2rem);
+    min-width: 15rem;
+    max-width: 35rem;
+    height: 19.5rem;
+    transform: translateX(0);
+    transition: transform 0.5s ease-in-out;
+    border-radius: 1rem;
+    background-color: #dfdfdf;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    font-size: 1.2rem;
+    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.25);
+    z-index: 0;
 }
 
 /* PDF styles*/

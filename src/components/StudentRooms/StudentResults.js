@@ -47,6 +47,36 @@ function StudentResults({ navigate, classCode }) {
     useEffect(() => initializeScrollbar(scrollbarRef3), []);
     useEffect(() => initializeScrollbar(scrollbarRef4), []);
 
+    // Function to calculate accuracy for a category
+    function calculateCategoryAccuracy(matrix, categoryIndex) {
+
+        if (matrix.length < 2) return 0;
+
+        let totalPredictions = 0;
+
+        for (let i = 0; i < 3; i++) {
+            totalPredictions += matrix[categoryIndex][i];
+        }
+
+        if (totalPredictions === 0) return 0;
+
+        let result = (matrix[categoryIndex][categoryIndex] / totalPredictions);
+
+        if (result > 0.95) result = 1.1;
+
+        return result;
+    }
+
+    // Calculate accuracy for each category, providing a default value of 0 if matrix is not available
+    const diphthongAccuracy = calculateCategoryAccuracy(matrix || [], 0);
+    const hiatusAccuracy = calculateCategoryAccuracy(matrix || [], 1);
+    const generalAccuracy = calculateCategoryAccuracy(matrix || [], 2);
+
+    // Map accuracy to constant values, rounding to the nearest integer
+    const diphthongScore = Math.round((diphthongAccuracy || 0) * 100);
+    const hiatusScore = Math.round((hiatusAccuracy || 0) * 100);
+    const generalScore = Math.round((generalAccuracy || 0) * 100);
+
 
     // Disable the scrollbar when the ctrl key is pressed in order to zoom in/out with the mouse wheel
     useEffect(() => {
@@ -231,17 +261,94 @@ function StudentResults({ navigate, classCode }) {
                                         <div>{t('AIResults')}</div>
                                     </div>
 
-                                    <div className="inside-card-2 p-7 lg:p-6 md:p-6 lg:pt-14 md:pt-14 pt-14 col-span-full grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 md:grid-rows-3 lg:grid-rows-3 grid-rows-0 justify-center">
+                                    <div className="inside-card-2 p-7 pt-14 col-span-full grid grid-cols-2 grid-rows-3 justify-center">
 
-                                        <div className={`contain-results md:ml-2 lg:ml-2 ml-0 mt-5 col-span-1 row-span-2 ${matrixLoaded ? 'matrix-loaded' : ''}`}>
-                                            <div className='inside-card-results-header text-white'> {/* Header */}
+                                        <div className='row-span-3 mt-2'>
+
+                                            <div className='self-center text-center'>
+                                                {/* <div className='allow-info-overflow'>
+                                                    <div className="info-button">
+                                                        i
+                                                        <div className="tooltip bottom right">
+                                                            <div className="text-xl text-">{t('info-columns-1')}</div>
+                                                            <div style={{ fontWeight: '400' }}>{t('info-columns-2')}</div>
+                                                            <div className='pt-1.5'></div>
+                                                            <div className="text-xl">{t('info-rows-1')}</div>
+                                                            <div style={{ fontWeight: '400' }}>{t('info-rows-2')}</div>
+
+                                                            <div className='pt-7'></div>
+                                                            <div className="text-xl">{t('info-result-1')}</div>
+                                                            <div style={{ fontWeight: '400' }}>{t('info-result-2')}</div>
+                                                        </div>
+                                                    </div>
+                                                </div> */}
+                                            </div>
+
+                                            <div className='ml-5 mt-20' style={{ boxShadow: '0 0 1rem rgba(0, 0, 0, 0.25)', width: '12rem', borderRadius: '1rem' }}>
+
+                                                <div className="flex row-span-2 justify-center">
+                                                    <div className="type-score-bar-container light diphthong">
+                                                        <div className='type-score-bar-text-white'>{t('d')}</div>
+                                                        <div className="type-score-bar diphthong" style={{ height: `${diphthongScore}%` }}></div>
+                                                        <div className="type-score-bar hide light" style={{ height: diphthongScore > 95 ? "0%" : `${100 - diphthongScore}%` }}>
+                                                            <div className='type-score-bar-text-black'>{t('d')}</div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div className="type-score-bar-container light hiatus">
+                                                        <div className='type-score-bar-text-white'>{t('h')}</div>
+                                                        <div className="type-score-bar hiatus" style={{ height: `${hiatusScore}%` }}></div>
+                                                        <div className="type-score-bar hide light" style={{ height: hiatusScore > 95 ? "0%" : `${100 - hiatusScore}%` }}>
+                                                            <div className='type-score-bar-text-black'>{t('h')}</div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div className="type-score-bar-container light general">
+                                                        <div className='type-score-bar-text-white'>{t('g')}</div>
+                                                        <div className="type-score-bar general" style={{ height: `${generalScore}%` }}></div>
+                                                        <div className="type-score-bar hide light" style={{ height: generalScore > 95 ? "0%" : `${100 - generalScore}%` }}>
+                                                            <div className='type-score-bar-text-black'>{t('g')}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* <div className='contain-mistakes ml-1 details'>
+                                                <div className='inside-card-mistakes-header details mt-5 text-white'>
+                                                    Detalles
+                                                </div>
+                                                <div className='inside-card-mistakes details p-7 pt-9 mt-5'>
+                                                    <div className='mistakes pt-1'>
+                                                        {diphthongScore}% diptongos <br />
+                                                        {hiatusScore}% hiatus <br />
+                                                        {generalScore}% general
+                                                    </div>
+                                                </div>
+                                            </div> */}
+
+                                            <div className='pr-4 mt-5'>
+                                                <button onClick={null} className="animated-button p-2 text-center align-bottom">
+                                                    <div className="animated-button-bg"></div>
+                                                    <div className="animated-button-text py-1">
+                                                        Descargar detalles
+                                                    </div>
+                                                </button>
+                                            </div>
+
+
+                                        </div>
+
+                                        {/* <div className={`contain-results md:ml-2 lg:ml-2 ml-0 mt-5 col-span-1 row-span-2 ${matrixLoaded ? 'matrix-loaded' : ''}`}>
+                                            <div className='inside-card-results-header text-white'>
                                                 <div></div>
                                                 <div className='matrix-bold-diphthong'>{t('d')}</div>
                                                 <div className='matrix-bold-hiatus'>{t('h')}</div>
                                                 <div className='matrix-bold-general'>{t('g')}</div>
                                             </div>
 
-                                            <div className='inside-card-results-header-side text-white'> {/* Side header */}
+                                            <div className='inside-card-results-header-side text-white'> 
                                                 <div></div>
                                                 <div className='matrix-bold-diphthong'>{t('d')}</div>
                                                 <div className='matrix-bold-hiatus'>{t('h')}</div>
@@ -259,12 +366,8 @@ function StudentResults({ navigate, classCode }) {
                                                     ))}
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> */}
 
-                                        <div className='block md:hidden lg:hidden self-center pt-4 text-center'>
-                                            <div className='text-2xl pb-2 text-custom_black' style={{ fontWeight: 640 }}>{t('globalAccuracy')} </div>
-                                            <div className='text-custom_black'> {sum !== null ? `${matrix[0][0]} + ${matrix[1][1]} + ${matrix[2][2]} = ${sum}` : 'loading...'} </div>
-                                        </div>
 
                                         <div className='col-span-1 row-span-3'>
                                             <div className='contain-mistakes pl-2'>
@@ -293,29 +396,7 @@ function StudentResults({ navigate, classCode }) {
                                             </div>
                                         </div>
 
-                                        <div className='hidden md:block lg:block self-center row-span-2 col-span-1 text-center'>
-                                            <div className='allow-info-overflow'>
-                                                <div className="info-button mr-4">
-                                                    i
-                                                    <div className="tooltip top right">
-                                                        <div className="text-xl text-">{t('info-columns-1')}</div>
-                                                        <div style={{ fontWeight: '400' }}>{t('info-columns-2')}</div>
-                                                        <div className='pt-1.5'></div>
-                                                        <div className="text-xl">{t('info-rows-1')}</div>
-                                                        <div style={{ fontWeight: '400' }}>{t('info-rows-2')}</div>
 
-                                                        <div className='pt-7'></div>
-                                                        <div className="text-xl">{t('info-result-1')}</div>
-                                                        <div style={{ fontWeight: '400' }}>{t('info-result-2')}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className='lg:pr-0 lg:pl-3 md:pr-8 lg:mr-10 lg:mt-3 md:mt-3 mt-8 '>
-                                                <div className='text-2xl pb-2 text-custom_black' style={{ fontWeight: 640 }}>{t('globalAccuracy')}</div>
-                                                <div className='text-custom_black'> {sum !== null ? `${matrix[0][0]} + ${matrix[1][1]} + ${matrix[2][2]} = ${sum}` : t('loading')} </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
 
@@ -411,8 +492,8 @@ function StudentResults({ navigate, classCode }) {
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 }
 
