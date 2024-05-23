@@ -6,6 +6,8 @@
     flex-grow: 1;
     overflow: hidden;
     position: relative;
+    width: 100vw;
+    height: 100vh;
     background-image: radial-gradient(circle at bottom, #ff0081, #ff3102);
 }
 
@@ -1320,4 +1322,75 @@
 
     z-index: 2;
     position: relative;
+}
+
+.inside-card-pdf {
+    width: 1600px;
+    height: 800px;
+    border-radius: 2rem;
+    background-color: white;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: top;
+    font-size: 1.5rem;
+    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+}
+
+.inside-card-2-pdf {
+    width: 100%;
+    height: 40rem;
+    transform: translateX(0);
+    transition: transform 0.5s ease-in-out;
+    border-radius: 1rem;
+    background-color: rgb(210, 210, 210);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    font-size: 1.75rem;
+    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    z-index: 0;
+}
+
+.inside-card-pdf h1 {
+    font-size: 5rem;
+    font-weight: 500;
+    color: rgb(28, 28, 28);
+}
+
+.contain-pdf {
+    width: 100%;
+    min-width: 16rem;
+    max-width: 35rem;
+    height: fit-content;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.inside-card-2-header-pdf {
+    width: 32rem;
+    height: 5rem;
+    background-color: rgb(28, 28, 28);
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    z-index: 10;
+    font-size: 2.4rem;
+    overflow: hidden;
+}
+
+.student-list-pdf {
+    font-size: 1.5rem;
 }

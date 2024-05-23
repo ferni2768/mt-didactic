@@ -26,6 +26,8 @@
     "downloadName": "student_results",
     "csvHeader": "STUDENT, SCORE",
     "namesAndScores": "Names and Scores",
+    "     PDF     ": "        ",
+    "mostErrors": "Words with most errors",
     "    S T U D E N T     ": "        ",
     "      JOIN     ": "        ",
     "studentJoin": "Join Class",

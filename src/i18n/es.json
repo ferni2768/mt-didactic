@@ -26,6 +26,8 @@
     "downloadName": "resultados_estudiantes",
     "csvHeader": "ESTUDIANTE, PUNTUACIÓN",
     "namesAndScores": "Nombres y puntos",
+    "     PDF     ": "        ",
+    "mostErrors": "Palabras con más errores",
     "    S T U D E N T     ": "        ",
     "      JOIN     ": "        ",
     "studentJoin": "Unirse a clase",

@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { TransitionContext } from '../../visualComponents/TransitionContext';
 import Scrollbar from 'smooth-scrollbar';
 import OverscrollPlugin from 'smooth-scrollbar/plugins/overscroll';
 import { useTranslation } from 'react-i18next';
+import html2pdf from 'html2pdf.js';
+import ReactDOMServer from 'react-dom/server';
+import TeacherPDF from './TeacherPDF';
 
 function TeacherResults({ navigate, classCode }) {
     const [students, setStudents] = useState([]);
@@ -10,6 +14,7 @@ function TeacherResults({ navigate, classCode }) {
     const scrollbarRef = useRef(null);
     const scrollbarRef2 = useRef(null);
     const scrollbarRef3 = useRef(null);
+    const navigateTo = useNavigate();
 
     const { t } = useTranslation();
 
@@ -65,6 +70,10 @@ function TeacherResults({ navigate, classCode }) {
                 handleDownloadCSV();
             } else if (event.key === 'e' || event.key === 'E') {
                 handleReset();
+            } else if (event.key === 't' || event.key === 'T') {
+                handleDownloadPDF({});
+            } else if (event.key === 'g' || event.key === 'G') {
+                navigateTo('/pdf'); // Navigate to the desired route
             }
         };
 
@@ -75,6 +84,44 @@ function TeacherResults({ navigate, classCode }) {
         };
     }, [students]);
 
+
+    const handleDownloadPDF = (params) => {
+        const element = document.createElement('div');
+        element.innerHTML = ReactDOMServer.renderToString(<TeacherPDF {...params} />);
+        document.body.appendChild(element);
+
+        const opt = {
+            margin: 0,
+            filename: 'teacher_results.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: {
+                scale: 2,
+                windowWidth: 1920, // Define your specific window width
+                windowHeight: 1080, // Define your specific window height
+                scrollX: 0,
+                scrollY: 0,
+                useCORS: true
+            },
+            jsPDF: {
+                unit: 'px',
+                format: [1920, 1080], // Match the window size
+                orientation: 'landscape'
+            }
+        };
+
+        html2pdf().from(element).set(opt).toPdf().get('pdf').then((pdf) => {
+            const totalPages = pdf.internal.getNumberOfPages();
+            if (totalPages > 1) {
+                const scale = 1 / totalPages;
+                pdf.internal.pageSize.width *= scale;
+                pdf.internal.pageSize.height *= scale;
+                pdf.setPage(1);
+                pdf.deletePage(2);
+            }
+        }).save().then(() => {
+            document.body.removeChild(element);
+        });
+    };
 
     const fetchStudents = async () => {
         try {
