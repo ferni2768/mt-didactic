@@ -36,6 +36,38 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         return storedNewBatch ? JSON.parse(storedNewBatch) : [];
     });
 
+    // Function to calculate accuracy for a category
+    function calculateCategoryAccuracy(matrix, categoryIndex) {
+
+        if (matrix.length < 2) return 0;
+
+        let totalPredictions = 0;
+
+        for (let i = 0; i < 3; i++) {
+            totalPredictions += matrix[categoryIndex][i];
+        }
+
+        if (totalPredictions === 0) return 0;
+
+        let result = (matrix[categoryIndex][categoryIndex] / totalPredictions);
+
+        if (result > 0.95) result = 1.1;
+
+        return result;
+    }
+
+    // Calculate accuracy for each category, providing a default value of 0 if matrix is not available
+    const diphthongAccuracy = calculateCategoryAccuracy(matrix || [], 0);
+    const hiatusAccuracy = calculateCategoryAccuracy(matrix || [], 1);
+    const generalAccuracy = calculateCategoryAccuracy(matrix || [], 2);
+
+    // Map accuracy to constant values, rounding to the nearest integer
+    const diphthongScore = Math.round((diphthongAccuracy || 0) * 100);
+    const hiatusScore = Math.round((hiatusAccuracy || 0) * 100);
+    const generalScore = Math.round((generalAccuracy || 0) * 100);
+
+
+
     const { t } = useTranslation();
 
 
@@ -540,7 +572,35 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                                 </div>
                             </div>
                         </div>
-                        <div className='hidden lg:block lg:row-span-1'></div>
+                        <div className={`block lg:row-span-2 ${isTurningIn && !isTraining ? 'buttonsOut' : 'buttonsIn'}`}>
+                            <div className="flex row-span-2 justify-center lg:mt-12">
+                                <div className="type-score-bar-container diphthong">
+                                    <div className='type-score-bar-text-white'>{t('d')}</div>
+                                    <div className="type-score-bar diphthong" style={{ height: `${diphthongScore}%` }}></div>
+                                    <div className="type-score-bar hide" style={{ height: diphthongScore > 95 ? "0%" : `${100 - diphthongScore}%` }}>
+                                        <div className='type-score-bar-text-black'>{t('d')}</div>
+                                    </div>
+                                </div>
+
+
+                                <div className="type-score-bar-container hiatus">
+                                    <div className='type-score-bar-text-white'>{t('h')}</div>
+                                    <div className="type-score-bar hiatus" style={{ height: `${hiatusScore}%` }}></div>
+                                    <div className="type-score-bar hide" style={{ height: hiatusScore > 95 ? "0%" : `${100 - hiatusScore}%` }}>
+                                        <div className='type-score-bar-text-black'>{t('h')}</div>
+                                    </div>
+                                </div>
+
+
+                                <div className="type-score-bar-container general">
+                                    <div className='type-score-bar-text-white'>{t('g')}</div>
+                                    <div className="type-score-bar general" style={{ height: `${generalScore}%` }}></div>
+                                    <div className="type-score-bar hide" style={{ height: generalScore > 95 ? "0%" : `${100 - generalScore}%` }}>
+                                        <div className='type-score-bar-text-black'>{t('g')}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>

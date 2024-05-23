@@ -1324,6 +1324,85 @@
     position: relative;
 }
 
+/* Vertical progress bar styles */
+
+.type-score-bar-container {
+    width: 4rem;
+    height: 4rem;
+    background-color: #d2d2d2;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.type-score-bar-container.diphthong {
+    border-top-right-radius: 0%;
+    border-bottom-right-radius: 0%;
+}
+
+.type-score-bar-container.hiatus {
+    border-radius: 0%;
+}
+
+.type-score-bar-container.general {
+    border-top-left-radius: 0%;
+    border-bottom-left-radius: 0%;
+}
+
+
+.type-score-bar {
+    width: 100%;
+    background-color: #19bd24;
+    position: absolute;
+    bottom: 0;
+    height: 0;
+    transition: height 0.5s ease-in-out;
+    border-top-left-radius: 0.4rem;
+    border-top-right-radius: 0.4rem;
+}
+
+.type-score-bar.hide {
+    width: 100%;
+    background-color: #d2d2d2;
+    top: 0;
+    transition: height 0.5s ease-in-out;
+    border-radius: 0;
+    z-index: 2;
+    overflow: hidden;
+}
+
+.type-score-bar.diphthong {
+    background-color: #f5d105;
+}
+
+.type-score-bar.hiatus {
+    background-color: #127edd;
+    z-index: 0;
+}
+
+.type-score-bar.general {
+    background-color: #ee1212;
+}
+
+.type-score-bar-text-black {
+    color: #7c7c7c;
+    font-weight: bold;
+    z-index: 3;
+    position: absolute;
+    top: 0.75rem;
+    left: 1.45rem;
+}
+
+.type-score-bar-text-white {
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    z-index: 1;
+    position: absolute;
+    top: 0.75rem;
+    left: 1.45rem;
+}
+
+/* PDF styles*/
 .inside-card-pdf {
     width: 1600px;
     height: 800px;
