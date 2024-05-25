@@ -27,7 +27,8 @@
     "csvHeader": "ESTUDIANTE, PUNTUACIÓN",
     "namesAndScores": "Nombres y puntos",
     "     PDF     ": "        ",
-    "mostErrors": "Palabras con más errores",
+    "mostErrors": "Errores comunes",
+    "times": "veces",
     "    S T U D E N T     ": "        ",
     "      JOIN     ": "        ",
     "studentJoin": "Unirse a clase",
@@ -69,5 +70,7 @@
     "info-rows-2": "respuestas esperadas",
     "info-result-1": "Resultado",
     "info-result-2": "% respuestas predichas correctamente",
-    "info-errors": "Estos son los errores que cometiste en tus respuestas"
+    "info-errors": "Estos son los errores que cometiste en tus respuestas",
+    "     PDF      ": "        ",
+    "iteration": "Iteración"
 }

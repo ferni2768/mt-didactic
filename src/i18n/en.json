@@ -27,7 +27,8 @@
     "csvHeader": "STUDENT, SCORE",
     "namesAndScores": "Names and Scores",
     "     PDF     ": "        ",
-    "mostErrors": "Words with most errors",
+    "mostErrors": "Common mistakes",
+    "times": "times",
     "    S T U D E N T     ": "        ",
     "      JOIN     ": "        ",
     "studentJoin": "Join Class",
@@ -69,5 +70,7 @@
     "info-rows-2": "expected answers",
     "info-result-1": "Result",
     "info-result-2": "% correctly predicted responses",
-    "info-errors": "These are the errors you made in your responses"
+    "info-errors": "These are the errors you made in your responses",
+    "     PDF      ": "        ",
+    "iteration": "Iteration"
 }

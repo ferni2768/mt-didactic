@@ -61,7 +61,6 @@ function TeacherResults({ navigate, classCode }) {
         };
     }, []);
 
-
     useEffect(() => {
         const handleKeyDown = (event) => {
             if (event.key === 'r' || event.key === 'R') {
@@ -85,10 +84,17 @@ function TeacherResults({ navigate, classCode }) {
     }, [students]);
 
 
+    // Function to handle the download of the results PDF
     const handleDownloadPDF = (params) => {
         const element = document.createElement('div');
+        element.style.width = '1920px'; // Match the PDF width
+        element.style.height = '1080px'; // Match the PDF height
+        element.style.background = 'white';
+
         element.innerHTML = ReactDOMServer.renderToString(<TeacherPDF {...params} />);
+
         document.body.appendChild(element);
+        document.body.style.overflow = 'hidden';
 
         const opt = {
             margin: 0,
@@ -96,8 +102,8 @@ function TeacherResults({ navigate, classCode }) {
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: {
                 scale: 2,
-                windowWidth: 1920, // Define your specific window width
-                windowHeight: 1080, // Define your specific window height
+                windowWidth: 1920,
+                windowHeight: 1080,
                 scrollX: 0,
                 scrollY: 0,
                 useCORS: true

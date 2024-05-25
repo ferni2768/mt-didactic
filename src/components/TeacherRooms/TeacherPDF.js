@@ -7,7 +7,7 @@ const TeacherPDF = ({ paramStudents, paramWords }) => {
 
     const generateFakeStudents = () => {
         const students = [];
-        for (let i = 1; i <= 36; i++) {
+        for (let i = 1; i <= 47; i++) {
             students.push({
                 id: i,
                 name: `estudiante ${i}`,
@@ -33,57 +33,40 @@ const TeacherPDF = ({ paramStudents, paramWords }) => {
 
     const words = paramWords || generateFakeWords();
 
-    const distributeStudentsIntoColumns = (students, columns) => {
-        const studentsPerColumn = Math.ceil(students.length / columns);
-        const distributedStudents = [];
-
-        for (let i = 0; i < columns; i++) {
-            distributedStudents.push(students.slice(i * studentsPerColumn, (i + 1) * studentsPerColumn));
-        }
-
-        return distributedStudents;
-    };
-
     const displayedStudents = students.slice(0, students.length > 36 ? 35 : 36);
     const additionalStudentsCount = students.length > 36 ? students.length - 35 : 0;
-
-    const columns = distributeStudentsIntoColumns(displayedStudents, 3);
 
     return (
         <Background>
             <div>
                 <div className="inside-card-pdf">
-                    <div className='grid grid-cols-3 w-full h-full'>
-                        <div className='grid grid-rows-5 col-span-2'>
-                            <h1>Resultados</h1>
-                            <div className='row-span-4 grid grid-cols-3 student-list-pdf mb-10 ml-3 mr-9'>
-                                {columns.map((column, colIndex) => (
-                                    <div key={colIndex} className='flex flex-col'>
-                                        {column.map((student, index) => (
-                                            <div key={student.id} className='student-item see-score adjust-text'>
-                                                <span>
-                                                    <a> {index + 1 + colIndex * Math.ceil(displayedStudents.length / columns.length)}.</a> {student.name.length > 13 ? student.name.substring(0, 13) + "..." : student.name}
-                                                    &nbsp;({student.score}%)
-                                                </span>
-                                            </div>
-                                        ))}
-                                        {colIndex === columns.length - 1 && additionalStudentsCount > 0 && (
-                                            <div className='student-item see-score'>
-                                                <span>...{additionalStudentsCount} more</span>
-                                            </div>
-                                        )}
+                    <div className='grid grid-cols-11 w-full h-full'>
+                        <div className='col-span-8'>
+                            <h1>{t('results')} ABC123</h1>
+                            <div className='grid grid-cols-3 gap-0.5 student-list-pdf mb-10 mt-10 ml-3 mr-9'>
+                                {displayedStudents.map((student, index) => (
+                                    <div key={student.id} className='student-item see-score adjust-text'>
+                                        <span>
+                                            <a> {index + 1}.</a> {student.name.length > 13 ? student.name.substring(0, 13) + "..." : student.name}
+                                            &nbsp;({student.score}%)
+                                        </span>
                                     </div>
                                 ))}
+                                {additionalStudentsCount > 0 && (
+                                    <div className='student-item see-score'>
+                                        <span>...{additionalStudentsCount} more</span>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
-                        <div>
+                        <div className='pt-6 col-span-3'>
                             <div style={{ height: '2rem' }}> </div>
-                            <div className='inside-card-2-header-pdf text-white pb-7'> {/*Header*/}
-                                <div> {t('mostErrors')}</div>
+                            <div className='inside-card-2-header-pdf text-white pl-9'> {/*Header*/}
+                                <div className='move-up-pdf'> {t('mostErrors')}</div>
                             </div>
-                            <div className="inside-card-2-pdf p-6 pt-20">
-                                <ul className='pt-1'>
+                            <div className="inside-card-2-pdf pl-9 pr-8 pt-0">
+                                <ul>
                                     {words.slice(0, 10).map((word, index) => (
                                         <li key={word.id} className='student-item see-score'>
                                             <div className='grid grid-cols-2 gap-0.5'>
@@ -93,9 +76,9 @@ const TeacherPDF = ({ paramStudents, paramWords }) => {
                                                     </span>
                                                 </div>
 
-                                                <div className={`col-span-1 flex items-center justify-start md:justify-end lg:justify-end pr-0 md:pr-3 lg:pr-3`}>
+                                                <div className="col-span-1 flex items-center justify-end pr-3">
                                                     <div>
-                                                        3 veces
+                                                        3 {t('times')}
                                                     </div>
                                                 </div>
                                             </div>
@@ -104,10 +87,10 @@ const TeacherPDF = ({ paramStudents, paramWords }) => {
                                 </ul>
                             </div>
 
-                            <div className='h-28 text-center content-center text-4xl pb-7'>
+                            {/* <div className='h-28 text-center content-center text-4xl pb-7'>
                                 Hiatus &#169; /
                                 ABC123
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>

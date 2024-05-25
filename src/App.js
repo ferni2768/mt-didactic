@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Link, Routes, Navigate } from 'react-ro
 import StudentView from './components/StudentView';
 import TeacherView from './components/TeacherView';
 import TeacherPDF from './components/TeacherRooms/TeacherPDF';
+import StudentPDF from './components/StudentRooms/StudentPDF';
 import { TransitionProvider } from './visualComponents/TransitionContext';
 import './App.css';
 import './i18n/i18n'; // Translations from i18n.js
@@ -37,6 +38,7 @@ function App() {
               <Route path="/teacher/:classCode" element={<TeacherView />} />
               <Route path="/teacher/:classCode/results" element={<TeacherView />} />
               <Route path="/pdf" element={<TeacherPDF />} />
+              <Route path="/pdf2" element={<StudentPDF />} />
               <Route path="*" element={<Navigate to="/student" replace />} />
             </Routes>
           </div>

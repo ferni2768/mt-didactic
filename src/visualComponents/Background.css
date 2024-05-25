@@ -1448,13 +1448,12 @@
 .inside-card-pdf {
     width: 1600px;
     height: 800px;
-    border-radius: 2rem;
+    border-radius: 2.5rem;
     background-color: white;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: top;
     font-size: 1.5rem;
     box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
@@ -1462,11 +1461,12 @@
 }
 
 .inside-card-2-pdf {
-    width: 100%;
-    height: 40rem;
+    width: 97%;
+    height: 35rem;
     transform: translateX(0);
     transition: transform 0.5s ease-in-out;
-    border-radius: 1rem;
+    border-bottom-left-radius: 2rem;
+    border-bottom-right-radius: 2rem;
     background-color: rgb(210, 210, 210);
     display: flex;
     flex-direction: column;
@@ -1497,16 +1497,16 @@
 }
 
 .inside-card-2-header-pdf {
-    width: 32rem;
+    width: 97%;
     height: 5rem;
     background-color: rgb(28, 28, 28);
-    border-top-left-radius: 1rem;
-    border-top-right-radius: 1rem;
+    border-top-left-radius: 2rem;
+    border-top-right-radius: 2rem;
     display: flex;
     align-items: center;
-    position: absolute;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+    padding: 1.5rem;
     z-index: 10;
     font-size: 2.4rem;
     overflow: hidden;
@@ -1514,4 +1514,117 @@
 
 .student-list-pdf {
     font-size: 1.5rem;
+}
+
+.graph-container-pdf {
+    width: 16.44rem;
+    height: 37rem;
+    border-radius: 1.3rem;
+    margin-top: 1rem;
+
+    justify-content: top;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.graph-title-pdf {
+    font-size: 2.2rem;
+    font-weight: 500;
+    /* padding-bottom: 0.5rem; */
+    padding-bottom: 1.3rem;
+}
+
+.graph-base-pdf {
+    width: 80%;
+    height: 12rem;
+    transform: translateX(0);
+    transition: transform 0.5s ease-in-out;
+    border-radius: 1.3rem;
+    border-bottom-left-radius: 0rem;
+    border-bottom-right-radius: 0rem;
+    background-color: rgb(210, 210, 210);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    font-size: 1.75rem;
+    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.25);
+    overflow: show;
+    z-index: 0;
+}
+
+.graph-footer-pdf {
+    width: 100%;
+    height: 3.1rem;
+    background-color: rgb(28, 28, 28);
+    border-bottom-left-radius: 1.3rem;
+    border-bottom-right-radius: 1.3rem;
+    display: flex;
+    align-items: center;
+    padding: 1.3rem;
+    z-index: 10;
+    font-size: 2rem;
+    color: white;
+    font-weight: bold;
+}
+
+.graph-bar-container-pdf {
+    width: 3rem;
+    height: 12rem;
+    border-radius: 0.85rem;
+    border-bottom-left-radius: 0%;
+    border-bottom-right-radius: 0%;
+    overflow: hidden;
+    position: relative;
+    font-size: 1.7rem;
+}
+
+.graph-bar-pdf {
+    width: 100%;
+    background-color: #19bd24;
+    position: absolute;
+    bottom: 0;
+    height: 0;
+    /* transition: height 1s ease-in-out; */
+    border-top-left-radius: 0.6rem;
+    border-top-right-radius: 0.6rem;
+}
+
+.graph-bar-pdf.hide.light {
+    background-color: #dfdfdf;
+}
+
+.graph-bar-pdf.diphthong {
+    background-color: #e4c410;
+}
+
+.graph-bar-pdf.hiatus {
+    background-color: #127edd;
+    z-index: 0;
+}
+
+.graph-bar-pdf.general {
+    background-color: #ee1212;
+}
+
+.graph-bar-text-pdf {
+    color: #6f6f6f;
+    font-weight: bold;
+    z-index: 3;
+    position: absolute;
+    /* top: -2.4rem; */
+    top: -3.15rem;
+}
+
+.graph-error-list-pdf {
+    font-size: 1.2rem;
+    margin-top: 3.7rem;
+}
+
+.move-up-pdf {
+    transform: translateY(-0.9rem);
+}
+
+.move-down-pdf {
+    transform: translateY(0.1rem);
 }

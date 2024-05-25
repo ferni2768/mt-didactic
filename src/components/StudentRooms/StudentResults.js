@@ -3,6 +3,9 @@ import { TransitionContext } from '../../visualComponents/TransitionContext';
 import Scrollbar from 'smooth-scrollbar';
 import OverscrollPlugin from 'smooth-scrollbar/plugins/overscroll';
 import { useTranslation } from 'react-i18next';
+import html2pdf from 'html2pdf.js';
+import ReactDOMServer from 'react-dom/server';
+import StudentPDF from './StudentPDF';
 
 function StudentResults({ navigate, classCode }) {
     const [student, setStudent] = useState({});
@@ -77,6 +80,50 @@ function StudentResults({ navigate, classCode }) {
     const hiatusScore = Math.round((hiatusAccuracy || 0) * 100);
     const generalScore = Math.round((generalAccuracy || 0) * 100);
 
+    // Function to handle the download of the results PDF
+    const handleDownloadPDF = (paramHistory) => {
+        const element = document.createElement('div');
+        element.style.width = '1920px'; // Match the PDF width
+        element.style.height = '1080px'; // Match the PDF height
+        element.style.background = 'white';
+
+        element.innerHTML = ReactDOMServer.renderToString(<StudentPDF paramHistory={paramHistory} />);
+
+        document.body.appendChild(element);
+        document.body.style.overflow = 'hidden';
+
+        const opt = {
+            margin: 0,
+            filename: 'student_results.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: {
+                scale: 2,
+                windowWidth: 1920,
+                windowHeight: 1080,
+                scrollX: 0,
+                scrollY: 0,
+                useCORS: true
+            },
+            jsPDF: {
+                unit: 'px',
+                format: [1920, 1080], // Match the window size
+                orientation: 'landscape'
+            }
+        };
+
+        html2pdf().from(element).set(opt).toPdf().get('pdf').then((pdf) => {
+            const totalPages = pdf.internal.getNumberOfPages();
+            if (totalPages > 1) {
+                const scale = 1 / totalPages;
+                pdf.internal.pageSize.width *= scale;
+                pdf.internal.pageSize.height *= scale;
+                pdf.setPage(1);
+                pdf.deletePage(2);
+            }
+        }).save().then(() => {
+            document.body.removeChild(element);
+        });
+    };
 
     // Disable the scrollbar when the ctrl key is pressed in order to zoom in/out with the mouse wheel
     useEffect(() => {
@@ -329,7 +376,7 @@ function StudentResults({ navigate, classCode }) {
                                             </div> */}
 
                                             <div className='pr-4 mt-5'>
-                                                <button onClick={null} className="animated-button p-2 text-center align-bottom">
+                                                <button onClick={() => handleDownloadPDF()} className="animated-button p-2 text-center align-bottom">
                                                     <div className="animated-button-bg"></div>
                                                     <div className="animated-button-text py-1">
                                                         Descargar detalles
