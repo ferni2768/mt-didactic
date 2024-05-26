@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { TransitionContext } from '../../visualComponents/TransitionContext';
 import Scrollbar from 'smooth-scrollbar';
 import OverscrollPlugin from 'smooth-scrollbar/plugins/overscroll';
@@ -14,7 +13,6 @@ function TeacherResults({ navigate, classCode }) {
     const scrollbarRef = useRef(null);
     const scrollbarRef2 = useRef(null);
     const scrollbarRef3 = useRef(null);
-    const navigateTo = useNavigate();
 
     const { t } = useTranslation();
 
@@ -64,15 +62,7 @@ function TeacherResults({ navigate, classCode }) {
     useEffect(() => {
         const handleKeyDown = (event) => {
             if (event.key === 'r' || event.key === 'R') {
-                restartClass();
-            } else if (event.key === 'd' || event.key === 'D') {
-                handleDownloadCSV();
-            } else if (event.key === 'e' || event.key === 'E') {
                 handleReset();
-            } else if (event.key === 't' || event.key === 'T') {
-                handleDownloadPDF({});
-            } else if (event.key === 'g' || event.key === 'G') {
-                navigateTo('/pdf'); // Navigate to the desired route
             }
         };
 
@@ -124,9 +114,45 @@ function TeacherResults({ navigate, classCode }) {
                 pdf.setPage(1);
                 pdf.deletePage(2);
             }
-        }).save().then(() => {
+            return pdf.output('blob'); // Output the PDF as a Blob object
+        }).then((blob) => {
+            const blobURL = URL.createObjectURL(blob); // Create a URL for the Blob
+            window.open(blobURL); // Open the Blob URL in a new window
+
+            // Save the PDF file
+            const link = document.createElement('a');
+            link.href = blobURL;
+            link.download = 'teacher_results.pdf';
+            link.click();
+
+            // Clean up
             document.body.removeChild(element);
+            URL.revokeObjectURL(blobURL); // Revoke the Blob URL after usage
         });
+    };
+
+    const seeProgress = async () => {
+        try {
+            // Set the class phase to 1
+            const response = await fetch(`${global.BASE_URL}/class/${sessionStorage.getItem('createdClassCode')}/setPhase`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ phase: 1 }),
+            });
+
+            if (response.ok) {
+                sessionStorage.removeItem('isFinished');
+                navigate(`/teacher/${sessionStorage.getItem('createdClassCode')}`);
+            } else {
+                console.error('Error setting class phase:', response.statusText);
+                alert('Error occurred while setting class phase');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error occurred while setting class phase');
+        }
     };
 
     const fetchStudents = async () => {
@@ -182,70 +208,56 @@ function TeacherResults({ navigate, classCode }) {
         }
     };
 
-    const handleDownloadCSV = () => {
-        const header = t('csvHeader') + '\n';
-        const rows = students.map(student => `${student.name}, ${student.score}`).join('\n');
-        const csvContent = header + rows;
-
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement('a');
-        const url = URL.createObjectURL(blob);
-        link.setAttribute('href', url);
-        link.setAttribute('download', t('downloadName') + '_' + sessionStorage.getItem('createdClassCode'));
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
 
     return (
         <div class="overflowY-container" ref={scrollbarRef3}>
             <div className="overflowY-container-inside">
                 <div>
-                    <div className={`inside-card ${isTransitioning ? 'transitioning' : ''} ${isEntering ? 'entering' : ''}`}>
+                    <div className={`inside-card wait-room ${isTransitioning ? 'transitioning' : ''} ${isEntering ? 'entering' : ''}`}>
                         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 lg:h-80 gap-4'>
 
                             <div className="grid lg:grid-cols-3 lg:col-span-1 gap-4 max-w-17">
-                                <div className="col-span-1">
-                                    <h1 style={{ position: 'absolute' }}>{t('results')}</h1>
-                                    <h1 style={{ opacity: 0 }}>.</h1>
+                                <h1 className='absolute hidden lg:block'>{t('results')}</h1>
+                                <h1 className='block lg:hidden'>{t('results')}</h1>
 
-                                    <div className='hidden lg:block podium-2 w-full'>
-                                        <div className='top-bar-2 py-8 see-score'>
-                                            <div className='flex justify-between text-center w-full'>
-                                                {students.slice(1, 2).map(student => (
-                                                    <div key={student.id} className='w-full see-score'>
-                                                        {student.name} <br />
-                                                        <div className="col-span-full md:col-span-2 lg:col-span-2 flex items-center justify-center pt-3">
-                                                            <div className="progress-bar-container-dark h-2">
-                                                                <div className='progress-bar-silver' style={{ width: `${student.score}%` }}></div>
-                                                            </div>
-                                                            <div className='hover-score hover-score-silver text-center'>{student.score}%</div>
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                            <h3 className='pt-8 text-gray-400' style={{ pointerEvents: 'none' }}>2</h3>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="hidden lg:block col-span-1 podium-3 w-full">
-                                    <div className='top-bar-3 py-8 see-score'>
+                                <div className='hidden lg:block podium-2 w-full'>
+                                    <div className='top-bar-2 py-8 see-score'>
                                         <div className='flex justify-between text-center w-full'>
-                                            {students.slice(2, 3).map(student => (
-                                                <div key={student.id} className='w-full'>
+                                            {students.slice(1, 2).map(student => (
+                                                <div key={student.id} className='w-full see-score'>
                                                     {student.name} <br />
                                                     <div className="col-span-full md:col-span-2 lg:col-span-2 flex items-center justify-center pt-3">
                                                         <div className="progress-bar-container-dark h-2">
-                                                            <div className='progress-bar-bronce' style={{ width: `${student.score}%` }}></div>
+                                                            <div className='progress-bar-silver' style={{ width: `${student.score}%` }}></div>
                                                         </div>
-                                                        <div className='hover-score hover-score-bronce text-center'>{student.score}%</div>
+                                                        <div className='hover-score hover-score-silver text-center'>{student.score}%</div>
                                                     </div>
                                                 </div>
                                             ))}
                                         </div>
-                                        <h3 className='pt-8 text-amber-800' style={{ pointerEvents: 'none' }}>3</h3>
+                                        <h3 className='pt-8 text-gray-400' style={{ pointerEvents: 'none' }}>2</h3>
+                                    </div>
+                                </div>
+
+                                <div className="hidden lg:block col-span-1 w-full">
+                                    <div className='podium-3'>
+                                        <div className='top-bar-3 py-8 see-score'>
+                                            <div className='flex justify-between text-center w-full'>
+                                                {students.slice(2, 3).map(student => (
+                                                    <div key={student.id} className='w-full'>
+                                                        {student.name} <br />
+                                                        <div className="col-span-full md:col-span-2 lg:col-span-2 flex items-center justify-center pt-3">
+                                                            <div className="progress-bar-container-dark h-2">
+                                                                <div className='progress-bar-bronce' style={{ width: `${student.score}%` }}></div>
+                                                            </div>
+                                                            <div className='hover-score hover-score-bronce text-center'>{student.score}%</div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <h3 className='pt-8 text-amber-800' style={{ pointerEvents: 'none' }}>3</h3>
+                                        </div>
+
                                     </div>
                                 </div>
 
@@ -269,6 +281,11 @@ function TeacherResults({ navigate, classCode }) {
                                 </div>
                             </div>
 
+                            <div className='hidden lg:block inside-card-2-common-errors'>
+                                <div className='font-bold'>Errores comunes: </div>
+                                cascarillo, máquina, pisapapeles, hora, maricarmen, oleaje, canción, genialidad, estudiante, guardería, julio
+                            </div>
+
 
                             <div className='col-span-full lg:col-span-1 lg:pl-7'>
                                 <div className="hidden lg:block">
@@ -277,19 +294,8 @@ function TeacherResults({ navigate, classCode }) {
                                             <div>{t('name')}</div>
                                             <div>{t('score')}</div>
                                             <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-                                            <div className="info-button mt-1 mr-1">
-                                                i
-                                                <div className="tooltip bottom left">
-                                                    <div className='text-xl'>{t('info-reset-1')}</div>
-                                                    <div style={{ fontWeight: '400' }} className='mt-6'>{t('info-reset-2')}</div>
-                                                    <div style={{ fontWeight: '400' }} className='mt-2'>{t('info-reset-3')}</div>
-                                                    <div style={{ fontWeight: '400' }} className='mt-2'>{t('info-reset-4')}</div>
-
-                                                    <div style={{ fontWeight: '300' }} className='mt-7'>{t('info-download-results')}</div>
-                                                </div>
-                                            </div>
                                         </div>
-                                        <div className="inside-card-2 p-6 pt-14" ref={scrollbarRef}>
+                                        <div className="inside-card-2 wait-room p-6 pt-14" ref={scrollbarRef}>
                                             <ul className='pt-1'>
                                                 {students.slice(3, 99).map((student, index) => (
                                                     <li key={student.id} className='student-item see-score'>
@@ -313,6 +319,32 @@ function TeacherResults({ navigate, classCode }) {
                                             </ul>
                                         </div>
                                     </div>
+                                    <div className='grid grid-cols-5 grid-rows-2 mt-3'>
+                                        <button onClick={() => handleDownloadPDF({})} className="col-span-full animated-button p-2 text-center mt-4 align-bottom">
+                                            <div className="animated-button-bg download"></div>
+                                            <div className="animated-button-text">
+                                                Descargar resultados
+                                            </div>
+                                        </button>
+
+                                        <div className='col-span-full grid grid-cols-5'>
+                                            <button onClick={() => seeProgress()} className="col-span-2 animated-button p-2 text-center my-2 align-bottom">
+                                                <div className="animated-button-bg"></div>
+                                                <div className="animated-button-text">
+                                                    Progreso
+                                                </div>
+                                            </button>
+
+                                            <div className="ml-5 col-span-3">
+                                                <button onclick={() => restartClass()} className="animated-button p-2 text-center my-2 align-bottom">
+                                                    <div className="animated-button-bg restart"></div>
+                                                    <div className="animated-button-text">
+                                                        Reiniciar clase
+                                                    </div>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div className="block lg:hidden">
@@ -325,13 +357,13 @@ function TeacherResults({ navigate, classCode }) {
 
                                             <div className="info-button mt-1 mr-1">
                                                 i
-                                                <div className="tooltip bottom left">
-                                                    <div className='text-xl'>{t('info-reset-1')}</div>
-                                                    <div style={{ fontWeight: '400' }} className='mt-6'>{t('info-reset-2')}</div>
-                                                    <div style={{ fontWeight: '400' }} className='mt-2'>{t('info-reset-3')}</div>
-                                                    <div style={{ fontWeight: '400' }} className='mt-2'>{t('info-reset-4')}</div>
+                                                <div className="tooltip common-errors bottom left">
 
-                                                    <div style={{ fontWeight: '300' }} className='mt-7'>{t('info-download-results')}</div>
+                                                    <div className='text-xl'>Errores comunes</div>
+
+                                                    <div style={{ fontWeight: '400' }} className='mt-6'>
+                                                        cascarillo, máquina, pisapapeles, hora, maricarmen, oleaje, canción, genialidad, estudiante, guardería, julio
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -361,6 +393,51 @@ function TeacherResults({ navigate, classCode }) {
 
                                             </ul>
                                         </div>
+                                    </div>
+
+                                    <div className='grid grid-cols-5 md:grid-rows-2 sm:grid-rows-3 mt-6 md:mt-4'>
+                                        <button onClick={() => handleDownloadPDF({})} className="col-span-full animated-button p-2 text-center md:mt-4 align-bottom">
+                                            <div className="animated-button-bg download"></div>
+                                            <div className="animated-button-text">
+                                                Descargar
+                                            </div>
+                                        </button>
+
+                                        <div className='col-span-full grid-cols-5 hidden md:grid'>
+                                            <button onClick={() => seeProgress()} className="col-span-2 animated-button p-2 text-center my-2 align-bottom">
+                                                <div className="animated-button-bg"></div>
+                                                <div className="animated-button-text">
+                                                    Progreso
+                                                </div>
+                                            </button>
+
+                                            <div className="ml-5 col-span-3">
+                                                <button onclick={() => restartClass()} className="animated-button p-2 text-center my-2 align-bottom">
+                                                    <div className="animated-button-bg restart"></div>
+                                                    <div className="animated-button-text">
+                                                        Reiniciar clase
+                                                    </div>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div className='col-span-full row-span-2 grid md:hidden'>
+
+                                            <button onClick={() => seeProgress()} className="animated-button p-2 text-center mt-2 align-bottom">
+                                                <div className="animated-button-bg"></div>
+                                                <div className="animated-button-text">
+                                                    Progreso
+                                                </div>
+                                            </button>
+
+                                            <button onclick={() => restartClass()} className="animated-button p-2 text-center mt-2 align-bottom">
+                                                <div className="animated-button-bg restart"></div>
+                                                <div className="animated-button-text">
+                                                    Reiniciar clase
+                                                </div>
+                                            </button>
+                                        </div>
+
                                     </div>
                                 </div>
 

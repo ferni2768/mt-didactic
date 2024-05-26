@@ -255,6 +255,10 @@
     overflow: hidden;
 }
 
+.inside-card.wait-room {
+    min-height: 38.6rem;
+}
+
 .inside-card-podium {
     width: 120%;
     position: relative;
@@ -276,6 +280,10 @@
     transform: translateY(-0.5rem);
 }
 
+.inside-card-2-common-errors:hover {
+    transform: translateY(-0.4rem) translateX(0.4rem);
+}
+
 .top-bar-1 {
     height: 100vh;
     width: calc(100% + 2rem);
@@ -288,11 +296,10 @@
     font-size: 1.5rem;
     box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
     border-radius: 1rem;
-    top: 4.5rem;
+    top: 5rem;
     right: calc(100% + 2rem);
     position: relative;
     z-index: 20 !important;
-
     transition: transform 0.05s ease-out;
 }
 
@@ -308,7 +315,7 @@
     border-top-left-radius: 1rem;
     position: relative;
     z-index: 0 !important;
-    top: 5.5rem;
+    top: 8.8rem;
 
     transition: transform 0.05s ease-out;
 }
@@ -324,9 +331,8 @@
     box-shadow: 0 0 2rem rgba(0, 0, 0, 0.4);
     border-top-right-radius: 1rem;
     position: relative;
-    top: 12.5rem;
+    top: 11rem;
     left: calc(100% + 1rem);
-
     transition: transform 0.05s ease-out;
 }
 
@@ -491,6 +497,29 @@
     font-size: 1.2rem;
     box-shadow: 0 0 2rem rgba(0, 0, 0, 0.25);
     z-index: 0;
+}
+
+.inside-card-2.wait-room {
+    height: 25.3rem;
+}
+
+.inside-card-2-common-errors {
+    width: 40rem;
+    height: 20rem;
+    position: absolute;
+    padding: 1rem;
+    padding-left: 10rem;
+    bottom: -11.7rem;
+    left: -7rem;
+    transition: transform 0.05s ease-in-out;
+    border-radius: 1rem;
+    background-color: rgb(237, 197, 197);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    font-size: 1.2rem;
+    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.25);
+    z-index: 100;
 }
 
 .contain {
@@ -813,6 +842,24 @@
     font-size: 1rem;
 }
 
+.tooltip.QR {
+    background-color: #ffffff;
+    width: 24rem;
+    z-index: 1000;
+}
+
+.tooltip.QR.small {
+    width: 15rem;
+    z-index: 1000;
+}
+
+.tooltip.common-errors {
+    background-color: #cfa5a5;
+    width: 12rem;
+    z-index: 1000;
+    color: rgb(27, 27, 27);
+}
+
 .info-button:hover .tooltip {
     visibility: visible;
     opacity: 1;
@@ -890,6 +937,14 @@
     -webkit-transition: all .5s ease;
     -o-transition: all .5s ease;
     transition: all .5s ease;
+}
+
+.animated-button-bg.restart {
+    background-color: #ee1212;
+}
+
+.animated-button-bg.download {
+    background-color: #127edd;
 }
 
 .animated-button-bg-diphthong {
@@ -1608,7 +1663,7 @@
 }
 
 .graph-bar-text-pdf {
-    color: #6f6f6f;
+    color: rgb(28, 28, 28);
     font-weight: bold;
     z-index: 3;
     position: absolute;

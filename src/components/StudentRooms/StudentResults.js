@@ -120,8 +120,20 @@ function StudentResults({ navigate, classCode }) {
                 pdf.setPage(1);
                 pdf.deletePage(2);
             }
-        }).save().then(() => {
+            return pdf.output('blob'); // Output the PDF as a Blob object
+        }).then((blob) => {
+            const blobURL = URL.createObjectURL(blob); // Create a URL for the Blob
+            window.open(blobURL); // Open the Blob URL in a new window
+
+            // Save the PDF file
+            const link = document.createElement('a');
+            link.href = blobURL;
+            link.download = 'student_results.pdf';
+            link.click();
+
+            // Clean up
             document.body.removeChild(element);
+            URL.revokeObjectURL(blobURL); // Revoke the Blob URL after usage
         });
     };
 

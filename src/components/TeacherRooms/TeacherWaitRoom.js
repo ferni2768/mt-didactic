@@ -3,6 +3,7 @@ import { TransitionContext } from '../../visualComponents/TransitionContext';
 import Scrollbar from 'smooth-scrollbar';
 import OverscrollPlugin from 'smooth-scrollbar/plugins/overscroll';
 import { useTranslation } from 'react-i18next';
+import QRCode from 'qrcode.react';
 
 function TeacherWaitRoom({ navigate, classCode }) {
     const [students, setStudents] = useState([]);
@@ -138,13 +139,17 @@ function TeacherWaitRoom({ navigate, classCode }) {
 
                             <div className="col-span-full md:col-span-full lg:col-span-1">
                                 <h1>{t('listOfStudents')}</h1>
-                                <p> {completedStudents}/{totalStudents} {t('studentsFinished')}
+                                <p style={{ position: 'relative', zIndex: 10 }}> {completedStudents}/{totalStudents} {t('studentsFinished')}
 
                                     <div className='allow-info-overflow block lg:hidden'>
-                                        <div className="info-button mt-0.5">
+                                        <div className="info-button QR mt-0.5">
                                             i
-                                            <div className="tooltip top left">
-                                                <div style={{ fontWeight: '400' }}>{t('info-results')}</div>
+                                            <div className="hidden md:flex tooltip QR bottom left justify-center">
+                                                <QRCode className='my-16' size={200} enableBackground={false} value="http://localhost:3000/student/ABC123" />
+                                            </div>
+
+                                            <div className="flex md:hidden tooltip QR small bottom left justify-center">
+                                                <QRCode className='my-10' size={150} enableBackground={false} value="http://localhost:3000/student/ABC123" />
                                             </div>
                                         </div>
                                     </div>
@@ -158,14 +163,10 @@ function TeacherWaitRoom({ navigate, classCode }) {
                                     </div>
                                 </button>
 
-                                <div className='allow-info-overflow hidden lg:block'>
-                                    <div className="info-button left mt-0.5">
-                                        i
-                                        <div className="tooltip bottom right">
-                                            <div style={{ fontWeight: '400' }}>{t('info-results')}</div>
-                                        </div>
-                                    </div>
+                                <div className='hidden lg:flex mt-8 w-full items-center justify-center'>
+                                    <QRCode size={160} value="http://localhost:3000/student/ABC123" />
                                 </div>
+
                             </div>
 
                             <div className="col-span-full md:col-span-full lg:col-span-2 lg:pl-7">
