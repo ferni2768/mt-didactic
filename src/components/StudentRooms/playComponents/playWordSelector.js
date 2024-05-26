@@ -324,8 +324,8 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
 
             await handleTestModel([selectedModel]);
 
-            // Update the session storage with the mistakes
-            updateMistakesInSessionStorage();
+            // Update the mistakes both in the session storage and the database
+            updateMistakes();
 
             if (iteration + 1 != maxIterations) {
                 setNewWords(true);
@@ -375,26 +375,34 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         }
     };
 
-    const updateMistakesInSessionStorage = () => {
-        // Retrieve the current mistakes from session storage, if any
-        const currentMistakes = sessionStorage.getItem('mistakes') ? JSON.parse(sessionStorage.getItem('mistakes')) : [];
-
+    const updateMistakes = async () => {
         // Find mistakes by comparing newAnswer with newBatch, ignoring case
         const newMistakes = newBatch.map(([word, correctLabel], index) => {
             const [, inputLabel] = newAnswer[index];
-            // Convert both labels to lowercase before comparing
             if (inputLabel.toUpperCase() !== correctLabel.toUpperCase()) {
-                // Convert both labels to lowercase before adding to mistakes
                 return [word, inputLabel.toUpperCase(), correctLabel.toUpperCase()];
             }
-            return null; // No mistake for this word
+            return null;
         }).filter(mistake => mistake !== null); // Filter out null values (no mistakes)
 
-        // Combine the current mistakes with the new mistakes
+        // Retrieve the current mistakes from session storage, if any
+        const currentMistakes = sessionStorage.getItem('mistakes') ? JSON.parse(sessionStorage.getItem('mistakes')) : [];
         const updatedMistakes = [...currentMistakes, ...newMistakes];
-
-        // Update the session storage with the updated mistakes array
         sessionStorage.setItem('mistakes', JSON.stringify(updatedMistakes));
+
+        // Upload the mistakes to the database
+        const classCode = sessionStorage.getItem('loggedInClassCode');
+        const response = await fetch(`${global.BASE_URL}/update-errors`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ mistakes: newMistakes, classCode }), // Send only newMistakes to the server
+        });
+
+        if (!response.ok) {
+            console.error('Failed to update errors in the database');
+        }
     };
 
     // Function to find the next non-set word index

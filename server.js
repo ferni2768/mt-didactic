@@ -100,6 +100,24 @@ app.get('/students', (req, res) => {
     });
 });
 
+// API endpoint to fetch list of common errors for a specific class
+app.get('/common-errors', (req, res) => {
+    // Extract classCode from query parameters
+    const classCode = req.query.classCode;
+
+    // Query to get errors sorted by counter in descending order
+    const query = `SELECT word, counter FROM errors WHERE class_code = ? ORDER BY counter DESC LIMIT 10`;
+
+    db.query(query, [classCode], (err, result) => {
+        if (err) {
+            console.error('Error executing MySQL query:', err);
+            res.status(500).json({ error: 'Internal server error' });
+        } else {
+            res.json(result);
+        }
+    });
+});
+
 // API endpoint to fetch a specific student by ID
 app.get('/student/:id', (req, res) => {
     const studentId = req.params.id || 1; // Set default student ID to 1 if no ID is provided
@@ -192,6 +210,35 @@ app.post('/class/:code/join', async (req, res) => {
         // A response is sent in case of an error
         res.status(500).json({ error: 'Internal server error' });
     }
+});
+
+// API endpoint to update the errors in the database
+app.post('/update-errors', (req, res) => {
+    const { mistakes, classCode } = req.body;
+
+    // Combined SQL query to insert or update based on existence
+    const combinedQuery = 'INSERT INTO errors (word, counter, class_code) VALUES (?,?,?) ON DUPLICATE KEY UPDATE counter = counter + 1';
+
+    // Use Promise.all to wait for all database operations to complete
+    Promise.all(mistakes.map(([word]) =>
+        new Promise((resolve, reject) => {
+            db.query(combinedQuery, [word, 1, classCode], (error, results) => {
+                if (error) {
+                    console.error('Error processing mistake:', error);
+                    reject(error);
+                } else {
+                    resolve(results);
+                }
+            });
+        })
+    )).then(() => {
+        // All operations were successful, send success response
+        res.status(200).json({ message: 'Errors updated successfully' });
+    }).catch((error) => {
+        // An error occurred, send error response
+        console.error('Failed to update errors:', error);
+        res.status(500).json({ error: 'Failed to update errors' });
+    });
 });
 
 // API endpoint to set the class phase
@@ -396,6 +443,37 @@ app.put('/class/:code/restart', async (req, res) => {
         await new Promise((resolve, reject) => {
             const query = 'UPDATE student SET class_code = ? WHERE class_code = ?';
             db.query(query, [newClassCode, classCode], (err, result) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+
+        // Aggregate errors for the class and move them to CLASSCODE_deleted
+        await new Promise((resolve, reject) => {
+            const aggregateQuery = `
+                INSERT INTO errors (word, counter, class_code)
+                SELECT word, SUM(counter),?
+                FROM errors
+                WHERE class_code = ?
+                GROUP BY word
+                ON DUPLICATE KEY UPDATE counter = counter + VALUES(counter)
+            `;
+            db.query(aggregateQuery, [newClassCode, classCode], (err, result) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+
+        // Delete original errors for the class
+        await new Promise((resolve, reject) => {
+            const deleteQuery = 'DELETE FROM errors WHERE class_code = ?';
+            db.query(deleteQuery, [classCode], (err, result) => {
                 if (err) {
                     reject(err);
                 } else {

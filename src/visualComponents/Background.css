@@ -540,7 +540,7 @@
     z-index: 0;
 }
 
-.small {
+.contain.small {
     height: 21rem;
 }
 

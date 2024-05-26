@@ -9,6 +9,7 @@ import TeacherPDF from './TeacherPDF';
 
 function TeacherResults({ navigate, classCode }) {
     const [students, setStudents] = useState([]);
+    const [commonErrors, setCommonErrors] = useState([]);
     const { isEntering, isTransitioning } = useContext(TransitionContext);
     const scrollbarRef = useRef(null);
     const scrollbarRef2 = useRef(null);
@@ -168,13 +169,30 @@ function TeacherResults({ navigate, classCode }) {
         }
     };
 
+    const fetchCommonErrors = async () => {
+        try {
+            const response = await fetch(`${global.BASE_URL}/common-errors?classCode=${sessionStorage.getItem('createdClassCode')}`);
+            const data = await response.json();
+            setCommonErrors(data);
+        } catch (error) {
+            console.error('Error fetching common errors:', error);
+        }
+    };
+
+    const fetchClass = async () => {
+        fetchStudents();
+        fetchCommonErrors();
+    }
+
     useEffect(() => {
         fetchStudents();
+        fetchCommonErrors();
     }, []);
 
     useEffect(() => {
         fetchStudents(); // Fetch students initially
-        const intervalId = setInterval(fetchStudents, 3000); // Reload students every 3 seconds
+        fetchCommonErrors(); // Fetch common errors initially
+        const intervalId = setInterval(fetchClass, 3000); // Reload class data every 3 seconds
 
         return () => clearInterval(intervalId);
     }, [classCode]);
@@ -283,7 +301,9 @@ function TeacherResults({ navigate, classCode }) {
 
                             <div className='hidden lg:block inside-card-2-common-errors'>
                                 <div className='font-bold'>Errores comunes: </div>
-                                cascarillo, máquina, pisapapeles, hora, maricarmen, oleaje, canción, genialidad, estudiante, guardería, julio
+                                {commonErrors.map(({ word }, index) => (
+                                    <span key={index}>{word}{index < commonErrors.length - 1 ? ', ' : ''}</span>
+                                ))}
                             </div>
 
 
@@ -361,8 +381,10 @@ function TeacherResults({ navigate, classCode }) {
 
                                                     <div className='text-xl'>Errores comunes</div>
 
-                                                    <div style={{ fontWeight: '400' }} className='mt-6'>
-                                                        cascarillo, máquina, pisapapeles, hora, maricarmen, oleaje, canción, genialidad, estudiante, guardería, julio
+                                                    <div style={{ fontWeight: '400' }} className='mt-4'>
+                                                        {commonErrors.map(({ word }, index) => (
+                                                            <span key={index}>{word}{index < commonErrors.length - 1 ? ', ' : ''}</span>
+                                                        ))}
                                                     </div>
                                                 </div>
                                             </div>
