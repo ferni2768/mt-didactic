@@ -210,7 +210,7 @@ function TeacherResults({ navigate, classCode }) {
 
 
     return (
-        <div class="overflowY-container" ref={scrollbarRef3}>
+        <div className="overflowY-container" ref={scrollbarRef3}>
             <div className="overflowY-container-inside">
                 <div>
                     <div className={`inside-card wait-room ${isTransitioning ? 'transitioning' : ''} ${isEntering ? 'entering' : ''}`}>
@@ -336,7 +336,7 @@ function TeacherResults({ navigate, classCode }) {
                                             </button>
 
                                             <div className="ml-5 col-span-3">
-                                                <button onclick={() => restartClass()} className="animated-button p-2 text-center my-2 align-bottom">
+                                                <button onClick={() => restartClass()} className="animated-button p-2 text-center my-2 align-bottom">
                                                     <div className="animated-button-bg restart"></div>
                                                     <div className="animated-button-text">
                                                         Reiniciar clase
@@ -348,7 +348,7 @@ function TeacherResults({ navigate, classCode }) {
                                 </div>
 
                                 <div className="block lg:hidden">
-                                    <div className='contain'>
+                                    <div className='contain small md:h-auto'>
                                         <div className='inside-card-2-header text-white'>
                                             <div className='hidden md:block'>{t('name')}</div>
                                             <div className='hidden md:block'>{t('score')}</div>
@@ -395,47 +395,29 @@ function TeacherResults({ navigate, classCode }) {
                                         </div>
                                     </div>
 
-                                    <div className='grid grid-cols-5 md:grid-rows-2 sm:grid-rows-3 mt-6 md:mt-4'>
-                                        <button onClick={() => handleDownloadPDF({})} className="col-span-full animated-button p-2 text-center md:mt-4 align-bottom">
+                                    <div className='grid-rows-3 md:grid-rows-2 mt-4'>
+                                        <button onClick={() => handleDownloadPDF({})} className="row-span-1 animated-button p-2 text-center mt-4 align-bottom">
                                             <div className="animated-button-bg download"></div>
                                             <div className="animated-button-text">
                                                 Descargar
                                             </div>
                                         </button>
 
-                                        <div className='col-span-full grid-cols-5 hidden md:grid'>
-                                            <button onClick={() => seeProgress()} className="col-span-2 animated-button p-2 text-center my-2 align-bottom">
+                                        <div className='md:grid grid-cols-5 row-span-2 md:row-span-1'>
+                                            <button onClick={() => seeProgress()} className="md:col-span-2 animated-button p-2 text-center md:my-2 mt-2 align-bottom">
                                                 <div className="animated-button-bg"></div>
                                                 <div className="animated-button-text">
                                                     Progreso
                                                 </div>
                                             </button>
-
-                                            <div className="ml-5 col-span-3">
-                                                <button onclick={() => restartClass()} className="animated-button p-2 text-center my-2 align-bottom">
+                                            <div className='md:col-span-3 md:ml-3'>
+                                                <button onClick={() => restartClass()} className="animated-button p-2 text-center my-0 md:my-2 mt-2 align-bottom">
                                                     <div className="animated-button-bg restart"></div>
                                                     <div className="animated-button-text">
                                                         Reiniciar clase
                                                     </div>
                                                 </button>
                                             </div>
-                                        </div>
-
-                                        <div className='col-span-full row-span-2 grid md:hidden'>
-
-                                            <button onClick={() => seeProgress()} className="animated-button p-2 text-center mt-2 align-bottom">
-                                                <div className="animated-button-bg"></div>
-                                                <div className="animated-button-text">
-                                                    Progreso
-                                                </div>
-                                            </button>
-
-                                            <button onclick={() => restartClass()} className="animated-button p-2 text-center mt-2 align-bottom">
-                                                <div className="animated-button-bg restart"></div>
-                                                <div className="animated-button-text">
-                                                    Reiniciar clase
-                                                </div>
-                                            </button>
                                         </div>
 
                                     </div>

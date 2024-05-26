@@ -503,6 +503,10 @@
     height: 25.3rem;
 }
 
+.inside-card-3.results {
+    height: 24rem;
+}
+
 .inside-card-2-common-errors {
     width: 40rem;
     height: 20rem;
@@ -534,6 +538,10 @@
     flex-direction: column;
     justify-content: flex-start;
     z-index: 0;
+}
+
+.small {
+    height: 21rem;
 }
 
 .inside-card-2-header {
