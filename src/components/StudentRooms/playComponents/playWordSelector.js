@@ -56,6 +56,24 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         return result;
     }
 
+    // Function to actual percentage accuracy for a category
+    function calculateCategoryScore(matrix, categoryIndex) {
+
+        if (matrix.length < 2) return 0;
+
+        let totalPredictions = 0;
+
+        for (let i = 0; i < 3; i++) {
+            totalPredictions += matrix[categoryIndex][i];
+        }
+
+        if (totalPredictions === 0) return 0;
+
+        let result = (matrix[categoryIndex][categoryIndex] / totalPredictions);
+
+        return Math.ceil(result * 100);
+    }
+
     // Calculate accuracy for each category, providing a default value of 0 if matrix is not available
     const diphthongAccuracy = calculateCategoryAccuracy(matrix || [], 0);
     const hiatusAccuracy = calculateCategoryAccuracy(matrix || [], 1);
@@ -65,8 +83,6 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
     const diphthongScore = Math.round((diphthongAccuracy || 0) * 100);
     const hiatusScore = Math.round((hiatusAccuracy || 0) * 100);
     const generalScore = Math.round((generalAccuracy || 0) * 100);
-
-
 
     const { t } = useTranslation();
 
@@ -278,6 +294,26 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         return () => clearInterval(intervalId);
     }, [isTraining]); // Depend on isTraining to reset the interval if it changes
 
+    useEffect(() => {
+        if (iteration === maxIterations) {
+            // Get the results from the matrix
+            const results = {
+                diphthong: calculateCategoryScore(matrix, 0),
+                hiatus: calculateCategoryScore(matrix, 1),
+                general: calculateCategoryScore(matrix, 2)
+            };
+
+            updateSessionStorageWithResultsAndErrors(results, []);
+        }
+    }, [matrix]);
+
+    useEffect(() => {
+        // Verify if the iterationData key exists in sessionStorage
+        const existingData = sessionStorage.getItem('iterationData');
+        if (!existingData) {
+            sessionStorage.setItem('iterationData', JSON.stringify({}));
+        }
+    }, []);
 
     const handleAnswerSubmit = async (newAnswer) => {
         if (!isTurningIn || buttonWait) return;
@@ -290,6 +326,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
             setIsTraining(true);
             setExternalIsTraining(true);
         }
+
         // Transform the newAnswer array into an object with the desired structure
         const answersObj = newAnswer.reduce((acc, combo) => {
             // Check if the combo has both elements (word and label) and the word is not an empty string
@@ -298,8 +335,6 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
             }
             return acc;
         }, {});
-
-        // console.log(answersObj);
 
         const url = `${global.BASE_URL}/models/${selectedModel}/train`;
         const config = {
@@ -312,7 +347,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
             const response = await fetch(url, config);
 
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                throw new Error(`HTTP error Status: ${response.status}`);
             }
             const data = await response.json();
 
@@ -324,8 +359,15 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
 
             await handleTestModel([selectedModel]);
 
-            // Update the mistakes both in the session storage and the database
-            updateMistakes();
+            // Get the results from the matrix
+            const results = {
+                diphthong: calculateCategoryScore(matrix, 0),
+                hiatus: calculateCategoryScore(matrix, 1),
+                general: calculateCategoryScore(matrix, 2)
+            };
+
+            const newMistakes = await updateMistakes();
+            updateSessionStorageWithResultsAndErrors(results, newMistakes);
 
             if (iteration + 1 != maxIterations) {
                 setNewWords(true);
@@ -341,6 +383,19 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         } catch (error) {
             console.error('Error:', error);
         }
+    };
+
+    const updateSessionStorageWithResultsAndErrors = (results, newMistakes) => {
+        const iterationKey = `iteration${iteration + 1}`;
+        const existingData = JSON.parse(sessionStorage.getItem('iterationData'));
+        existingData[iterationKey] = {
+            results: results,
+            errors: newMistakes.reduce((acc, mistake) => {
+                acc[mistake[0]] = mistake.slice(1);
+                return acc;
+            }, {})
+        };
+        sessionStorage.setItem('iterationData', JSON.stringify(existingData));
     };
 
     const handleTestModel = async (selectedModelNames) => {
@@ -403,6 +458,9 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         if (!response.ok) {
             console.error('Failed to update errors in the database');
         }
+
+        // Return the new mistakes
+        return newMistakes;
     };
 
     // Function to find the next non-set word index

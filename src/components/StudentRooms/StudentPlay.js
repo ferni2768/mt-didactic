@@ -166,7 +166,7 @@ function StudentPlay({ navigate, classCode }) {
 
 
     return (
-        <div class="overflowY-container" ref={scrollbarRef2}>
+        <div className="overflowY-container" ref={scrollbarRef2}>
             <div className="overflowY-container-inside">
                 <div>
                     <div className={`inside-card ${isTransitioning ? 'transitioning' : ''} ${isEntering ? 'entering' : ''}`}>

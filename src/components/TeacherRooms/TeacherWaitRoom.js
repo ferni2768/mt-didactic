@@ -177,7 +177,7 @@ function TeacherWaitRoom({ navigate, classCode }) {
                                         <div className='hidden md:block lg:block'></div>
                                         <div className='md:hidden lg:hidden'>{t('nameAndProgress')}</div>
                                     </div>
-                                    <div className="inside-card-2 p-6 pt-14" ref={scrollbarRef}>
+                                    <div className="inside-card-2 md:min-w-[27rem] p-6 pt-14" ref={scrollbarRef}>
                                         <ul className='pt-1'>
                                             {students && students.slice(0, 99).reverse().map(student => (
                                                 <li key={student.id} className="student-item">

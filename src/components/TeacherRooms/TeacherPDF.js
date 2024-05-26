@@ -78,7 +78,7 @@ const TeacherPDF = ({ paramStudents, paramWords }) => {
 
                                                 <div className="col-span-1 flex items-center justify-end pr-3">
                                                     <div>
-                                                        3 {t('times')}
+                                                        {word.times} {word.times > 1 ? t('times') : t('time')}
                                                     </div>
                                                 </div>
                                             </div>

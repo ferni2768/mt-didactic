@@ -76,13 +76,23 @@ function TeacherResults({ navigate, classCode }) {
 
 
     // Function to handle the download of the results PDF
-    const handleDownloadPDF = (params) => {
+    const handleDownloadPDF = () => {
         const element = document.createElement('div');
         element.style.width = '1920px'; // Match the PDF width
         element.style.height = '1080px'; // Match the PDF height
         element.style.background = 'white';
 
-        element.innerHTML = ReactDOMServer.renderToString(<TeacherPDF {...params} />);
+        const paramStudents = students.map(student => ({
+            name: student.name,
+            score: student.score
+        }));
+
+        const paramWords = commonErrors.map(error => ({
+            name: error.word,
+            times: error.counter
+        }));
+
+        element.innerHTML = ReactDOMServer.renderToString(<TeacherPDF paramStudents={paramStudents} paramWords={paramWords} />);
 
         document.body.appendChild(element);
         document.body.style.overflow = 'hidden';

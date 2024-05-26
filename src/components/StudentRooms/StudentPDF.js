@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import Background from '../../visualComponents/Background';
 import { useTranslation } from 'react-i18next';
 
-const TeacherPDF = ({ paramHistory }) => {
+const TeacherPDF = () => {
 
     const { t } = useTranslation();
 
@@ -124,7 +124,7 @@ const TeacherPDF = ({ paramHistory }) => {
         }
     };
 
-    const history = paramHistory || jsonData;
+    const history = JSON.parse(sessionStorage.getItem('iterationData')) || jsonData;
 
     // Function to retrieve specific values from history
     const getValue = (iteration, key, subKey = null, subIndex = null) => {
@@ -162,41 +162,57 @@ const TeacherPDF = ({ paramHistory }) => {
         const hiatusValue = getValue(i, 'results', 'hiatus');
         const generalValue = getValue(i, 'results', 'general');
 
-        const errors = getValue(i, 'errors');
-        const errorList = [];
-        if (errors) {
-            const errorKeys = Object.keys(errors);
-            for (let j = 0; j < Math.min(10, errorKeys.length); j++) {
-                const word = errorKeys[j];
-                const characters = errors[word];
+        let errorDisplayContent;
+        if (i === 6) {
+            errorDisplayContent = <div>
+                <div> <a className='font-bold'>Precisión inicial: </a>45.03% </div>
+                <div> <a className='font-bold'>Precisión final: </a> {sessionStorage.getItem('loggedInScore')}% </div>
+                <div> <a className='font-bold'>Número de errores: </a>12 </div>
+                {/* Total mistakes: {sessionStorage.getItem('mistakes')}<br /> */}
 
-                const div = document.createElement('div');
+            </div>;
+        } else {
+            const errors = getValue(i, 'errors');
+            const errorList = [];
+            if (errors) {
+                const errorKeys = Object.keys(errors);
+                for (let j = 0; j < Math.min(10, errorKeys.length); j++) {
+                    const word = errorKeys[j];
+                    const characters = errors[word];
 
-                const wordElement = document.createElement('a');
-                wordElement.textContent = `${word}: `;
-                div.appendChild(wordElement);
+                    const div = document.createElement('div');
 
-                const correctLabelElement = document.createElement('a');
-                Object.assign(correctLabelElement.style, getStyleForLabel(characters[0]));
-                correctLabelElement.textContent = characters[0];
-                div.appendChild(correctLabelElement);
+                    const wordElement = document.createElement('a');
+                    wordElement.textContent = `${word}: `;
+                    div.appendChild(wordElement);
 
-                const noElement = document.createElement('a');
-                noElement.textContent = `${t('no')} `;
-                div.appendChild(noElement);
+                    const correctLabelElement = document.createElement('a');
+                    Object.assign(correctLabelElement.style, getStyleForLabel(characters[1]));
+                    correctLabelElement.textContent = characters[1];
+                    div.appendChild(correctLabelElement);
 
-                const mistakenLabelElement = document.createElement('a');
-                Object.assign(mistakenLabelElement.style, getStyleForLabel(characters[1]));
-                mistakenLabelElement.textContent = characters[1];
-                div.appendChild(mistakenLabelElement);
+                    const noElement = document.createElement('a');
+                    noElement.textContent = `${t('no')} `;
+                    div.appendChild(noElement);
 
-                errorList.push(div);
+                    const mistakenLabelElement = document.createElement('a');
+                    Object.assign(mistakenLabelElement.style, getStyleForLabel(characters[0]));
+                    mistakenLabelElement.textContent = characters[0];
+                    div.appendChild(mistakenLabelElement);
+
+                    errorList.push(div);
+                }
             }
+            errorDisplayContent = errorList.map((error, index) => (
+                <div key={index} dangerouslySetInnerHTML={{ __html: error.outerHTML }} />
+            ));
         }
 
         graphContainers.push(
             <div className='graph-container-pdf' key={i}>
-                <div className='graph-title-pdf move-down-pdf'>{t('iteration')} {i}</div>
+                <div className='graph-title-pdf move-down-pdf'>
+                    {i === 6 ? 'FINAL' : `${t('iteration')} ${i}`}
+                </div>
 
                 <div className='graph-base-pdf'>
                     <div>
@@ -236,13 +252,12 @@ const TeacherPDF = ({ paramHistory }) => {
                 </div>
 
                 <div className='graph-error-list-pdf'>
-                    {errorList.map((error, index) => (
-                        <div key={index} dangerouslySetInnerHTML={{ __html: error.outerHTML }} />
-                    ))}
+                    {errorDisplayContent}
                 </div>
             </div>
         );
     }
+
 
     // Generate percentage indicators
     const percentageIndicatorsVW = [];

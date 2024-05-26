@@ -81,13 +81,15 @@ function StudentResults({ navigate, classCode }) {
     const generalScore = Math.round((generalAccuracy || 0) * 100);
 
     // Function to handle the download of the results PDF
-    const handleDownloadPDF = (paramHistory) => {
+    const handleDownloadPDF = () => {
         const element = document.createElement('div');
         element.style.width = '1920px'; // Match the PDF width
         element.style.height = '1080px'; // Match the PDF height
         element.style.background = 'white';
 
-        element.innerHTML = ReactDOMServer.renderToString(<StudentPDF paramHistory={paramHistory} />);
+        console.log(sessionStorage.getItem('iterationData'));
+
+        element.innerHTML = ReactDOMServer.renderToString(<StudentPDF />);
 
         document.body.appendChild(element);
         document.body.style.overflow = 'hidden';
@@ -292,7 +294,7 @@ function StudentResults({ navigate, classCode }) {
 
 
     return (
-        <div class="overflowY-container" ref={scrollbarRef4}>
+        <div className="overflowY-container" ref={scrollbarRef4}>
             <div className="overflowY-container-inside">
                 <div>
                     <div className={`inside-card ${isTransitioning ? 'transitioning' : ''} ${isEntering ? 'entering' : ''}`}>
