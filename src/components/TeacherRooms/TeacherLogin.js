@@ -13,6 +13,9 @@ function TeacherLogin({ navigate, classCode }) {
     const [password, setPassword] = useState('password');
     const [inputClassCode, setInputClassCode] = useState(classCode);
     const { isTransitioning, isEntering } = useContext(TransitionContext);
+    const [classError, setClassError] = useState('');
+    const [generalError, setGeneralError] = useState('');
+
     const scrollbarRef = useRef(null);
 
     const { t } = useTranslation();
@@ -94,8 +97,8 @@ function TeacherLogin({ navigate, classCode }) {
                         return;
                     }
                 } else {
-                    console.error('Error checking class phase:', checkPhaseResponse.statusText);
-                    alert('Error occurred while checking class phase');
+                    setClassError('');
+                    setGeneralError(t('error'));
                     return; // Exit the function if there's an error checking the phase
                 }
 
@@ -109,16 +112,16 @@ function TeacherLogin({ navigate, classCode }) {
                 });
 
                 if (!phaseResponse.ok) {
-                    console.error('Error setting class phase:', phaseResponse.statusText);
-                    alert('Error occurred while setting class phase');
+                    setClassError('');
+                    setGeneralError(t('error'));
                 }
             } else {
-                const errorData = await response.json();
-                alert(errorData.error || 'Invalid class code or password');
+                setClassError(t('invalidCredentials'));
+                setGeneralError('');
             }
         } catch (error) {
-            console.error('Error:', error);
-            alert('Error occurred while logging in');
+            setClassError('');
+            setGeneralError(t('error'));
         }
     };
 
@@ -137,7 +140,10 @@ function TeacherLogin({ navigate, classCode }) {
                                         type="text"
                                         placeholder=""
                                         value={inputClassCode}
-                                        onChange={(e) => setInputClassCode(e.target.value)}
+                                        onChange={(e) => {
+                                            setInputClassCode(e.target.value);
+                                            setClassError(''); // Reset class code error on change
+                                        }}
                                         maxLength={100}
                                         className="mt-8 border-custom_black focus:border-accent border-2 rounded-lg
                                                outline-none block w-full shadow-sm text-custom_black p-2"
@@ -145,6 +151,11 @@ function TeacherLogin({ navigate, classCode }) {
                                     <span className='text-2xl text-gray-300 bg-white absolute left-3 top-11 px-1
                                 transition duration-200 input-text pointer-events-none'>{t('classCode')}</span>
                                 </div>
+                                {classError && (
+                                    <div className='pb-0.5'>
+                                        <p className="text-sm text-error slideUpFadeIn">{classError}</p>
+                                    </div>
+                                )}
 
                                 <div className="flex justify-center relative">
                                     <input
@@ -152,7 +163,10 @@ function TeacherLogin({ navigate, classCode }) {
                                         type="password"
                                         placeholder=""
                                         value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
+                                        onChange={(e) => {
+                                            setPassword(e.target.value);
+                                            setClassError('');
+                                        }}
                                         maxLength={20}
                                         className="mt-3 border-custom_black focus:border-accent border-2 rounded-lg
                                                outline-none block w-full shadow-sm text-custom_black p-2"
@@ -161,10 +175,10 @@ function TeacherLogin({ navigate, classCode }) {
                                 transition duration-200 input-text pointer-events-none'>{t('password')}</span>
                                 </div>
                                 <div>
-                                    <button type="submit" className="animated-button p-2 text-center mt-4">
-                                        <div className="animated-button-bg"></div>
-                                        <div className="animated-button-text">
-                                            {t('login')}
+                                    <button type="submit" className={`animated-button p-2 text-center mt-4 ${generalError ? 'error' : ''}`}>
+                                        <div className={`animated-button-bg ${generalError ? 'error' : ''}`}></div>
+                                        <div className={`animated-button-text ${generalError ? 'error' : ''}`}>
+                                            {generalError || t('login')}
                                         </div>
                                     </button>
 

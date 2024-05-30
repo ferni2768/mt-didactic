@@ -5,6 +5,7 @@ module.exports = {
       colors: {
         accent: '#19bd24',
         accent2: '#467d35',
+        error: '#ee1212',
         custom_black: '#1c1c1c'
       },
     },

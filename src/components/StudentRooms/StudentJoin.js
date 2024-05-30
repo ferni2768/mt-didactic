@@ -17,6 +17,10 @@ function StudentJoin({ navigate, classCode }) {
     const [inputClassCode, setInputClassCode] = useState(classCode);
     const [wantsToJoin, setWantsToJoin] = useState(false);
     const { isTransitioning, isEntering } = useContext(TransitionContext);
+    const [classCodeError, setClassCodeError] = useState('');
+    const [nameError, setNameError] = useState('');
+    const [generalError, setGeneralError] = useState('');
+
     const scrollbarRef = useRef(null);
 
     const { t } = useTranslation();
@@ -117,12 +121,15 @@ function StudentJoin({ navigate, classCode }) {
                         }
                     } else {
                         clearInterval(intervalId); // Clear the interval if the response is not ok
-                        alert('Error occurred while checking class phase');
+                        setNameError('');
+                        setClassCodeError('');
+                        setGeneralError(t('error'));
                     }
                 } catch (error) {
                     clearInterval(intervalId); // Clear the interval in case of an error
-                    console.error('Error:', error);
-                    alert('Error occurred while checking class phase');
+                    setNameError('');
+                    setClassCodeError('');
+                    setGeneralError(t('error'));
                 }
             }, 1000); // Poll every second
 
@@ -148,29 +155,33 @@ function StudentJoin({ navigate, classCode }) {
 
             // Check if the response contains an error
             if (data.error) {
-                // Handle different types of errors
                 switch (data.error) {
                     case 'Class code does not exist':
-                        alert('The class code does not exist. Please check and try again.');
+                        setClassCodeError(t('classCodeDoesNotExist'));
+                        setGeneralError('');
                         break;
                     case 'Student with that name already exists in the class':
-                        alert('A student with that name already exists in the class. Please choose a different name.');
+                        setNameError(t('studentWithNameExists'));
+                        setGeneralError('');
                         break;
                     case 'Failed to create model':
-                        alert('Failed to create model. Please try again.');
-                        break;
                     default:
-                        alert('An error occurred while joining the class.');
+                        setNameError('');
+                        setClassCodeError('');
+                        setGeneralError(t('error'));
+                        break;
                 }
                 return; // Exit the function if there's an error
             }
 
             // If there's no error, proceed as before
+            setGeneralError('');
             sessionStorage.setItem('loggedInStudent', JSON.stringify(data));
             setWantsToJoin(true); // Set wantsToJoin to true to start polling for the class phase
         } catch (error) {
-            console.error('Error:', error);
-            alert('An error occurred while joining the class.');
+            setNameError('');
+            setClassCodeError('');
+            setGeneralError(t('error'));
         }
     };
 
@@ -215,7 +226,10 @@ function StudentJoin({ navigate, classCode }) {
                                             placeholder=""
                                             value={name}
                                             disabled={wantsToJoin}
-                                            onChange={handleNameChange}
+                                            onChange={(e) => {
+                                                handleNameChange(e);
+                                                setNameError('');
+                                            }}
                                             maxLength={maxLength + 1}
                                             onFocus={() => {
                                                 setIsNameInputFocused(true);
@@ -223,7 +237,7 @@ function StudentJoin({ navigate, classCode }) {
                                             }}
                                             onBlur={() => setIsNameInputFocused(false)}
                                             className="mt-8 border-custom_black focus:border-accent border-2 rounded-lg
-                                               outline-none block w-full shadow-sm text-custom_black p-2"
+                                        outline-none block w-full shadow-sm text-custom_black p-2"
                                         />
                                         <span className='text-2xl text-gray-300 bg-white absolute left-5 top-11 px-1
                                                 transition duration-200 input-text pointer-events-none'>{t('name')}</span>
@@ -233,6 +247,11 @@ function StudentJoin({ navigate, classCode }) {
                                             <p className="text-sm text-accent slideUpFadeIn">{t('charLimit')}</p>
                                         </div>
                                     )}
+                                    {nameError && (
+                                        <div className='pb-0.5'>
+                                            <p className="text-sm text-error slideUpFadeIn">{nameError}</p>
+                                        </div>
+                                    )}
                                     <div className="flex justify-center relative">
                                         <input
                                             id="classCode"
@@ -240,19 +259,28 @@ function StudentJoin({ navigate, classCode }) {
                                             placeholder=""
                                             value={inputClassCode}
                                             disabled={wantsToJoin}
-                                            onChange={(e) => setInputClassCode(e.target.value)}
-                                            maxLength={100}
+                                            onChange={(e) => {
+                                                setInputClassCode(e.target.value);
+                                                setClassCodeError(''); // Reset class code error on change
+                                            }}
+                                            maxLength={10}
                                             className="mt-3 border-custom_black focus:border-accent border-2 rounded-lg
                                               outline-none block w-full shadow-sm text-custom_black p-2"
                                         />
                                         <span className='text-2xl text-gray-300 bg-white absolute left-3 top-6 px-1
                                                  transition duration-200 input-text pointer-events-none'>{t('classCode')}</span>
                                     </div>
+                                    {classCodeError && (
+                                        <div className='pb-0.5'>
+                                            <p className="text-sm text-error slideUpFadeIn">{classCodeError}</p>
+                                        </div>
+                                    )}
                                     <div>
-                                        <button type="submit" className="animated-button p-2 text-center mt-4" disabled={wantsToJoin}>
-                                            <div className="animated-button-bg"></div>
-                                            <div className="animated-button-text">
-                                                {t('join')}
+                                        <button type="submit" className={`animated-button p-2 text-center mt-4 ${generalError ? 'error' : ''}`}
+                                            disabled={wantsToJoin}>
+                                            <div className={`animated-button-bg ${generalError ? 'error' : ''}`}></div>
+                                            <div className={`animated-button-text ${generalError ? 'error' : ''}`}>
+                                                {generalError || t('join')}
                                             </div>
                                         </button>
 

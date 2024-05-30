@@ -952,6 +952,10 @@
     transition: all .5s ease;
 }
 
+.animated-button-bg.error {
+    background-color: #ee1212;
+}
+
 .animated-button-bg.restart {
     background-color: #ee1212;
 }
@@ -1034,6 +1038,10 @@
 
     z-index: 2;
     position: relative;
+}
+
+.animated-button-text.error {
+    color: #ffb9b9;
 }
 
 /* Go out of page */
