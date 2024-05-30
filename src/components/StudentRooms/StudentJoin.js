@@ -3,6 +3,11 @@ import Scrollbar from 'smooth-scrollbar';
 import OverscrollPlugin from 'smooth-scrollbar/plugins/overscroll';
 import { TransitionContext } from '../../visualComponents/TransitionContext';
 import { useTranslation } from 'react-i18next';
+import UDClogo from '../../static/logos/UDC.png';
+import LIDIAlogo from '../../static/logos/LIDIA.png';
+import OLAVIDElogo from '../../static/logos/Olavide.png';
+import RADTElogo from '../../static/logos/radte.jpg';
+import INNOVAGIA from '../../static/logos/Grupo_Eduinnovagogia.png';
 
 function StudentJoin({ navigate, classCode }) {
     const maxLength = 15; // Set the maximum length of the name of the student
@@ -187,7 +192,7 @@ function StudentJoin({ navigate, classCode }) {
 
     return (
         <div class="overflowY-container" ref={scrollbarRef}>
-            <div className="overflowY-container-inside">
+            <div className="overflowY-container-inside footer">
                 <div>
                     <div ref={shrinkCard} className={`inside-login-card ${wantsToJoin ? 'shrink' : ''} ${isTransitioning ? 'transitioning' : ''} ${isEntering ? 'entering' : ''}`}>
                         <div className="form-container">
@@ -254,6 +259,14 @@ function StudentJoin({ navigate, classCode }) {
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <div class={`bg-white fixed inset-x-0 bottom-0 flex justify-around items-center py-4 z-50 ${isTransitioning ? 'transitioning-footer' : ''} ${isEntering ? 'entering-footer' : ''}`}>
+                    <img className="logo" src={UDClogo} alt="UDClogo" />
+                    <img className="logo" src={RADTElogo} alt="RADTElogo" />
+                    <img className="logo" src={OLAVIDElogo} alt="OLAVIDElogo" />
+                    <img className="logo" src={LIDIAlogo} alt="LIDIAlogo" />
+                    <img className="logo" src={INNOVAGIA} alt="INNOVAGIA" />
                 </div>
             </div>
         </div>

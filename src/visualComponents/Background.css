@@ -9,6 +9,7 @@
     width: 100vw;
     height: 100vh;
     background-image: radial-gradient(circle at bottom, #ff0081, #ff3102);
+    /* background-image: radial-gradient(circle at bottom, #118c6d, #02ff30); */
 }
 
 /* Necessary to support hidden overflow overwriting */
@@ -39,6 +40,10 @@
     padding-bottom: 2.5rem;
     padding-left: 1%;
     padding-right: 1%;
+}
+
+.overflowY-container-inside.footer {
+    padding-bottom: 10rem;
 }
 
 .parent-container {
@@ -1050,6 +1055,24 @@
     }
 }
 
+@keyframes BounceFooter {
+    0% {
+        transform: translateY(0vh);
+    }
+
+    70% {
+        transform: translateY(5vh);
+    }
+
+    100% {
+        transform: translateY(50vh);
+    }
+
+    110% {
+        transform: translateY(50vh);
+    }
+}
+
 /* Come into page */
 @keyframes inverseBounce {
     0% {
@@ -1061,7 +1084,21 @@
     }
 
     100% {
-        transform: translateX(0vw);
+        transform: translateX(0vh);
+    }
+}
+
+@keyframes inverseBounceFooter {
+    0% {
+        transform: translateY(50vh);
+    }
+
+    60% {
+        transform: translateY(10vh);
+    }
+
+    100% {
+        transform: translateY(0vh);
     }
 }
 
@@ -1131,6 +1168,14 @@
 
 .entering {
     animation: inverseBounce 0.45s ease-in-out;
+}
+
+.transitioning-footer {
+    animation: BounceFooter 0.5s ease-in-out;
+}
+
+.entering-footer {
+    animation: inverseBounceFooter 0.45s ease-out;
 }
 
 .animated-word.entering,
@@ -1402,6 +1447,11 @@
 
     z-index: 2;
     position: relative;
+}
+
+.logo {
+    max-height: 5rem;
+    max-width: 20%;
 }
 
 /* Vertical progress bar styles */
