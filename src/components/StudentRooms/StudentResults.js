@@ -3,6 +3,7 @@ import { TransitionContext } from '../../visualComponents/TransitionContext';
 import Scrollbar from 'smooth-scrollbar';
 import OverscrollPlugin from 'smooth-scrollbar/plugins/overscroll';
 import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 import html2pdf from 'html2pdf.js';
 import ReactDOMServer from 'react-dom/server';
 import StudentPDF from './StudentPDF';
@@ -94,9 +95,21 @@ function StudentResults({ navigate, classCode }) {
         document.body.appendChild(element);
         document.body.style.overflow = 'hidden';
 
+        // Get current date and format it according to language
+        const currentDate = new Date();
+        let formattedDate;
+        if (i18next.language.startsWith('en')) {
+            formattedDate = `${currentDate.getMonth() + 1}.${currentDate.getDate()}.${currentDate.getFullYear()}`;
+        } else if (i18next.language.startsWith('es')) {
+            formattedDate = `${currentDate.getDate()}.${currentDate.getMonth() + 1}.${currentDate.getFullYear()}`;
+        }
+
+        // Determine file name based on language
+        let fileName = `${student.name}_${sessionStorage.getItem('loggedInClassCode')}_${formattedDate}.pdf`;
+
         const opt = {
             margin: 0,
-            filename: 'student_results.pdf',
+            filename: fileName, // Updated filename
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: {
                 scale: 2,
@@ -130,7 +143,7 @@ function StudentResults({ navigate, classCode }) {
             // Save the PDF file
             const link = document.createElement('a');
             link.href = blobURL;
-            link.download = 'student_results.pdf';
+            link.download = fileName; // Use the dynamically generated file name
             link.click();
 
             // Clean up
@@ -138,6 +151,7 @@ function StudentResults({ navigate, classCode }) {
             URL.revokeObjectURL(blobURL); // Revoke the Blob URL after usage
         });
     };
+
 
     // Disable the scrollbar when the ctrl key is pressed in order to zoom in/out with the mouse wheel
     useEffect(() => {
