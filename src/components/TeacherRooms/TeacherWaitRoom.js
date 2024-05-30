@@ -10,6 +10,7 @@ function TeacherWaitRoom({ navigate, classCode }) {
     const { isEntering, isTransitioning } = useContext(TransitionContext);
     const scrollbarRef = useRef(null);
     const scrollbarRef2 = useRef(null);
+    const [resultsError, setResultsError] = useState('');
 
     const { t } = useTranslation();
 
@@ -117,15 +118,15 @@ function TeacherWaitRoom({ navigate, classCode }) {
             });
 
             if (response.ok) {
+                setResultsError('');
                 sessionStorage.setItem('isFinished', true);
                 navigate(`/teacher/${sessionStorage.getItem('createdClassCode')}/results`);
             } else {
-                console.error('Error setting class phase:', response.statusText);
-                alert('Error occurred while setting class phase');
+                setResultsError(t('error'));
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('Error occurred while setting class phase');
+            setResultsError(t('error'));
         }
     };
 
@@ -157,9 +158,9 @@ function TeacherWaitRoom({ navigate, classCode }) {
                                 <p> {t('code')}: {sessionStorage.getItem('createdClassCode')} </p>
 
                                 <button onClick={seeResults} className="animated-button p-2 text-center mt-4 align-bottom">
-                                    <div className="animated-button-bg"></div>
-                                    <div className="animated-button-text">
-                                        {t('seeResults')}
+                                    <div className={`animated-button-bg ${resultsError ? 'error' : ''}`}></div>
+                                    <div className={`animated-button-text ${resultsError ? 'error' : ''}`}>
+                                        {resultsError ? resultsError : t('seeResults')}
                                     </div>
                                 </button>
 

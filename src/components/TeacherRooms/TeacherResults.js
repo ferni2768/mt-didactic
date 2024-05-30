@@ -11,6 +11,8 @@ function TeacherResults({ navigate, classCode }) {
     const [students, setStudents] = useState([]);
     const [commonErrors, setCommonErrors] = useState([]);
     const { isEntering, isTransitioning } = useContext(TransitionContext);
+    const [progressError, setProgressError] = useState('');
+    const [restartError, setRestartError] = useState('');
     const scrollbarRef = useRef(null);
     const scrollbarRef2 = useRef(null);
     const scrollbarRef3 = useRef(null);
@@ -144,7 +146,6 @@ function TeacherResults({ navigate, classCode }) {
 
     const seeProgress = async () => {
         try {
-            // Set the class phase to 1
             const response = await fetch(`${global.BASE_URL}/class/${sessionStorage.getItem('createdClassCode')}/setPhase`, {
                 method: 'PUT',
                 headers: {
@@ -154,15 +155,15 @@ function TeacherResults({ navigate, classCode }) {
             });
 
             if (response.ok) {
+                setProgressError('');
                 sessionStorage.removeItem('isFinished');
                 navigate(`/teacher/${sessionStorage.getItem('createdClassCode')}`);
             } else {
-                console.error('Error setting class phase:', response.statusText);
-                alert('Error occurred while setting class phase');
+                setProgressError(t('error'));
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('Error occurred while setting class phase');
+            setProgressError(t('error'));
         }
     };
 
@@ -221,18 +222,17 @@ function TeacherResults({ navigate, classCode }) {
             const classCode = sessionStorage.getItem('createdClassCode');
             const response = await fetch(`${global.BASE_URL}/class/${classCode}/restart`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
             });
 
             if (response.ok) {
+                setRestartError('');
                 handleReset();
             } else {
-                console.error('Error restarting class:', response.statusText); // Silently handle errors
+                setRestartError(t('error'));
             }
         } catch (error) {
-            console.error('Error:', error); // Silently handle errors
+            console.error('Error:', error);
+            setRestartError(t('error'));
         }
     };
 
@@ -353,23 +353,23 @@ function TeacherResults({ navigate, classCode }) {
                                         <button onClick={() => handleDownloadPDF({})} className="col-span-full animated-button p-2 text-center mt-4 align-bottom">
                                             <div className="animated-button-bg download"></div>
                                             <div className="animated-button-text">
-                                                Descargar resultados
+                                                {t('downloadResults')}
                                             </div>
                                         </button>
 
                                         <div className='col-span-full grid grid-cols-5'>
                                             <button onClick={() => seeProgress()} className="col-span-2 animated-button p-2 text-center my-2 align-bottom">
-                                                <div className="animated-button-bg"></div>
-                                                <div className="animated-button-text">
-                                                    Progreso
+                                                <div className={`animated-button-bg ${progressError ? 'error' : ''}`}></div>
+                                                <div className={`animated-button-text ${progressError ? 'error' : ''}`}>
+                                                    {progressError ? progressError : t('progressButton')}
                                                 </div>
                                             </button>
 
                                             <div className="ml-5 col-span-3">
                                                 <button onClick={() => restartClass()} className="animated-button p-2 text-center my-2 align-bottom">
-                                                    <div className="animated-button-bg restart"></div>
-                                                    <div className="animated-button-text">
-                                                        Reiniciar clase
+                                                    <div className={`animated-button-bg restart ${restartError ? 'error' : ''}`}></div>
+                                                    <div className={`animated-button-text ${restartError ? 'error' : ''}`}>
+                                                        {restartError ? restartError : t('restartClass')}
                                                     </div>
                                                 </button>
                                             </div>
@@ -431,22 +431,23 @@ function TeacherResults({ navigate, classCode }) {
                                         <button onClick={() => handleDownloadPDF({})} className="row-span-1 animated-button p-2 text-center mt-4 align-bottom">
                                             <div className="animated-button-bg download"></div>
                                             <div className="animated-button-text">
-                                                Descargar
+                                                <div className='hidden md:block'>{t('downloadResults')}</div>
+                                                <div className='block md:hidden'>{t('download')}</div>
                                             </div>
                                         </button>
 
                                         <div className='md:grid grid-cols-5 row-span-2 md:row-span-1'>
                                             <button onClick={() => seeProgress()} className="md:col-span-2 animated-button p-2 text-center md:my-2 mt-2 align-bottom">
-                                                <div className="animated-button-bg"></div>
-                                                <div className="animated-button-text">
-                                                    Progreso
+                                                <div className={`animated-button-bg ${progressError ? 'error' : ''}`}></div>
+                                                <div className={`animated-button-text ${progressError ? 'error' : ''}`}>
+                                                    {progressError ? progressError : t('progressButton')}
                                                 </div>
                                             </button>
                                             <div className='md:col-span-3 md:ml-3'>
                                                 <button onClick={() => restartClass()} className="animated-button p-2 text-center my-0 md:my-2 mt-2 align-bottom">
-                                                    <div className="animated-button-bg restart"></div>
-                                                    <div className="animated-button-text">
-                                                        Reiniciar clase
+                                                    <div className={`animated-button-bg restart ${restartError ? 'error' : ''}`}></div>
+                                                    <div className={`animated-button-text ${restartError ? 'error' : ''}`}>
+                                                        {restartError ? restartError : t('restartClass')}
                                                     </div>
                                                 </button>
                                             </div>

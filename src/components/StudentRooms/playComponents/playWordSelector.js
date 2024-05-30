@@ -382,6 +382,8 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
 
         } catch (error) {
             console.error('Error:', error);
+            alert(t('errorTraining')); // Show an alert to the user
+            window.location.reload(); // Reload the page
         }
     };
 

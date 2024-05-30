@@ -354,22 +354,33 @@ app.post('/models/:modelName/train', async (req, res) => {
         const url = `${BASE_URL}/models/${modelName}/train`;
         const config = { method: 'post', body: JSON.stringify(answers), headers: { 'Content-Type': 'application/json' } };
 
-        // Initialize a variable to hold the result of the last iteration
+        // Initialize variables to hold the result of the last iteration and count of failed iterations
         let lastResult = [];
+        let failedIterationsCount = 0;
 
-        // Loop the the training based on maxIterations from the request body
+        // Loop through the training based on maxIterations from the request body
         for (let i = 0; i < maxIterations; i++) {
-            const response = await fetch(url, config);
+            try {
+                const response = await fetch(url, config);
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error Status: ${response.status}`);
+                }
+                const data = await response.json();
+
+                // Transform the data to the desired format
+                const transformedData = data.map(item => [item[1], item[2]]);
+
+                lastResult = transformedData;
+            } catch (error) {
+                console.error(`Iteration ${i + 1} failed:`, error);
+                failedIterationsCount++;
+
+                // Check if the number of failed iterations has reached or exceeded half of maxIterations
+                if (failedIterationsCount >= Math.ceil(maxIterations / 2)) {
+                    throw new Error('More than half of the iterations have failed');
+                }
             }
-            const data = await response.json();
-
-            // Transform the data to the desired format
-            const transformedData = data.map(item => [item[1], item[2]]);
-
-            lastResult = transformedData;
         }
 
         // Response
