@@ -62,6 +62,11 @@ function TeacherLogin({ navigate, classCode }) {
         setInputClassCode(classCode);
     }, [classCode]);
 
+    const openTeacherManualInNewTab = () => {
+        // Open the PDF in a new tab
+        window.open('/manuals/manual_profesor.pdf', '_blank');
+    };
+
     const handleCreateClass = async (event) => {
         event.preventDefault();
         try {
@@ -163,8 +168,9 @@ function TeacherLogin({ navigate, classCode }) {
                                         </div>
                                     </button>
 
-                                    <div className="text-center text-base pt-2" onClick={() => navigate('/student')}>
-                                        <span className="text-custom_black opacity-50 hover:text-accent hover:opacity-100 cursor-pointer">{t('imastudent')}</span>
+                                    <div className="text-center text-base pt-2 justify-between flex">
+                                        <span onClick={openTeacherManualInNewTab} className="text-custom_black opacity-60 hover:text-accent hover:opacity-100 cursor-pointer">{t('teacherManual')}</span>
+                                        <span onClick={() => navigate('/student')} className="text-custom_black opacity-60 hover:text-accent hover:opacity-100 cursor-pointer">{t('imastudent')}</span>
                                     </div>
                                 </div>
 

@@ -97,6 +97,11 @@ function StudentJoin({ navigate, classCode }) {
         setInputClassCode(classCode);
     }, [classCode]);
 
+    const openStudentManualInNewTab = () => {
+        // Open the PDF in a new tab
+        window.open('/manuals/manual_estudiante.pdf', '_blank');
+    };
+
     useEffect(() => {
         if (wantsToJoin) {
             const intervalId = setInterval(async () => {
@@ -251,8 +256,9 @@ function StudentJoin({ navigate, classCode }) {
                                             </div>
                                         </button>
 
-                                        <div className="text-center text-base pt-2" onClick={() => navigate('/teacher')}>
-                                            <span className="text-custom_black opacity-50 hover:text-accent hover:opacity-100 cursor-pointer">{t('imateacher')}</span>
+                                        <div className="text-center text-base pt-2 justify-between flex">
+                                            <span onClick={openStudentManualInNewTab} className="text-custom_black opacity-60 hover:text-accent hover:opacity-100 cursor-pointer">{t('studentManual')}</span>
+                                            <span onClick={() => navigate('/teacher')} className="text-custom_black opacity-60 hover:text-accent hover:opacity-100 cursor-pointer">{t('imateacher')}</span>
                                         </div>
                                     </div>
                                 </form>
