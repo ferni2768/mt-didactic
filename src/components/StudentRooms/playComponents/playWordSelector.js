@@ -21,6 +21,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
     const [newAnswer, setNewAnswer] = useState([]); // To store the input answers
     const [newWords, setNewWords] = useState(false); // To trigger the new batch of words
     const [trainingData, setTrainingData] = useState([]);
+    const [forceCheckMatrix, setForceCheckMatrix] = useState(false);
     const { selectedElements, processTrainingDataMatrix } = useDataFetcher();
 
     const [animationClass, setAnimationClass] = useState(''); // To trigger the transition animation between words
@@ -221,11 +222,9 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
 
     useEffect(() => {
         let intervalId;
-        console.log('Matrix 1:', matrix);
 
         const checkMatrix = () => {
             if (matrix !== null && Array.isArray(matrix) && matrix.every(row => Array.isArray(row))) {
-                console.log('Matrix 2:', matrix);
                 clearInterval(intervalId);
 
                 if (parseInt(sessionStorage.getItem('iteration'), 10) >= maxIterations) {
@@ -253,6 +252,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                     setExternalIsTraining(false);
                     setNewWords(false);
                 }
+                setForceCheckMatrix(true);
             }
         };
 
@@ -262,10 +262,16 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
             checkMatrix();
         }
 
-        console.log('Matrix 3:', matrix);
-
         return () => clearInterval(intervalId);
-    }, [matrix]);
+    }, [matrix, forceCheckMatrix]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (forceCheckMatrix === false) setForceCheckMatrix(true);
+        }, 1000);
+
+        return () => clearTimeout(timer);
+    }, []);
 
     useEffect(() => {
         if (iteration < maxIterations) {
