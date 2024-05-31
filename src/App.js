@@ -8,6 +8,7 @@ import { TransitionProvider } from './visualComponents/TransitionContext';
 import './App.css';
 import './i18n/i18n'; // Translations from i18n.js
 global.BASE_URL = 'http://127.0.0.1:3001'; // JavaScript server URL
+global.WEB_URL = 'http://localhost:3000'; // React web URL
 
 function App() {
   return (

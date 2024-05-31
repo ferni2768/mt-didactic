@@ -146,11 +146,11 @@ function TeacherWaitRoom({ navigate, classCode }) {
                                         <div className="info-button QR mt-0.5">
                                             i
                                             <div className="hidden md:flex tooltip QR bottom left justify-center">
-                                                <QRCode className='my-16' size={200} enableBackground={false} value="http://localhost:3000/student/ABC123" />
+                                                <QRCode className='my-16' size={200} enableBackground={false} value={global.WEB_URL} />
                                             </div>
 
                                             <div className="flex md:hidden tooltip QR small bottom left justify-center">
-                                                <QRCode className='my-10' size={150} enableBackground={false} value="http://localhost:3000/student/ABC123" />
+                                                <QRCode className='my-10' size={150} enableBackground={false} value={global.WEB_URL} />
                                             </div>
                                         </div>
                                     </div>
@@ -165,7 +165,7 @@ function TeacherWaitRoom({ navigate, classCode }) {
                                 </button>
 
                                 <div className='hidden lg:flex mt-8 w-full items-center justify-center'>
-                                    <QRCode size={160} value="http://localhost:3000/student/ABC123" />
+                                    <QRCode size={160} value={global.WEB_URL} />
                                 </div>
 
                             </div>

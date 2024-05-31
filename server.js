@@ -37,6 +37,16 @@ app.use(express.json());
 app.use(bodyParser.json());
 
 
+// Log function
+const log = (message) => {
+    const query = 'INSERT INTO app_logs (message) VALUES (?)';
+    db.query(query, [message], (err) => {
+        if (err) {
+            console.error('Error logging message:', err);
+        }
+    });
+};
+
 // API endpoint for teacher authentication
 app.post('/teacher/authenticate', (req, res) => {
     const { code, password } = req.body;
@@ -54,6 +64,7 @@ app.post('/teacher/authenticate', (req, res) => {
                         res.status(500).json({ error: 'Internal server error' });
                     } else if (isMatch) {
                         res.status(200).json({ message: 'Authentication successful' });
+                        log(`Teacher in ${code} authenticated`);
                     } else {
                         res.status(401).json({ error: 'Invalid credentials' });
                     }
@@ -203,6 +214,8 @@ app.post('/class/:code/join', async (req, res) => {
             return res.status(500).json({ error: 'Failed to retrieve newly created student' });
         }
 
+        log(`Student ${name} joined class ${classCode} with model ${model}`)
+
         // Send the newly created student's data
         res.json(newStudentResult[0]);
     } catch (error) {
@@ -269,6 +282,7 @@ app.put('/student/:id/updateScore', (req, res) => {
             res.status(500).json({ error: 'Internal server error' });
         } else {
             res.status(200).json({ message: 'Score updated successfully' });
+            log(`Student (id: ${studentId}) score updated to ${newScore}%`);
         }
     });
 });
@@ -383,6 +397,8 @@ app.post('/models/:modelName/train', async (req, res) => {
             }
         }
 
+        log(`Model ${modelName} was trained`);
+
         // Response
         res.json(lastResult);
     } catch (error) {
@@ -403,6 +419,7 @@ app.put('/student/:id/setProgress', (req, res) => {
             res.status(500).json({ error: 'Internal server error' });
         } else {
             res.status(200).json({ message: 'Progress updated successfully' });
+            log(`Student (id: ${studentId}) is now ${progress}% done in class`);
         }
     });
 });
@@ -532,6 +549,7 @@ app.put('/class/:code/restart', async (req, res) => {
         }
 
         res.status(200).json({ message: 'Class restarted successfully' });
+        log(`Class ${classCode} was restarted by the teacher`);
     } catch (error) {
         await new Promise((resolve, reject) => {
             db.rollback(() => {
