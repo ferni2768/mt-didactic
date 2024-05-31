@@ -7,6 +7,7 @@ import i18next from 'i18next';
 import html2pdf from 'html2pdf.js';
 import ReactDOMServer from 'react-dom/server';
 import StudentPDF from './StudentPDF';
+import { getFromSessionStorage } from '../../utils/storageUtils';
 
 function StudentResults({ navigate, classCode }) {
     const [student, setStudent] = useState({});
@@ -14,7 +15,7 @@ function StudentResults({ navigate, classCode }) {
     const [classPhase, setClassPhase] = useState(null); // State to track the class phase
     const { isEntering, isTransitioning } = useContext(TransitionContext);
 
-    const jsonData = JSON.parse(sessionStorage.getItem('iterationData')) || {};
+    const jsonData = JSON.parse(getFromSessionStorage('iterationData')) || {};
     const diphthongScore = jsonData.iteration6?.results?.diphthong || 0;
     const hiatusScore = jsonData.iteration6?.results?.hiatus || 0;
     const generalScore = jsonData.iteration6?.results?.general || 0;
@@ -24,7 +25,7 @@ function StudentResults({ navigate, classCode }) {
     const scrollbarRef3 = useRef(null);
     const scrollbarRef4 = useRef(null);
 
-    const mistakes = JSON.parse(sessionStorage.getItem('mistakes')) || [];
+    const mistakes = JSON.parse(getFromSessionStorage('mistakes')) || [];
 
     const { t } = useTranslation();
 
@@ -55,7 +56,7 @@ function StudentResults({ navigate, classCode }) {
     useEffect(() => initializeScrollbar(scrollbarRef4), []);
 
     useEffect(() => {
-        const storedScore = parseFloat(sessionStorage.getItem('loggedInScore')) || 0;
+        const storedScore = parseFloat(getFromSessionStorage('loggedInScore')) || 0;
         setScore(storedScore);
     }, []);
 
@@ -67,7 +68,7 @@ function StudentResults({ navigate, classCode }) {
         element.style.height = '1080px'; // Match the PDF height
         element.style.background = 'white';
 
-        console.log(sessionStorage.getItem('iterationData'));
+        console.log(getFromSessionStorage('iterationData'));
 
         element.innerHTML = ReactDOMServer.renderToString(<StudentPDF />);
 
@@ -84,7 +85,7 @@ function StudentResults({ navigate, classCode }) {
         }
 
         // Determine file name based on language
-        let fileName = `${student.name}_${sessionStorage.getItem('loggedInClassCode')}_${formattedDate}.pdf`;
+        let fileName = `${student.name}_${getFromSessionStorage('loggedInClassCode')}_${formattedDate}.pdf`;
 
         const opt = {
             margin: 0,
@@ -166,12 +167,12 @@ function StudentResults({ navigate, classCode }) {
 
     useEffect(() => {
         // Get the data from sessionStorage
-        const loggedInStudent = JSON.parse(sessionStorage.getItem('loggedInStudent'));
+        const loggedInStudent = JSON.parse(getFromSessionStorage('loggedInStudent'));
         setStudent(loggedInStudent);
 
         const checkClassPhase = async () => {
             try {
-                const response = await fetch(`${global.BASE_URL}/class/${sessionStorage.getItem('loggedInClassCode')}/phase`);
+                const response = await fetch(`${global.BASE_URL}/class/${getFromSessionStorage('loggedInClassCode')}/phase`);
                 if (response.ok) {
                     const data = await response.json();
                     setClassPhase(data.phase);
@@ -218,6 +219,7 @@ function StudentResults({ navigate, classCode }) {
         sessionStorage.removeItem('newBatch');
         sessionStorage.removeItem('score');
         sessionStorage.removeItem('mistakes');
+        sessionStorage.removeItem('iterationData');
         navigate('/student/ABC123');
         window.location.reload(); // Reload the page to reset the state
     };

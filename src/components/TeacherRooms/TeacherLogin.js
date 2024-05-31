@@ -8,6 +8,7 @@ import LIDIAlogo from '../../static/logos/LIDIA.png';
 import OLAVIDElogo from '../../static/logos/Olavide.png';
 import RADTElogo from '../../static/logos/radte.jpg';
 import INNOVAGIA from '../../static/logos/Grupo_Eduinnovagogia.png';
+import { saveToSessionStorage } from '../../utils/storageUtils';
 
 function TeacherLogin({ navigate, classCode }) {
     const [password, setPassword] = useState('password');
@@ -82,8 +83,8 @@ function TeacherLogin({ navigate, classCode }) {
             });
 
             if (response.ok) {
-                sessionStorage.setItem('isAuthenticated', true);
-                sessionStorage.setItem('createdClassCode', inputClassCode);
+                saveToSessionStorage('isAuthenticated', true);
+                saveToSessionStorage('createdClassCode', inputClassCode);
                 navigate(`/teacher/${inputClassCode}`);
 
                 // Check the class phase in case the class already has finished
@@ -92,7 +93,7 @@ function TeacherLogin({ navigate, classCode }) {
                     const checkPhaseData = await checkPhaseResponse.json();
                     if (checkPhaseData.phase === 2) {
                         // Go to results directly
-                        sessionStorage.setItem('isFinished', true);
+                        saveToSessionStorage('isFinished', true);
                         navigate(`/teacher/${classCode}/results`);
                         return;
                     }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import useDataFetcher from './dataFetcher'; // To fetch the data from the csv files
 import { useTranslation } from 'react-i18next';
+import { getFromSessionStorage, saveToSessionStorage } from '../../../utils/storageUtils';
 
 function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentWordIndex, ExternalCurrentWordIndexChange,
     setExternalIsTraining, maxIterations, iteration, setIteration, navigate, matrix, setMatrix, isTurningIn, setIsTurningIn, classCode,
@@ -14,7 +15,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
 
     const [selectedModel,] = useState(() => {
         // Get the name of the model that the student is going to train
-        const loggedInStudent = sessionStorage.getItem('loggedInStudent');
+        const loggedInStudent = getFromSessionStorage('loggedInStudent');
         return loggedInStudent ? JSON.parse(loggedInStudent).model : '';
     });
 
@@ -33,7 +34,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
 
     const [newBatch, setNewBatch] = useState(() => {
         // To store the new batch of recommended words
-        const storedNewBatch = sessionStorage.getItem('newBatch');
+        const storedNewBatch = getFromSessionStorage('newBatch');
         return storedNewBatch ? JSON.parse(storedNewBatch) : [];
     });
 
@@ -89,7 +90,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
 
 
     useEffect(() => {
-        if (currentWordIndex > 10 || parseInt(sessionStorage.getItem('iteration'), 10) >= maxIterations) {
+        if (currentWordIndex > 10 || parseInt(getFromSessionStorage('iteration'), 10) >= maxIterations) {
             setIsTurningIn(true);
         } else {
             setIsTurningIn(false);
@@ -98,8 +99,8 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
 
     useEffect(() => {
         // Retrieve the loggedInStudent object from sessionStorage
-        const loggedInStudentString = sessionStorage.getItem('loggedInStudent');
-        const loggedInScoreString = sessionStorage.getItem('loggedInScore');
+        const loggedInStudentString = getFromSessionStorage('loggedInStudent');
+        const loggedInScoreString = getFromSessionStorage('loggedInScore');
 
         if (loggedInStudentString) {
             const loggedInStudent = JSON.parse(loggedInStudentString);
@@ -170,11 +171,11 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
 
     // Save the iteration and newBatch to sessionStorage
     useEffect(() => {
-        sessionStorage.setItem('iteration', iteration);
+        saveToSessionStorage('iteration', iteration);
     }, [iteration]);
 
     useEffect(() => {
-        sessionStorage.setItem('newBatch', JSON.stringify(newBatch));
+        saveToSessionStorage('newBatch', JSON.stringify(newBatch));
     }, [newBatch]);
 
     useEffect(() => {
@@ -227,7 +228,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
             if (matrix !== null && Array.isArray(matrix) && matrix.every(row => Array.isArray(row))) {
                 clearInterval(intervalId);
 
-                if (parseInt(sessionStorage.getItem('iteration'), 10) >= maxIterations) {
+                if (parseInt(getFromSessionStorage('iteration'), 10) >= maxIterations) {
                     setProgress(100);
                     setExternalIsTraining(true);
                     setIsTraining(false);
@@ -236,7 +237,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                     return;
                 }
 
-                if (!newWords && (!sessionStorage.getItem('newBatch') || JSON.parse(sessionStorage.getItem('newBatch')).length === 0)) {
+                if (!newWords && (!getFromSessionStorage('newBatch') || JSON.parse(getFromSessionStorage('newBatch')).length === 0)) {
                     setNewBatch(selectedElements);
                 }
 
@@ -315,9 +316,9 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
 
     useEffect(() => {
         // Verify if the iterationData key exists in sessionStorage
-        const existingData = sessionStorage.getItem('iterationData');
+        const existingData = getFromSessionStorage('iterationData');
         if (!existingData) {
-            sessionStorage.setItem('iterationData', JSON.stringify({}));
+            saveToSessionStorage('iterationData', JSON.stringify({}));
         }
     }, []);
 
@@ -325,7 +326,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         if (!isTurningIn || buttonWait) return;
 
         if (iteration == maxIterations) {
-            navigate(`/student/${sessionStorage.getItem('loggedInClassCode')}/results`); // Redirect to the results page
+            navigate(`/student/${getFromSessionStorage('loggedInClassCode')}/results`); // Redirect to the results page
             return;
         }
         else {
@@ -395,7 +396,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
 
     const updateSessionStorageWithResultsAndErrors = (results, newMistakes) => {
         const iterationKey = `iteration${iteration + 1}`;
-        const existingData = JSON.parse(sessionStorage.getItem('iterationData'));
+        const existingData = JSON.parse(getFromSessionStorage('iterationData'));
         existingData[iterationKey] = {
             results: results,
             errors: newMistakes.reduce((acc, mistake) => {
@@ -403,7 +404,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                 return acc;
             }, {})
         };
-        sessionStorage.setItem('iterationData', JSON.stringify(existingData));
+        saveToSessionStorage('iterationData', JSON.stringify(existingData));
     };
 
     const handleTestModel = async (selectedModelNames) => {
@@ -430,7 +431,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
             if (processedData.length > 0) {
                 if (iteration + 1 === maxIterations) {
                     updateScore(processedData[0].accuracy.toFixed(2)); // Upload the score to the database
-                    sessionStorage.setItem('loggedInScore', processedData[0].accuracy.toFixed(2)); // Update the score in sessionStorage
+                    saveToSessionStorage('loggedInScore', processedData[0].accuracy.toFixed(2)); // Update the score in sessionStorage
                 }
             }
         } catch (error) {
@@ -449,12 +450,12 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         }).filter(mistake => mistake !== null); // Filter out null values (no mistakes)
 
         // Retrieve the current mistakes from session storage, if any
-        const currentMistakes = sessionStorage.getItem('mistakes') ? JSON.parse(sessionStorage.getItem('mistakes')) : [];
+        const currentMistakes = getFromSessionStorage('mistakes') ? JSON.parse(getFromSessionStorage('mistakes')) : [];
         const updatedMistakes = [...currentMistakes, ...newMistakes];
-        sessionStorage.setItem('mistakes', JSON.stringify(updatedMistakes));
+        saveToSessionStorage('mistakes', JSON.stringify(updatedMistakes));
 
         // Upload the mistakes to the database
-        const classCode = sessionStorage.getItem('loggedInClassCode');
+        const classCode = getFromSessionStorage('loggedInClassCode');
         const response = await fetch(`${global.BASE_URL}/update-errors`, {
             method: 'POST',
             headers: {

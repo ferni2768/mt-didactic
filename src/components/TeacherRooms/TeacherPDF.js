@@ -1,6 +1,7 @@
 import React from 'react';
 import Background from '../../visualComponents/Background';
 import { useTranslation } from 'react-i18next';
+import { getFromSessionStorage } from '../../utils/storageUtils';
 
 const TeacherPDF = ({ paramStudents, paramWords }) => {
     const { t } = useTranslation();
@@ -35,7 +36,7 @@ const TeacherPDF = ({ paramStudents, paramWords }) => {
 
     const displayedStudents = students.slice(0, students.length > 36 ? 35 : 36);
     const additionalStudentsCount = students.length > 36 ? students.length - 35 : 0;
-    const classCode = sessionStorage.getItem('createdClassCode') || '';
+    const classCode = getFromSessionStorage('createdClassCode') || '';
 
     return (
         <Background>

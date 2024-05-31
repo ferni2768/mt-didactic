@@ -4,6 +4,7 @@ import Scrollbar from 'smooth-scrollbar';
 import OverscrollPlugin from 'smooth-scrollbar/plugins/overscroll';
 import { useTranslation } from 'react-i18next';
 import QRCode from 'qrcode.react';
+import { getFromSessionStorage, saveToSessionStorage } from '../../utils/storageUtils';
 
 function TeacherWaitRoom({ navigate, classCode }) {
     const [students, setStudents] = useState([]);
@@ -82,7 +83,7 @@ function TeacherWaitRoom({ navigate, classCode }) {
     useEffect(() => {
         const fetchStudents = async () => {
             try {
-                const response = await fetch(`${global.BASE_URL}/students?classCode=${sessionStorage.getItem('createdClassCode')}`);
+                const response = await fetch(`${global.BASE_URL}/students?classCode=${getFromSessionStorage('createdClassCode')}`);
                 const data = await response.json();
                 setStudents(data);
             } catch (error) {
@@ -109,7 +110,7 @@ function TeacherWaitRoom({ navigate, classCode }) {
     const seeResults = async () => {
         try {
             // Set the class phase to 2
-            const response = await fetch(`${global.BASE_URL}/class/${sessionStorage.getItem('createdClassCode')}/setPhase`, {
+            const response = await fetch(`${global.BASE_URL}/class/${getFromSessionStorage('createdClassCode')}/setPhase`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -119,8 +120,8 @@ function TeacherWaitRoom({ navigate, classCode }) {
 
             if (response.ok) {
                 setResultsError('');
-                sessionStorage.setItem('isFinished', true);
-                navigate(`/teacher/${sessionStorage.getItem('createdClassCode')}/results`);
+                saveToSessionStorage('isFinished', true);
+                navigate(`/teacher/${getFromSessionStorage('createdClassCode')}/results`);
             } else {
                 setResultsError(t('error'));
             }
@@ -155,7 +156,7 @@ function TeacherWaitRoom({ navigate, classCode }) {
                                         </div>
                                     </div>
                                 </p>
-                                <p> {t('code')}: {sessionStorage.getItem('createdClassCode')} </p>
+                                <p> {t('code')}: {getFromSessionStorage('createdClassCode')} </p>
 
                                 <button onClick={seeResults} className="animated-button p-2 text-center mt-4 align-bottom">
                                     <div className={`animated-button-bg ${resultsError ? 'error' : ''}`}></div>

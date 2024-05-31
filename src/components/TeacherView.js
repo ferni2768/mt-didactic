@@ -5,6 +5,7 @@ import TeacherLogin from './TeacherRooms/TeacherLogin';
 import TeacherWaitRoom from './TeacherRooms/TeacherWaitRoom';
 import TeacherResults from './TeacherRooms/TeacherResults';
 import Background from '../visualComponents/Background';
+import { getFromSessionStorage } from '../utils/storageUtils';
 
 function TeacherView() {
     const { classCode: urlClassCode } = useParams();
@@ -53,8 +54,8 @@ function TeacherView() {
 
     // Function to determine which component to render based on conditions
     const determineComponentToRender = () => {
-        const isAuthenticated = sessionStorage.getItem('isAuthenticated');
-        const isFinished = sessionStorage.getItem('isFinished');
+        const isAuthenticated = getFromSessionStorage('isAuthenticated');
+        const isFinished = getFromSessionStorage('isFinished');
 
         if (!isAuthenticated) {
             return <TeacherLogin navigate={navigate} classCode={urlClassCode} />;

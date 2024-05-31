@@ -4,13 +4,14 @@ import PlayWordSelector from './playComponents/playWordSelector';
 import Scrollbar from 'smooth-scrollbar';
 import OverscrollPlugin from 'smooth-scrollbar/plugins/overscroll';
 import { useTranslation } from 'react-i18next';
+import { getFromSessionStorage } from '../../utils/storageUtils';
 
 function StudentPlay({ navigate, classCode }) {
     const maxIterations = 5; // Maximum training times
 
     const [iteration, setIteration] = useState(() => {
         // To keep track of the training iterations
-        const storedIteration = sessionStorage.getItem('iteration');
+        const storedIteration = getFromSessionStorage('iteration');
         const parsedIteration = storedIteration ? parseInt(storedIteration, 10) : 0;
         return parsedIteration;
     });
@@ -88,12 +89,12 @@ function StudentPlay({ navigate, classCode }) {
 
     useEffect(() => {
         // Get the data from sessionStorage
-        const loggedInStudent = JSON.parse(sessionStorage.getItem('loggedInStudent'));
+        const loggedInStudent = JSON.parse(getFromSessionStorage('loggedInStudent'));
         setStudent(loggedInStudent);
 
         const checkClassPhase = async () => {
             try {
-                const response = await fetch(`${global.BASE_URL}/class/${sessionStorage.getItem('loggedInClassCode')}/phase`);
+                const response = await fetch(`${global.BASE_URL}/class/${getFromSessionStorage('loggedInClassCode')}/phase`);
                 if (response.ok) {
                     const data = await response.json();
                     setClassPhase(data.phase);
@@ -155,6 +156,7 @@ function StudentPlay({ navigate, classCode }) {
         sessionStorage.removeItem('newBatch');
         sessionStorage.removeItem('score');
         sessionStorage.removeItem('mistakes');
+        sessionStorage.removeItem('iterationData');
         navigate('/student/ABC123');
         window.location.reload(); // Reload the page to reset the state
     };

@@ -8,6 +8,7 @@ import LIDIAlogo from '../../static/logos/LIDIA.png';
 import OLAVIDElogo from '../../static/logos/Olavide.png';
 import RADTElogo from '../../static/logos/radte.jpg';
 import INNOVAGIA from '../../static/logos/Grupo_Eduinnovagogia.png';
+import { saveToSessionStorage } from '../../utils/storageUtils';
 
 function StudentJoin({ navigate, classCode }) {
     const maxLength = 15; // Set the maximum length of the name of the student
@@ -115,8 +116,8 @@ function StudentJoin({ navigate, classCode }) {
                         const data = await response.json();
                         if (data.phase > 0) {
                             clearInterval(intervalId); // Clear the interval when the phase is 1
-                            sessionStorage.setItem('loggedInClassCode', inputClassCode);
-                            sessionStorage.setItem('classStarted', true);
+                            saveToSessionStorage('loggedInClassCode', inputClassCode);
+                            saveToSessionStorage('classStarted', true);
                             navigate(`/student/${inputClassCode}`);
                         }
                     } else {
@@ -176,7 +177,7 @@ function StudentJoin({ navigate, classCode }) {
 
             // If there's no error, proceed as before
             setGeneralError('');
-            sessionStorage.setItem('loggedInStudent', JSON.stringify(data));
+            saveToSessionStorage('loggedInStudent', JSON.stringify(data));
             setWantsToJoin(true); // Set wantsToJoin to true to start polling for the class phase
         } catch (error) {
             setNameError('');

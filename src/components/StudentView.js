@@ -5,6 +5,7 @@ import StudentJoin from './StudentRooms/StudentJoin';
 import StudentPlay from './StudentRooms/StudentPlay';
 import StudentResults from './StudentRooms/StudentResults';
 import Background from '../visualComponents/Background';
+import { getFromSessionStorage } from '../utils/storageUtils';
 
 function StudentView() {
     const { classCode: urlClassCode } = useParams();
@@ -53,9 +54,9 @@ function StudentView() {
 
     // Function to determine which component to render based on conditions
     const determineComponentToRender = () => {
-        const loggedInStudent = sessionStorage.getItem('loggedInStudent');
-        const loggedInScore = sessionStorage.getItem('loggedInScore');
-        const classStarted = sessionStorage.getItem('classStarted');
+        const loggedInStudent = getFromSessionStorage('loggedInStudent');
+        const loggedInScore = getFromSessionStorage('loggedInScore');
+        const classStarted = getFromSessionStorage('classStarted');
 
         if (!classStarted) {
             return <StudentJoin navigate={navigate} classCode={urlClassCode} />;

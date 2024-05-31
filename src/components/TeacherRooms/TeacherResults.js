@@ -7,6 +7,7 @@ import i18next from 'i18next';
 import html2pdf from 'html2pdf.js';
 import ReactDOMServer from 'react-dom/server';
 import TeacherPDF from './TeacherPDF';
+import { getFromSessionStorage } from '../../utils/storageUtils';
 
 function TeacherResults({ navigate, classCode }) {
     const [students, setStudents] = useState([]);
@@ -112,7 +113,7 @@ function TeacherResults({ navigate, classCode }) {
 
         // Determine file name based on language
         let fileNamePrefix = i18next.t('fileNamePrefixTeacher');
-        let fileName = `${fileNamePrefix}_${sessionStorage.getItem('loggedInClassCode')}_${formattedDate}.pdf`;
+        let fileName = `${fileNamePrefix}_${getFromSessionStorage('loggedInClassCode')}_${formattedDate}.pdf`;
 
         const opt = {
             margin: 0,
@@ -161,7 +162,7 @@ function TeacherResults({ navigate, classCode }) {
 
     const seeProgress = async () => {
         try {
-            const response = await fetch(`${global.BASE_URL}/class/${sessionStorage.getItem('createdClassCode')}/setPhase`, {
+            const response = await fetch(`${global.BASE_URL}/class/${getFromSessionStorage('createdClassCode')}/setPhase`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -172,7 +173,7 @@ function TeacherResults({ navigate, classCode }) {
             if (response.ok) {
                 setProgressError('');
                 sessionStorage.removeItem('isFinished');
-                navigate(`/teacher/${sessionStorage.getItem('createdClassCode')}`);
+                navigate(`/teacher/${getFromSessionStorage('createdClassCode')}`);
             } else {
                 setProgressError(t('error'));
             }
@@ -184,7 +185,7 @@ function TeacherResults({ navigate, classCode }) {
 
     const fetchStudents = async () => {
         try {
-            const response = await fetch(`${global.BASE_URL}/students?classCode=${sessionStorage.getItem('createdClassCode')}`);
+            const response = await fetch(`${global.BASE_URL}/students?classCode=${getFromSessionStorage('createdClassCode')}`);
             const data = await response.json();
             // Sort students by score in descending order
             const sortedStudents = data.sort((a, b) => b.score - a.score);
@@ -197,7 +198,7 @@ function TeacherResults({ navigate, classCode }) {
 
     const fetchCommonErrors = async () => {
         try {
-            const response = await fetch(`${global.BASE_URL}/common-errors?classCode=${sessionStorage.getItem('createdClassCode')}`);
+            const response = await fetch(`${global.BASE_URL}/common-errors?classCode=${getFromSessionStorage('createdClassCode')}`);
             const data = await response.json();
             setCommonErrors(data);
         } catch (error) {
@@ -248,7 +249,7 @@ function TeacherResults({ navigate, classCode }) {
 
     const restartClass = async () => {
         try {
-            const classCode = sessionStorage.getItem('createdClassCode');
+            const classCode = getFromSessionStorage('createdClassCode');
             const response = await fetch(`${global.BASE_URL}/class/${classCode}/restart`, {
                 method: 'PUT',
             });

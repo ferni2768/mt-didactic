@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Background from '../../visualComponents/Background';
 import { useTranslation } from 'react-i18next';
+import { getFromSessionStorage } from '../../utils/storageUtils';
 
 const TeacherPDF = () => {
 
@@ -124,9 +125,9 @@ const TeacherPDF = () => {
         }
     };
 
-    const history = JSON.parse(sessionStorage.getItem('iterationData')) || jsonData;
-    const student = JSON.parse(sessionStorage.getItem('loggedInStudent')) || '';
-    const classCode = sessionStorage.getItem('loggedInClassCode') || '';
+    const history = JSON.parse(getFromSessionStorage('iterationData')) || jsonData;
+    const student = JSON.parse(getFromSessionStorage('loggedInStudent')) || '';
+    const classCode = getFromSessionStorage('loggedInClassCode') || '';
 
     // Function to retrieve specific values from history
     const getValue = (iteration, key, subKey = null, subIndex = null) => {
@@ -180,7 +181,7 @@ const TeacherPDF = () => {
         if (i === 6) {
             errorDisplayContent = <div>
                 <div> <a className='font-bold'>{t('initialPrecision')}: </a>{initialPrecision}% </div>
-                <div> <a className='font-bold'>{t('finalPrecision')}: </a> {sessionStorage.getItem('loggedInScore')}% </div>
+                <div> <a className='font-bold'>{t('finalPrecision')}: </a> {getFromSessionStorage('loggedInScore')}% </div>
                 <div> <a className='font-bold'>{t('totalErrors')}: </a>{totalErrors}</div>
 
             </div>;
