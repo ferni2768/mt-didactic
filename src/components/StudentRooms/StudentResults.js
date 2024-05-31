@@ -10,18 +10,21 @@ import StudentPDF from './StudentPDF';
 
 function StudentResults({ navigate, classCode }) {
     const [student, setStudent] = useState({});
-    const [score, setScore] = useState();
+    const [score, setScore] = useState(0);
     const [classPhase, setClassPhase] = useState(null); // State to track the class phase
     const { isEntering, isTransitioning } = useContext(TransitionContext);
+
+    const jsonData = JSON.parse(sessionStorage.getItem('iterationData')) || {};
+    const diphthongScore = jsonData.iteration6?.results?.diphthong || 0;
+    const hiatusScore = jsonData.iteration6?.results?.hiatus || 0;
+    const generalScore = jsonData.iteration6?.results?.general || 0;
+
     const scrollbarRef = useRef(null);
     const scrollbarRef2 = useRef(null);
     const scrollbarRef3 = useRef(null);
     const scrollbarRef4 = useRef(null);
 
-    const [matrix, setMatrix] = useState(null);
-    const [matrixLoaded, setMatrixLoaded] = useState(false); // State to track if the matrix is loaded
     const mistakes = JSON.parse(sessionStorage.getItem('mistakes')) || [];
-    const sum = matrix && matrix.length > 0 ? matrix[0][0] + matrix[1][1] + matrix[2][2] : null;
 
     const { t } = useTranslation();
 
@@ -51,35 +54,11 @@ function StudentResults({ navigate, classCode }) {
     useEffect(() => initializeScrollbar(scrollbarRef3), []);
     useEffect(() => initializeScrollbar(scrollbarRef4), []);
 
-    // Function to calculate accuracy for a category
-    function calculateCategoryAccuracy(matrix, categoryIndex) {
+    useEffect(() => {
+        const storedScore = parseFloat(sessionStorage.getItem('loggedInScore')) || 0;
+        setScore(storedScore);
+    }, []);
 
-        if (matrix.length < 2) return 0;
-
-        let totalPredictions = 0;
-
-        for (let i = 0; i < 3; i++) {
-            totalPredictions += matrix[categoryIndex][i];
-        }
-
-        if (totalPredictions === 0) return 0;
-
-        let result = (matrix[categoryIndex][categoryIndex] / totalPredictions);
-
-        if (result > 0.95) result = 1.1;
-
-        return result;
-    }
-
-    // Calculate accuracy for each category, providing a default value of 0 if matrix is not available
-    const diphthongAccuracy = calculateCategoryAccuracy(matrix || [], 0);
-    const hiatusAccuracy = calculateCategoryAccuracy(matrix || [], 1);
-    const generalAccuracy = calculateCategoryAccuracy(matrix || [], 2);
-
-    // Map accuracy to constant values, rounding to the nearest integer
-    const diphthongScore = Math.round((diphthongAccuracy || 0) * 100);
-    const hiatusScore = Math.round((hiatusAccuracy || 0) * 100);
-    const generalScore = Math.round((generalAccuracy || 0) * 100);
 
     // Function to handle the download of the results PDF
     const handleDownloadPDF = () => {
@@ -214,65 +193,6 @@ function StudentResults({ navigate, classCode }) {
         return () => clearInterval(intervalId);
     }, [classCode]);
 
-    useEffect(() => {
-        // Retrieve the loggedInStudent object from sessionStorage
-        const loggedInStudentString = sessionStorage.getItem('loggedInStudent');
-        const loggedInScoreString = sessionStorage.getItem('loggedInScore');
-
-        if (loggedInStudentString) {
-            const loggedInStudent = JSON.parse(loggedInStudentString);
-            const loggedInScore = loggedInScoreString ? JSON.parse(loggedInScoreString) : null;
-
-            // Set the student and score state
-            setStudent(loggedInStudent);
-            setScore(loggedInScore);
-
-            // Fetch the matrix data using the model name from loggedInStudent
-            const fetchAndSetMatrix = async () => {
-                const modelName = loggedInStudent.model;
-                await fetchMatrixUntilClose(modelName, loggedInScore, setMatrix);
-                setMatrixLoaded(true);
-            };
-
-            fetchAndSetMatrix();
-        } else {
-            console.log('No loggedInStudent found in sessionStorage.');
-        }
-    }, []); // Empty dependency array ensures this runs only once after the initial render
-
-    const fetchMatrixUntilClose = async (modelName, score, setMatrix) => {
-        let matrix = null;
-        let diagonalSum = 0;
-
-        do {
-            try {
-                const response = await fetch(`${global.BASE_URL}/models/${modelName}/matrix`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                matrix = data;
-                diagonalSum = calculateDiagonalSum(matrix);
-
-            } catch (error) {
-                console.error('Failed to fetch model matrix:', error);
-                break;
-            }
-        } while (Math.abs(diagonalSum - score) > 1.5);
-
-        setMatrix(matrix);
-    };
-
-    const calculateDiagonalSum = (matrix) => {
-        return matrix[0][0] + matrix[1][1] + matrix[2][2];
-    };
 
     // Function to map labels to inline styles
     const getStyleForLabel = (label) => {
@@ -341,22 +261,6 @@ function StudentResults({ navigate, classCode }) {
                                         <div className='row-span-3 mt-2'>
 
                                             <div className='self-center text-center'>
-                                                {/* <div className='allow-info-overflow'>
-                                                    <div className="info-button">
-                                                        i
-                                                        <div className="tooltip bottom right">
-                                                            <div className="text-xl text-">{t('info-columns-1')}</div>
-                                                            <div style={{ fontWeight: '400' }}>{t('info-columns-2')}</div>
-                                                            <div className='pt-1.5'></div>
-                                                            <div className="text-xl">{t('info-rows-1')}</div>
-                                                            <div style={{ fontWeight: '400' }}>{t('info-rows-2')}</div>
-
-                                                            <div className='pt-7'></div>
-                                                            <div className="text-xl">{t('info-result-1')}</div>
-                                                            <div style={{ fontWeight: '400' }}>{t('info-result-2')}</div>
-                                                        </div>
-                                                    </div>
-                                                </div> */}
                                             </div>
 
                                             <div className='ml-5 mt-20' style={{ boxShadow: '0 0 1rem rgba(0, 0, 0, 0.25)', width: '12rem', borderRadius: '1rem' }}>
@@ -390,18 +294,6 @@ function StudentResults({ navigate, classCode }) {
                                                 </div>
                                             </div>
 
-                                            {/* <div className='contain-mistakes ml-1 details'>
-                                                <div className='inside-card-mistakes-header details mt-5 text-white'>
-                                                    Detalles
-                                                </div>
-                                                <div className='inside-card-mistakes details p-7 pt-9 mt-5'>
-                                                    <div className='mistakes pt-1'>
-                                                        {diphthongScore}% diptongos <br />
-                                                        {hiatusScore}% hiatus <br />
-                                                        {generalScore}% general
-                                                    </div>
-                                                </div>
-                                            </div> */}
 
                                             <div className='pr-4 mt-5'>
                                                 <button onClick={() => handleDownloadPDF()} className="animated-button p-2 text-center align-bottom">
@@ -414,34 +306,6 @@ function StudentResults({ navigate, classCode }) {
 
 
                                         </div>
-
-                                        {/* <div className={`contain-results md:ml-2 lg:ml-2 ml-0 mt-5 col-span-1 row-span-2 ${matrixLoaded ? 'matrix-loaded' : ''}`}>
-                                            <div className='inside-card-results-header text-white'>
-                                                <div></div>
-                                                <div className='matrix-bold-diphthong'>{t('d')}</div>
-                                                <div className='matrix-bold-hiatus'>{t('h')}</div>
-                                                <div className='matrix-bold-general'>{t('g')}</div>
-                                            </div>
-
-                                            <div className='inside-card-results-header-side text-white'> 
-                                                <div></div>
-                                                <div className='matrix-bold-diphthong'>{t('d')}</div>
-                                                <div className='matrix-bold-hiatus'>{t('h')}</div>
-                                                <div className='matrix-bold-general'>{t('g')}</div>
-                                            </div>
-
-                                            <div className="inside-card-matrix pt-9 pl-14 pb-2 pr-7">
-                                                <div className="matrix">
-                                                    {matrix && matrix.map((row, rowIndex) => (
-                                                        <div key={rowIndex} className="matrix-row">
-                                                            {row.map((value, colIndex) => (
-                                                                <span key={colIndex} className="matrix-item top">{value}</span>
-                                                            ))}
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div> */}
 
 
                                         <div className='col-span-1 row-span-3'>
@@ -483,59 +347,6 @@ function StudentResults({ navigate, classCode }) {
                                     </div>
 
                                     <div ref={scrollbarRef2} className="inside-card-2 lg:pt-14 md:pt-14 pt-14 pl-5 pb-5 justify-center">
-
-                                        <div className={`contain-results md:ml-2 lg:ml-2 ml-0 mt-5 col-span-1 row-span-2 ${matrixLoaded ? 'matrix-loaded' : ''}`}>
-                                            <div className='inside-card-results-header text-white'> {/* Header */}
-                                                <div></div>
-                                                <div className='matrix-bold-diphthong'>{t('d')}</div>
-                                                <div className='matrix-bold-hiatus'>{t('h')}</div>
-                                                <div className='matrix-bold-general'>{t('g')}</div>
-                                            </div>
-
-                                            <div className='inside-card-results-header-side text-white'> {/* Side header */}
-                                                <div></div>
-                                                <div className='matrix-bold-diphthong'>{t('d')}</div>
-                                                <div className='matrix-bold-hiatus'>{t('h')}</div>
-                                                <div className='matrix-bold-general'>{t('g')}</div>
-                                            </div>
-
-                                            <div className="inside-card-matrix pt-9 pl-14 pb-2 pr-7">
-                                                <div className="matrix">
-                                                    {matrix && matrix.map((row, rowIndex) => (
-                                                        <div key={rowIndex} className="matrix-row">
-                                                            {row.map((value, colIndex) => (
-                                                                <span key={colIndex} className="matrix-item top">{value}</span>
-                                                            ))}
-                                                        </div>
-                                                    ))}
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-                                        <div className='self-center pt-1 pb-2 text-center pr-8'>
-                                            <div className='allow-info-overflow mr-16'>
-                                                <div className="info-button mr-3">
-                                                    i
-                                                    <div className="tooltip top">
-                                                        <div className="text-xl">{t('info-columns-1')}</div>
-                                                        <div style={{ fontWeight: '400' }}>{t('info-columns-2')}</div>
-                                                        <div className='pt-1.5'></div>
-                                                        <div className="text-xl">{t('info-rows-1')}</div>
-                                                        <div style={{ fontWeight: '400' }}>{t('info-rows-2')}</div>
-
-                                                        <div className='pt-7'></div>
-                                                        <div className="text-xl">{t('info-result-1')}</div>
-                                                        <div style={{ fontWeight: '400' }}>{t('info-result-2')}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className='lg:pr-0 lg:pl-3 md:pr-8 lg:mr-10 lg:mt-3 md:mt-3 mt-8 '>
-                                                <div className='text-2xl pb-0 text-custom_black' style={{ fontWeight: 640 }}>{t('globalAccuracy')}</div>
-                                                <div className='text-custom_black'> {sum !== null ? `${matrix[0][0]} + ${matrix[1][1]} + ${matrix[2][2]} = ${sum}` : t('loading')} </div>
-                                            </div>
-                                        </div>
 
                                         <div className='contain-mistakes-slim'>
                                             <div className='inside-card-mistakes-header mt-4 text-white'> {/* Header */}
