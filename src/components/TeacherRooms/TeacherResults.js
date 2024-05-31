@@ -14,6 +14,7 @@ function TeacherResults({ navigate, classCode }) {
     const { isEntering, isTransitioning } = useContext(TransitionContext);
     const [progressError, setProgressError] = useState('');
     const [restartError, setRestartError] = useState('');
+    const [sureRestart, setSureRestart] = useState(false);
     const scrollbarRef = useRef(null);
     const scrollbarRef2 = useRef(null);
     const scrollbarRef3 = useRef(null);
@@ -231,6 +232,20 @@ function TeacherResults({ navigate, classCode }) {
         window.location.reload(); // Reload the page to reset the state
     };
 
+    const handleRestartClass = async () => {
+        if (!sureRestart) {
+            setSureRestart(true);
+
+            setTimeout(() => {
+                setSureRestart(false);
+            }, 3500);
+        }
+
+        if (sureRestart) {
+            restartClass();
+        }
+    }
+
     const restartClass = async () => {
         try {
             const classCode = sessionStorage.getItem('createdClassCode');
@@ -379,11 +394,26 @@ function TeacherResults({ navigate, classCode }) {
                                                 </div>
                                             </button>
 
-                                            <div className="ml-5 col-span-3">
-                                                <button onClick={() => restartClass()} className="animated-button p-2 text-center my-2 align-bottom">
+                                            <div className="ml-5 col-span-3 flex justify-center restartMessage" style={{ position: 'relative' }}>
+                                                <div className="tooltipRestart" style={{ opacity: sureRestart ? 1 : 0 }} >
+                                                    <div>
+                                                        <div style={{ fontWeight: '400' }}>
+                                                            {t('info-reset-1')} <br />
+                                                            <div className='mt-4'> {t('info-reset-2')} </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <button onClick={() => handleRestartClass()} className="animated-button restart p-2 text-center my-2 align-bottom">
                                                     <div className={`animated-button-bg restart ${restartError ? 'error' : ''}`}></div>
                                                     <div className={`animated-button-text ${restartError ? 'error' : ''}`}>
-                                                        {restartError ? restartError : t('restartClass')}
+                                                        {
+                                                            restartError
+                                                                ? restartError
+                                                                : (sureRestart
+                                                                    ? t('sure')
+                                                                    : t('restartClass'))
+                                                        }
                                                     </div>
                                                 </button>
                                             </div>
@@ -457,11 +487,26 @@ function TeacherResults({ navigate, classCode }) {
                                                     {progressError ? progressError : t('progressButton')}
                                                 </div>
                                             </button>
-                                            <div className='md:col-span-3 md:ml-3'>
-                                                <button onClick={() => restartClass()} className="animated-button p-2 text-center my-0 md:my-2 mt-2 align-bottom">
+                                            <div className='md:col-span-3 md:ml-3 flex justify-center restartMessage' style={{ position: 'relative' }}>
+                                                <div className="tooltipRestart" style={{ opacity: sureRestart ? 1 : 0 }}>
+                                                    <div>
+                                                        <div style={{ fontWeight: '400' }}>
+                                                            {t('info-reset-1')} <br />
+                                                            <div className='mt-4'> {t('info-reset-2')} </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <button onClick={() => handleRestartClass()} className="animated-button p-2 text-center my-0 md:my-2 mt-2 align-bottom">
                                                     <div className={`animated-button-bg restart ${restartError ? 'error' : ''}`}></div>
                                                     <div className={`animated-button-text ${restartError ? 'error' : ''}`}>
-                                                        {restartError ? restartError : t('restartClass')}
+                                                        {
+                                                            restartError
+                                                                ? restartError
+                                                                : (sureRestart
+                                                                    ? t('sure')
+                                                                    : t('restartClass'))
+                                                        }
                                                     </div>
                                                 </button>
                                             </div>

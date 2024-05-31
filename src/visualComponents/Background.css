@@ -855,6 +855,24 @@
     font-size: 1rem;
 }
 
+.tooltipRestart {
+    width: 14rem;
+    background-color: #a41111;
+    color: white;
+    text-align: center;
+    border-radius: 1rem;
+    padding: 0.5rem;
+    position: absolute;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.2s;
+    bottom: 100%;
+    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+
+    font-size: 1.1rem;
+}
+
 .tooltip.QR {
     background-color: #ffffff;
     width: 24rem;
