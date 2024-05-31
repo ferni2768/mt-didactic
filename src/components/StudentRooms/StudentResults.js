@@ -231,7 +231,7 @@ function StudentResults({ navigate, classCode }) {
         <div className="overflowY-container" ref={scrollbarRef4}>
             <div className="overflowY-container-inside">
                 <div>
-                    <div className={`inside-card ${isTransitioning ? 'transitioning' : ''} ${isEntering ? 'entering' : ''}`}>
+                    <div className={`inside-card ${isTransitioning ? 'transitioning' : ''} ${isEntering ? 'entering' : ''} max-w-[20rem] md:max-w-none lg:max-w-[60rem]`}>
                         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:h-80 gap-4'>
                             <div className="lg:col-span-1 col-span-full gap-4 max-w-17">
                                 <h1>{t('studentResults')}</h1>
@@ -341,7 +341,7 @@ function StudentResults({ navigate, classCode }) {
 
 
                                 {/*For small screens*/}
-                                <div className='contain grid md:hidden lg:hidden'>
+                                <div className='contain slim grid md:hidden lg:hidden'>
                                     <div className='inside-card-2-header text-white'> {/* Header */}
                                         <div>{t('AIResultsShort')}</div>
                                     </div>
@@ -349,7 +349,7 @@ function StudentResults({ navigate, classCode }) {
                                     <div ref={scrollbarRef2} className="inside-card-2 lg:pt-14 md:pt-14 pt-14 pl-5 pb-5 justify-center">
 
                                         <div className='contain-mistakes-slim'>
-                                            <div className='inside-card-mistakes-header mt-4 text-white'> {/* Header */}
+                                            <div className='inside-card-mistakes-header mt-4 text-white' > {/* Header */}
                                                 {mistakes.length} {mistakes.length === 1 ? t('mistake') : t('mistakes')}
 
                                                 <div className="info-button mt-4 mr-4">

@@ -257,7 +257,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         };
 
         if (matrix === null) {
-            intervalId = setInterval(checkMatrix, 100);
+            intervalId = setInterval(checkMatrix, 1000);
         } else {
             checkMatrix();
         }

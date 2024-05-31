@@ -1,4 +1,5 @@
 import os
+import shutil
 
 import keras.models
 from sklearn.model_selection import StratifiedKFold
@@ -329,23 +330,61 @@ def curriculum_train_model_with_kfolds(model, model_name, x_train_list, y_train_
     return curriculum_learning_progress
 
 
+def extract_class_code_from_name(name):
+    _, class_code, _ = name.split("_")
+    return class_code
+
+
 # Get AI model.
 def get_pretrained_model(name="example", directory="models/", extension=".keras"):
-    filepath = os.path.join(os.path.dirname(__file__), directory, name + extension)
+    base_model_name = "curriculum_under_trained"
+    
+    # Check if the model name matches the base model name
+    if name == base_model_name:
+        # Load the base model directly from the /models folder
+        filepath = os.path.join(os.path.dirname(__file__), directory, name + extension)
+    else:
+        # For other models, extract the class code and construct the path accordingly
+        class_code = name.split("_")[1]  # Assuming the format is "studentName_classCode_timestamp"
+        filepath = os.path.join(os.path.dirname(__file__), directory, class_code, name + extension)
+    
     return keras.models.load_model(filepath)
 
 
 # Save AI model.
 def save_pretrained_model(model, name="example", directory="models/", extension=".keras"):
-    if not name.endswith(extension):
-        name += extension
-    try:
-        # Save model weights.
-        model.save(directory + name)
-    except:
-        # In case weights have not yet been initialized
-        model.build()
-        model.save(directory + name)
+    class_code = extract_class_code_from_name(name)
+    dir_path = os.path.join(directory, class_code)
+    os.makedirs(dir_path, exist_ok=True)  # Ensure the directory exists
+    file_path = os.path.join(dir_path, name + extension)
+    model.save(file_path)
+
+
+# Function to handle class deletion by moving models to a "_deleted" directory
+def handle_class_deletion(class_code):
+    old_dir = os.path.join("models", class_code)
+    new_dir = os.path.join("models", f"{class_code}_deleted")
+    
+    # Check if the old directory exists
+    if os.path.exists(old_dir):
+        # Check if the new directory already exists
+        if os.path.exists(new_dir):
+            # If the new directory exists, merge the contents of the old directory into the new one
+            for filename in os.listdir(old_dir):
+                src_file = os.path.join(old_dir, filename)
+                dst_file = os.path.join(new_dir, filename)
+                
+                # Move the file from the old directory to the new one
+                shutil.move(src_file, dst_file)
+            
+            # Remove the old directory since its contents have been merged
+            os.rmdir(old_dir)
+        else:
+            # If the new directory does not exist, simply rename the old directory
+            os.rename(old_dir, new_dir)
+    else:
+        # If the old directory does not exist, do nothing
+        pass
 
 
 # Teach new examples to the model. aqui

@@ -144,7 +144,7 @@ function TeacherLogin({ navigate, classCode }) {
                                             setInputClassCode(e.target.value);
                                             setClassError(''); // Reset class code error on change
                                         }}
-                                        maxLength={100}
+                                        maxLength={6}
                                         className="mt-8 border-custom_black focus:border-accent border-2 rounded-lg
                                                outline-none block w-full shadow-sm text-custom_black p-2"
                                     />

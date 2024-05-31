@@ -193,7 +193,7 @@ function StudentJoin({ navigate, classCode }) {
         }
         let newName = e.target.value;
         // Filter out special characters
-        newName = newName.replace(/[^a-zA-Z0-9 ]/g, '');
+        newName = newName.replace(/[^a-zA-Z0-9 áéíóúñ\.]/g, '');
         // Limit the name characters to maxLength
         if (newName.length > maxLength) {
             const trimmedName = newName.slice(0, maxLength);
@@ -263,7 +263,7 @@ function StudentJoin({ navigate, classCode }) {
                                                 setInputClassCode(e.target.value);
                                                 setClassCodeError(''); // Reset class code error on change
                                             }}
-                                            maxLength={10}
+                                            maxLength={6}
                                             className="mt-3 border-custom_black focus:border-accent border-2 rounded-lg
                                               outline-none block w-full shadow-sm text-custom_black p-2"
                                         />

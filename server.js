@@ -514,6 +514,23 @@ app.put('/class/:code/restart', async (req, res) => {
             });
         });
 
+        const deleteClassUrl = `${BASE_URL}/class/${classCode}/delete`;
+        try {
+            const deleteClassResponse = await fetch(deleteClassUrl, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!deleteClassResponse.ok) {
+                throw new Error(`Failed to delete class: ${deleteClassResponse.statusText}`);
+            }
+
+        } catch (error) {
+            console.error('Error deleting class:', error);
+        }
+
         res.status(200).json({ message: 'Class restarted successfully' });
     } catch (error) {
         await new Promise((resolve, reject) => {

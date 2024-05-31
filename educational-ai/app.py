@@ -143,6 +143,12 @@ def load_new_model(model_name):
     usecase.load_new(model_name=model_name, curriculum=curriculum, kfolds=kfolds)
     return jsonify({"message": "Model loaded successfully"})
 
+# Handles the restart of a class.
+@app.route('/class/<class_code>/delete', methods=['PUT'])
+def delete_class(class_code):
+    usecase.handle_class_deletion(class_code)
+    return jsonify({"message": "Class deleted successfully"}), 200
+
 
 # Deletes a stored model.
 @app.route('/models/<model_name>', methods=['DELETE'])
