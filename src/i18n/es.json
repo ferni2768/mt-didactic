@@ -29,6 +29,7 @@
     "download": "Descargar",
     "progressButton": "Progreso",
     "restartClass": "Reiniciar clase",
+    "commonErrors": "Errores comunes",
     "sure": "¿Estás seguro?",
     "     PDF     ": "        ",
     "fileNamePrefixTeacher": "resultados_clase",
@@ -75,13 +76,12 @@
     "mistake": "Error",
     "no": ", no ",
     "loading": "Cargando...",
-    "info-columns-1": "Columnas",
-    "info-columns-2": "respuestas de la IA",
-    "info-rows-1": "Filas",
-    "info-rows-2": "respuestas esperadas",
-    "info-result-1": "Resultado",
-    "info-result-2": "% respuestas predichas correctamente",
     "info-errors": "Estos son los errores que cometiste en tus respuestas",
+    "downloadDetails": "Descargar detalles",
     "     PDF      ": "        ",
-    "iteration": "Iteración"
+    "iteration": "Iteración",
+    "finalIteration": "FINAL",
+    "initialPrecision": "Precisión inicial",
+    "finalPrecision": "Precisión final",
+    "totalErrors": "Errores totales"
 }

@@ -1,5 +1,3 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # dependencies
 /node_modules
 /.pnp
@@ -21,7 +19,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-educational-ai/models/
+educational-ai/models/*
+!educational-ai/models/.gitignore
 educational-ai/machine_teaching_curriculum_cnn/
 educational-ai/machine_teaching_base_cnn/
 educational-ai/__pycache__/

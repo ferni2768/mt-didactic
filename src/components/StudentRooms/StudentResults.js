@@ -298,8 +298,8 @@ function StudentResults({ navigate, classCode }) {
                                             <div className='pr-4 mt-5'>
                                                 <button onClick={() => handleDownloadPDF()} className="animated-button p-2 text-center align-bottom">
                                                     <div className="animated-button-bg"></div>
-                                                    <div className="animated-button-text py-1">
-                                                        Descargar detalles
+                                                    <div className="animated-button-text">
+                                                        {t('downloadDetails')}
                                                     </div>
                                                 </button>
                                             </div>

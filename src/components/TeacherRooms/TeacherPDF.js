@@ -35,6 +35,7 @@ const TeacherPDF = ({ paramStudents, paramWords }) => {
 
     const displayedStudents = students.slice(0, students.length > 36 ? 35 : 36);
     const additionalStudentsCount = students.length > 36 ? students.length - 35 : 0;
+    const classCode = sessionStorage.getItem('createdClassCode') || '';
 
     return (
         <Background>
@@ -42,12 +43,13 @@ const TeacherPDF = ({ paramStudents, paramWords }) => {
                 <div className="inside-card-pdf">
                     <div className='grid grid-cols-11 w-full h-full'>
                         <div className='col-span-8'>
-                            <h1>{t('results')} ABC123</h1>
+                            <h1>{t('results')} {classCode} </h1>
                             <div className='grid grid-cols-3 gap-0.5 student-list-pdf mb-10 mt-10 ml-3 mr-9'>
                                 {displayedStudents.map((student, index) => (
                                     <div key={student.id} className='student-item see-score adjust-text'>
                                         <span>
-                                            <a> {index + 1}.</a> {student.name.length > 13 ? student.name.substring(0, 13) + "..." : student.name}
+                                            <a style={{ fontWeight: 'bold' }} className={`resultsStudent${index + 1}`}> {index + 1}.</a>
+                                            &nbsp;{student.name.length > 13 ? student.name.substring(0, 13) + "..." : student.name}
                                             &nbsp;({student.score}%)
                                         </span>
                                     </div>

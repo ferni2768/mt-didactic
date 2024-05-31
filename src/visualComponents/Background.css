@@ -1052,6 +1052,7 @@
     overflow: hidden;
 
     font-weight: bold;
+    font-size: 1.5rem;
     color: #FFF;
 
     z-index: 2;
@@ -1766,4 +1767,16 @@
 
 .move-down-pdf {
     transform: translateY(0.1rem);
+}
+
+.resultsStudent1 {
+    color: #cac42a;
+}
+
+.resultsStudent2 {
+    color: #777777;
+}
+
+.resultsStudent3 {
+    color: #b96520;
 }

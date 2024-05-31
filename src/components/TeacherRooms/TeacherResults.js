@@ -339,7 +339,7 @@ function TeacherResults({ navigate, classCode }) {
                             </div>
 
                             <div className='hidden lg:block inside-card-2-common-errors'>
-                                <div className='font-bold'>Errores comunes: </div>
+                                <div className='font-bold'>{t("commonErrors")}: </div>
                                 {commonErrors.map(({ word }, index) => (
                                     <span key={index}>{word}{index < commonErrors.length - 1 ? ', ' : ''}</span>
                                 ))}
@@ -433,7 +433,7 @@ function TeacherResults({ navigate, classCode }) {
                                                 i
                                                 <div className="tooltip common-errors bottom left">
 
-                                                    <div className='text-xl'>Errores comunes</div>
+                                                    <div className='text-xl'>{t("commonErrors")}</div>
 
                                                     <div style={{ fontWeight: '400' }} className='mt-4'>
                                                         {commonErrors.map(({ word }, index) => (
