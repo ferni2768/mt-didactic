@@ -49,6 +49,11 @@ const log = (message) => {
     });
 };
 
+app.get('/', (req, res) => {
+    res.send('Welcome to the API root');
+});
+
+
 // API endpoint for teacher authentication
 app.post('/teacher/authenticate', (req, res) => {
     const { code, password } = req.body;
