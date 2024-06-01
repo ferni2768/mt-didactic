@@ -1,4 +1,5 @@
 import os
+import re
 import shutil
 
 import keras.models
@@ -331,8 +332,11 @@ def curriculum_train_model_with_kfolds(model, model_name, x_train_list, y_train_
 
 
 def extract_class_code_from_name(name):
-    _, class_code, _ = name.split("_")
-    return class_code
+    parts = name.split("_")
+    if len(parts) == 3:
+        return parts[1]
+    else:
+        return None
 
 
 # Get AI model.
@@ -351,14 +355,20 @@ def get_pretrained_model(name="example", directory="models/", extension=".keras"
     return keras.models.load_model(filepath)
 
 
+def has_numbers(name):
+    return bool(re.search(r'\d', name))
+
+
 # Save AI model.
 def save_pretrained_model(model, name="example", directory="models/", extension=".keras"):
-    class_code = extract_class_code_from_name(name)
-    dir_path = os.path.join(directory, class_code)
-    os.makedirs(dir_path, exist_ok=True)  # Ensure the directory exists
+    if has_numbers(name):
+        class_code = extract_class_code_from_name(name)
+        dir_path = os.path.join(directory, class_code)
+    else:
+        dir_path = directory
+    os.makedirs(dir_path, exist_ok=True)
     file_path = os.path.join(dir_path, name + extension)
     model.save(file_path)
-
 
 # Function to handle class deletion by moving models to a "_deleted" directory
 def handle_class_deletion(class_code):
