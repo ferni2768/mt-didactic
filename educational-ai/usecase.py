@@ -366,8 +366,14 @@ def save_pretrained_model(model, name="example", directory="models/", extension=
         dir_path = os.path.join(directory, class_code)
     else:
         dir_path = directory
+
     os.makedirs(dir_path, exist_ok=True)
-    file_path = os.path.join(dir_path, name + extension)
+    
+    # Ensure the name ends with the desired extension
+    if not name.endswith(extension):
+        name += extension
+
+    file_path = os.path.join(dir_path, name)
     model.save(file_path)
 
 # Function to handle class deletion by moving models to a "_deleted" directory
