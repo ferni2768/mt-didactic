@@ -5,7 +5,7 @@ const EXTERNAL_API_PORT = process.env.REACT_APP_EXTERNAL_API_PORT;
 
 const SERVER_URL = `${IP}:${BASE_PORT}`;
 const WEB_URL = `${IP}:${WEB_PORT}`;
-const API_URL = `${IP}:${EXTERNAL_API_PORT}`;
+const API_URL = `http://localhost:${EXTERNAL_API_PORT}`;
 
 // Database config
 const DB_HOST = process.env.REACT_APP_IP || 'localhost';
