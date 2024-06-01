@@ -9,8 +9,10 @@ import './App.css';
 import './i18n/i18n'; // Translations from i18n.js
 import { saveToSessionStorage, getFromSessionStorage } from './utils/storageUtils';
 
-global.BASE_URL = 'http://127.0.0.1:3001'; // JavaScript server URL
-global.WEB_URL = 'http://localhost:3000'; // React web URL
+const { SERVER_URL, WEB_URL } = require('./config');
+
+global.BASE_URL = SERVER_URL;
+global.WEB_URL = WEB_URL;
 
 const StorageContext = React.createContext();
 

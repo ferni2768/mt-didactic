@@ -3,16 +3,18 @@ const mysql = require('mysql');
 const cors = require('cors'); // Import the cors middleware
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt'); // To hash the password
-const BASE_URL = 'http://127.0.0.1:8000';
+
+require('dotenv').config();
+const { API_URL, BASE_PORT, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME } = require('./src/config');
 
 const app = express();
-const port = 3001;
+const port = BASE_PORT;
 
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
-    database: 'tfg_db'
+    host: DB_HOST,
+    user: DB_USER,
+    password: DB_PASSWORD,
+    database: DB_NAME
 });
 
 // Get a hashed password
@@ -181,7 +183,7 @@ app.post('/class/:code/join', async (req, res) => {
 
         // Create a new model in the external API
         try {
-            const modelResponse = await fetch(`${BASE_URL}/models/${model}`, {
+            const modelResponse = await fetch(`${API_URL}/models/${model}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -291,7 +293,7 @@ app.put('/student/:id/updateScore', (req, res) => {
 app.post('/models/:modelName/matrix', async (req, res) => {
     const modelName = req.params.modelName;
     try {
-        const response = await fetch(`${BASE_URL}/models/${modelName}/matrix`, {
+        const response = await fetch(`${API_URL}/models/${modelName}/matrix`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -333,7 +335,7 @@ app.post('/models/:modelName/matrix', async (req, res) => {
 app.post('/models/test', async (req, res) => {
     const { model_names } = req.body;
     try {
-        const response = await fetch(`${BASE_URL}/models/test`, {
+        const response = await fetch(`${API_URL}/models/test`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -365,7 +367,7 @@ app.post('/models/:modelName/train', async (req, res) => {
     const modelName = req.params.modelName;
     const { answers, maxIterations } = req.body;
     try {
-        const url = `${BASE_URL}/models/${modelName}/train`;
+        const url = `${API_URL}/models/${modelName}/train`;
         const config = { method: 'post', body: JSON.stringify(answers), headers: { 'Content-Type': 'application/json' } };
 
         // Initialize variables to hold the result of the last iteration and count of failed iterations
@@ -531,7 +533,7 @@ app.put('/class/:code/restart', async (req, res) => {
             });
         });
 
-        const deleteClassUrl = `${BASE_URL}/class/${classCode}/delete`;
+        const deleteClassUrl = `${API_URL}/class/${classCode}/delete`;
         try {
             const deleteClassResponse = await fetch(deleteClassUrl, {
                 method: 'PUT',
