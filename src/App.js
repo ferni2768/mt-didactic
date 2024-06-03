@@ -22,10 +22,13 @@ function App() {
 
   useEffect(() => {
     const isStudent = getFromSessionStorage('isStudent');
-    if (isStudent === 'true') {
+    const isTeacher = getFromSessionStorage('isTeacher');
+    if (isStudent) {
       setRedirectTo('/student');
-    } else if (isStudent === 'false') {
+    } else if (isTeacher) {
       setRedirectTo('/teacher');
+    } else {
+      setRedirectTo('/student');
     }
   }, []);
 
