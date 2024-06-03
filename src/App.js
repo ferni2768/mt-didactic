@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import StudentView from './components/StudentView';
 import TeacherView from './components/TeacherView';
 import TeacherPDF from './components/TeacherRooms/TeacherPDF';
@@ -17,21 +17,6 @@ global.WEB_URL = WEB_URL;
 const StorageContext = React.createContext();
 
 function App() {
-  const location = useLocation();
-  const [redirectTo, setRedirectTo] = useState('/student'); // Default redirect
-
-  useEffect(() => {
-    const isStudent = getFromSessionStorage('isStudent');
-    const isTeacher = getFromSessionStorage('isTeacher');
-    if (isStudent) {
-      setRedirectTo('/student');
-    } else if (isTeacher) {
-      setRedirectTo('/teacher');
-    } else {
-      setRedirectTo('/student');
-    }
-  }, []);
-
   return (
     <TransitionProvider>
       <Router>
@@ -47,7 +32,7 @@ function App() {
                 <Route path="/teacher/:classCode/results" element={<TeacherView />} />
                 <Route path="/pdf" element={<TeacherPDF />} />
                 <Route path="/pdf2" element={<StudentPDF />} />
-                <Route path="*" element={<Navigate to={location.pathname !== '/' ? location.pathname : redirectTo} replace />} />
+                <Route path="*" element={<Navigate to="/student" replace />} />
               </Routes>
             </StorageContext.Provider>
           </div>

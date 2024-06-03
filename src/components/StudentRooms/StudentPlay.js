@@ -165,7 +165,7 @@ function StudentPlay({ navigate, classCode }) {
         sessionStorage.removeItem('score');
         sessionStorage.removeItem('mistakes');
         sessionStorage.removeItem('iterationData');
-        navigate('/');
+        navigate('/student');
         window.location.reload(); // Reload the page to reset the state
     };
 
