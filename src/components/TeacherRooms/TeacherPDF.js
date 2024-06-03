@@ -49,7 +49,7 @@ const TeacherPDF = ({ paramStudents, paramWords }) => {
                                 {displayedStudents.map((student, index) => (
                                     <div key={student.id} className='student-item see-score adjust-text'>
                                         <span>
-                                            <a style={{ fontWeight: 'bold' }} className={`resultsStudent${index + 1}`}> {index + 1}.</a>
+                                            <span style={{ fontWeight: 'bold' }} className={`resultsStudent${index + 1}`}> {index + 1}.</span>
                                             &nbsp;{student.name.length > 13 ? student.name.substring(0, 13) + "..." : student.name}
                                             &nbsp;({student.score}%)
                                         </span>

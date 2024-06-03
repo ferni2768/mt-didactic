@@ -163,6 +163,7 @@ function StudentResults({ navigate, classCode }) {
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -331,10 +332,10 @@ function StudentResults({ navigate, classCode }) {
                                                     <div className='mistakes pt-1'>
                                                         {mistakes.map(([word, mistakenLabel, correctLabel], index) => (
                                                             <div key={index}>
-                                                                <a>{word}: </a>
-                                                                <a style={getStyleForLabel(correctLabel)}>{correctLabel}</a>
-                                                                <a>, no </a>
-                                                                <a style={getStyleForLabel(mistakenLabel)}>{mistakenLabel}</a>
+                                                                <span>{word}: </span>
+                                                                <span style={getStyleForLabel(correctLabel)}>{correctLabel}</span>
+                                                                <span>, no </span>
+                                                                <span style={getStyleForLabel(mistakenLabel)}>{mistakenLabel}</span>
                                                             </div>
                                                         ))}
                                                     </div>
@@ -370,10 +371,10 @@ function StudentResults({ navigate, classCode }) {
                                                 <div className='mistakes pt-1'>
                                                     {mistakes.map(([word, mistakenLabel, correctLabel], index) => (
                                                         <div key={index}>
-                                                            <a>{word}: </a>
-                                                            <a style={getStyleForLabel(correctLabel)}>{correctLabel}</a>
-                                                            <a>{t('no')}</a>
-                                                            <a style={getStyleForLabel(mistakenLabel)}>{mistakenLabel}</a>
+                                                            <span>{word}: </span>
+                                                            <span style={getStyleForLabel(correctLabel)}>{correctLabel}</span>
+                                                            <span>{t('no')}</span>
+                                                            <span style={getStyleForLabel(mistakenLabel)}>{mistakenLabel}</span>
                                                         </div>
                                                     ))}
                                                 </div>

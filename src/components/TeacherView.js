@@ -46,6 +46,7 @@ function TeacherView() {
             setIsEntering(false);
             setRenderComponent(determineComponentToRender());
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location, setIsTransitioning]);
 
     useEffect(() => {

@@ -21,7 +21,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
 
     const [newAnswer, setNewAnswer] = useState([]); // To store the input answers
     const [newWords, setNewWords] = useState(false); // To trigger the new batch of words
-    const [trainingData, setTrainingData] = useState([]);
+    const [, setTrainingData] = useState([]);
     const [forceCheckMatrix, setForceCheckMatrix] = useState(false);
     const { selectedElements, processTrainingDataMatrix } = useDataFetcher();
 
@@ -95,6 +95,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         } else {
             setIsTurningIn(false);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentWordIndex]);
 
     useEffect(() => {
@@ -122,6 +123,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         } else {
             console.log('No loggedInStudent found in sessionStorage.');
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [iteration]); // Re-run the effect every iteration
 
 
@@ -265,6 +267,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         }
 
         return () => clearInterval(intervalId);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [matrix, forceCheckMatrix]);
 
     useEffect(() => {
@@ -273,20 +276,24 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         }, 1000);
 
         return () => clearTimeout(timer);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
         if (iteration < maxIterations) {
             handleExternalClick();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ExternalCurrentWordIndexChange]);
 
     useEffect(() => {
         setNewAnswer(newBatch.map(([word, label]) => [word, '']));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [newBatch]);
 
     useEffect(() => {
         setWords(newAnswer);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [newAnswer]);
 
     useEffect(() => {
@@ -313,6 +320,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
 
             updateSessionStorageWithResultsAndErrors(results, []);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [matrix]);
 
     useEffect(() => {
@@ -326,7 +334,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
     const handleAnswerSubmit = async (newAnswer) => {
         if (!isTurningIn || buttonWait) return;
 
-        if (iteration == maxIterations) {
+        if (iteration === maxIterations) {
             navigate(`/student/${getFromSessionStorage('loggedInClassCode')}/results`); // Redirect to the results page
             return;
         }
@@ -380,7 +388,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
             const newMistakes = await updateMistakes();
             updateSessionStorageWithResultsAndErrors(results, newMistakes);
 
-            if (iteration + 1 != maxIterations) {
+            if (iteration + 1 !== maxIterations) {
                 setNewWords(true);
             } else {
                 setProgress(100);
@@ -505,7 +513,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
 
             setCurrentWordIndex(findNextNonSetWordIndex(updatedNewAnswer));
 
-            if (currentWordIndex != 11) {
+            if (currentWordIndex !== 11) {
                 setNewAnswer(updatedNewAnswer);
             }
 
@@ -556,6 +564,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [newBatch, currentWordIndex, handleButtonClick]);
 
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import Background from '../../visualComponents/Background';
 import { useTranslation } from 'react-i18next';
 import { getFromSessionStorage } from '../../utils/storageUtils';
@@ -180,10 +180,9 @@ const TeacherPDF = () => {
         let errorDisplayContent;
         if (i === 6) {
             errorDisplayContent = <div>
-                <div> <a className='font-bold'>{t('initialPrecision')}: </a>{initialPrecision}% </div>
-                <div> <a className='font-bold'>{t('finalPrecision')}: </a> {getFromSessionStorage('loggedInScore')}% </div>
-                <div> <a className='font-bold'>{t('totalErrors')}: </a>{totalErrors}</div>
-
+                <div> <span className='font-bold'>{t('initialPrecision')}: </span>{initialPrecision}% </div>
+                <div> <span className='font-bold'>{t('finalPrecision')}: </span> {getFromSessionStorage('loggedInScore')}% </div>
+                <div> <span className='font-bold'>{t('totalErrors')}: </span>{totalErrors}</div>
             </div>;
         } else {
             const errors = getValue(i, 'errors');

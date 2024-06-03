@@ -77,6 +77,7 @@ function TeacherResults({ navigate, classCode }) {
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [students]);
 
 
@@ -232,6 +233,7 @@ function TeacherResults({ navigate, classCode }) {
         const intervalId = setInterval(fetchClass, 3000); // Reload class data every 3 seconds
 
         return () => clearInterval(intervalId);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [classCode]);
 
     const handleReset = () => {
@@ -375,7 +377,7 @@ function TeacherResults({ navigate, classCode }) {
                                                         <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 lg:gap-4 md:gap-4 gap-0.5'>
                                                             <div className="col-span-full md:col-span-1 lg:col-span-1">
                                                                 <span>
-                                                                    <a className={`${student.score < 1 ? 'hidden' : ''}`}> {index + 4}.</a> {student.name.length > 16 ? student.name.substring(0, 16) + "..." : student.name}
+                                                                    <span className={`${student.score < 1 ? 'hidden' : ''}`}> {index + 4}.</span> {student.name.length > 16 ? student.name.substring(0, 16) + "..." : student.name}
                                                                 </span>
                                                             </div>
 
@@ -464,7 +466,7 @@ function TeacherResults({ navigate, classCode }) {
                                                         <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 lg:gap-4 md:gap-4 gap-0.5'>
                                                             <div className="col-span-full md:col-span-1 lg:col-span-1">
                                                                 <span>
-                                                                    <a className={`${student.score < 1 ? 'hidden' : ''}`}> {index + 1}.</a> {student.name.length > 16 ? student.name.substring(0, 16) + "..." : student.name}
+                                                                    <span className={`${student.score < 1 ? 'hidden' : ''}`}> {index + 1}.</span> {student.name.length > 16 ? student.name.substring(0, 16) + "..." : student.name}
                                                                 </span>
                                                             </div>
 

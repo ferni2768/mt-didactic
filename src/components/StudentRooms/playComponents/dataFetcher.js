@@ -37,6 +37,7 @@ function useDataFetcher() {
         };
 
         loadDataAndSetState(); // Load the files
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 
