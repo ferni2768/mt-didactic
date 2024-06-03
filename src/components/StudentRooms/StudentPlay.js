@@ -94,7 +94,12 @@ function StudentPlay({ navigate, classCode }) {
 
         const checkClassPhase = async () => {
             try {
-                const response = await fetch(`${global.BASE_URL}/class/${getFromSessionStorage('loggedInClassCode')}/phase`);
+                const response = await fetch(`${global.BASE_URL}/class/${getFromSessionStorage('loggedInClassCode')}/phase`, {
+                    headers: {
+                        'bypass-tunnel-reminder': 'any-value-you-want'
+                    }
+                });
+
                 if (response.ok) {
                     const data = await response.json();
                     setClassPhase(data.phase);
@@ -123,7 +128,8 @@ function StudentPlay({ navigate, classCode }) {
             await fetch(`${global.BASE_URL}/student/${student.id}/updateScore`, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'bypass-tunnel-reminder': 'any-value-you-want'
                 },
                 body: JSON.stringify({ score: updatedScore }) // Updated score to database
             });
@@ -137,7 +143,8 @@ function StudentPlay({ navigate, classCode }) {
             await fetch(`${global.BASE_URL}/student/${student.id}/setProgress`, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'bypass-tunnel-reminder': 'any-value-you-want'
                 },
                 body: JSON.stringify({ progress: progress }) // Updated progress to database
             });

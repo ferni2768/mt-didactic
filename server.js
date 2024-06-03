@@ -1,20 +1,21 @@
+const fetch = require('cross-fetch');
 const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors'); // Import the cors middleware
 const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt'); // To hash the password
+const bcrypt = require('bcryptjs'); // To hash the password
 
 require('dotenv').config();
 const { API_URL, BASE_PORT, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME } = require('./src/config');
 
 const app = express();
-const port = BASE_PORT;
+const port = 3306;
 
 const db = mysql.createConnection({
-    host: DB_HOST,
-    user: DB_USER,
-    password: DB_PASSWORD,
-    database: DB_NAME
+    host: '127.0.0.1',
+    user: 'pupis',
+    password: 'pupis',
+    database: 'tfg_db'
 });
 
 // Get a hashed password
@@ -36,7 +37,7 @@ app.use(cors());
 app.use(express.json());
 
 // Parse URL-encoded bodies
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 
 // Log function
@@ -103,17 +104,15 @@ app.get('/class/:code/phase', (req, res) => {
 
 // API endpoint to fetch list of students from a specific class
 app.get('/students', (req, res) => {
-    // Extract classCode from query parameters
     const classCode = req.query.classCode;
-
-    // Filter students by classCode
     const query = `SELECT * FROM student WHERE class_code = ?`;
     db.query(query, [classCode], (err, result) => {
         if (err) {
             console.error('Error executing MySQL query:', err);
             res.status(500).json({ error: 'Internal server error' });
         } else {
-            res.json(result);
+            res.header('Content-Type', 'application/json', 'ngrok-skip-browser-warning'); // Ensure Content-Type header is set
+            res.json(result); // Return the result as JSON
         }
     });
 });
@@ -192,6 +191,7 @@ app.post('/class/:code/join', async (req, res) => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'bypass-tunnel-reminder': 'any-value-you-want'
                 }
             });
 
@@ -204,6 +204,26 @@ app.post('/class/:code/join', async (req, res) => {
             console.error('Error creating model:', modelError);
             return res.status(500).json({ error: 'Failed to create model' });
         }
+
+        console.log("UNO");
+
+        // try {
+        //     const modelResponse = await fetch(`${API_URL}/models/${model}`, {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         }
+        //     });
+
+        //     // Removed the check for!modelResponse.ok
+
+        //     // If the model creation is successful, proceed with the rest of the function
+        // } catch (modelError) {
+        //     console.error('Error creating model:', modelError);
+        //     // Since we're ignoring the server's response, we don't need to handle errors here either
+        // }
+
+        console.log("DOS");
 
         const insertResult = await query('INSERT INTO student (name, class_code, score, progress, model) VALUES (?, ?, 0, 0, ?)', [name, classCode, model]);
 
@@ -220,6 +240,8 @@ app.post('/class/:code/join', async (req, res) => {
         if (newStudentResult.length === 0) {
             return res.status(500).json({ error: 'Failed to retrieve newly created student' });
         }
+
+        console.log("TRES");
 
         log(`Student ${name} joined class ${classCode} with model ${model}`)
 
@@ -302,6 +324,7 @@ app.post('/models/:modelName/matrix', async (req, res) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'bypass-tunnel-reminder': 'any-value-you-want'
             },
         });
 
@@ -344,6 +367,7 @@ app.post('/models/test', async (req, res) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'bypass-tunnel-reminder': 'any-value-you-want'
             },
             body: JSON.stringify({ model_names: model_names }),
         });
@@ -544,6 +568,7 @@ app.put('/class/:code/restart', async (req, res) => {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    'bypass-tunnel-reminder': 'any-value-you-want'
                 },
             });
 

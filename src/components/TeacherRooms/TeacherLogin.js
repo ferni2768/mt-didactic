@@ -78,6 +78,7 @@ function TeacherLogin({ navigate, classCode }) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'bypass-tunnel-reminder': 'any-value-you-want'
                 },
                 body: JSON.stringify({ code: inputClassCode, password }),
             });
@@ -88,7 +89,12 @@ function TeacherLogin({ navigate, classCode }) {
                 navigate(`/teacher/${inputClassCode}`);
 
                 // Check the class phase in case the class already has finished
-                const checkPhaseResponse = await fetch(`${global.BASE_URL}/class/${inputClassCode}/phase`);
+                const checkPhaseResponse = await fetch(`${global.BASE_URL}/class/${inputClassCode}/phase`, {
+                    headers: {
+                        'bypass-tunnel-reminder': 'any-value-you-want'
+                    }
+                });
+
                 if (checkPhaseResponse.ok) {
                     const checkPhaseData = await checkPhaseResponse.json();
                     if (checkPhaseData.phase === 2) {
@@ -108,6 +114,7 @@ function TeacherLogin({ navigate, classCode }) {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
+                        'bypass-tunnel-reminder': 'any-value-you-want'
                     },
                     body: JSON.stringify({ phase: 1 }),
                 });

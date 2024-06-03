@@ -166,6 +166,7 @@ function TeacherResults({ navigate, classCode }) {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    'bypass-tunnel-reminder': 'any-value-you-want'
                 },
                 body: JSON.stringify({ phase: 1 }),
             });
@@ -185,7 +186,11 @@ function TeacherResults({ navigate, classCode }) {
 
     const fetchStudents = async () => {
         try {
-            const response = await fetch(`${global.BASE_URL}/students?classCode=${getFromSessionStorage('createdClassCode')}`);
+            const response = await fetch(`${global.BASE_URL}/students?classCode=${getFromSessionStorage('createdClassCode')}`, {
+                headers: {
+                    'bypass-tunnel-reminder': 'any-value-you-want'
+                }
+            });
             const data = await response.json();
             // Sort students by score in descending order
             const sortedStudents = data.sort((a, b) => b.score - a.score);
@@ -198,7 +203,12 @@ function TeacherResults({ navigate, classCode }) {
 
     const fetchCommonErrors = async () => {
         try {
-            const response = await fetch(`${global.BASE_URL}/common-errors?classCode=${getFromSessionStorage('createdClassCode')}`);
+            const response = await fetch(`${global.BASE_URL}/common-errors?classCode=${getFromSessionStorage('createdClassCode')}`, {
+                headers: {
+                    'bypass-tunnel-reminder': 'any-value-you-want'
+                }
+            });
+
             const data = await response.json();
             setCommonErrors(data);
         } catch (error) {
@@ -252,6 +262,9 @@ function TeacherResults({ navigate, classCode }) {
             const classCode = getFromSessionStorage('createdClassCode');
             const response = await fetch(`${global.BASE_URL}/class/${classCode}/restart`, {
                 method: 'PUT',
+                headers: {
+                    'bypass-tunnel-reminder': 'any-value-you-want'
+                }
             });
 
             if (response.ok) {

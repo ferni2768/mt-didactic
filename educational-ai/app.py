@@ -1,3 +1,16 @@
+import usecase
+import os
+import tensorflow as tf
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+gpus = tf.config.experimental.list_physical_devices('GPU')
+if gpus:
+    try:
+        for gpu in gpus:
+            tf.config.experimental.set_memory_growth(gpu, True)
+    except RuntimeError as e:
+        print(e)
+
 import sys
 from itertools import zip_longest
 
@@ -10,10 +23,6 @@ from sklearn.model_selection import train_test_split
 
 from sklearn.metrics import confusion_matrix # aqui
 
-import usecase
-import os
-
-import tensorflow as tf
 import tokenizer_utils as ts_utils
 import dataset_utils as ds_utils
 from flask import Flask, request, make_response, current_app, jsonify
@@ -138,9 +147,7 @@ def reset_models():
 # Loads a new model.
 @app.route('/models/<model_name>', methods=['POST'])
 def load_new_model(model_name):
-    curriculum = request.args.get('curriculum', default=True, type=bool)
-    kfolds = request.args.get('kfolds', default=False, type=bool)
-    usecase.load_new(model_name=model_name, curriculum=curriculum, kfolds=kfolds)
+    usecase.load_new(model_name=model_name)
     return jsonify({"message": "Model loaded successfully"})
 
 # Handles the restart of a class.

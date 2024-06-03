@@ -83,7 +83,11 @@ function TeacherWaitRoom({ navigate, classCode }) {
     useEffect(() => {
         const fetchStudents = async () => {
             try {
-                const response = await fetch(`${global.BASE_URL}/students?classCode=${getFromSessionStorage('createdClassCode')}`);
+                const response = await fetch(`${global.BASE_URL}/students?classCode=${getFromSessionStorage('createdClassCode')}`, {
+                    headers: {
+                        'bypass-tunnel-reminder': 'any-value-you-want'
+                    }
+                });
                 const data = await response.json();
                 setStudents(data);
             } catch (error) {
@@ -114,6 +118,7 @@ function TeacherWaitRoom({ navigate, classCode }) {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    'bypass-tunnel-reminder': 'any-value-you-want'
                 },
                 body: JSON.stringify({ phase: 2 }),
             });

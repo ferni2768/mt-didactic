@@ -132,6 +132,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'bypass-tunnel-reminder': 'any-value-you-want'
                     },
                 });
 
@@ -347,7 +348,10 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
         const config = {
             method: 'post',
             body: JSON.stringify({ answers: answersObj, maxIterations: trainingTimes }),
-            headers: { 'Content-Type': 'application/json' }
+            headers: {
+                'Content-Type': 'application/json',
+                'bypass-tunnel-reminder': 'any-value-you-want'
+            }
         };
 
         try {
@@ -413,6 +417,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'bypass-tunnel-reminder': 'any-value-you-want'
                 },
                 body: JSON.stringify({ model_names: selectedModelNames }),
             });
@@ -460,6 +465,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'bypass-tunnel-reminder': 'any-value-you-want'
             },
             body: JSON.stringify({ mistakes: newMistakes, classCode }), // Send only newMistakes to the server
         });

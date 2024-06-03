@@ -172,7 +172,12 @@ function StudentResults({ navigate, classCode }) {
 
         const checkClassPhase = async () => {
             try {
-                const response = await fetch(`${global.BASE_URL}/class/${getFromSessionStorage('loggedInClassCode')}/phase`);
+                const response = await fetch(`${global.BASE_URL}/class/${getFromSessionStorage('loggedInClassCode')}/phase`, {
+                    headers: {
+                        'bypass-tunnel-reminder': 'any-value-you-want'
+                    }
+                });
+
                 if (response.ok) {
                     const data = await response.json();
                     setClassPhase(data.phase);

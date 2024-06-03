@@ -111,7 +111,11 @@ function StudentJoin({ navigate, classCode }) {
         if (wantsToJoin) {
             const intervalId = setInterval(async () => {
                 try {
-                    const response = await fetch(`${global.BASE_URL}/class/${inputClassCode}/phase`);
+                    const response = await fetch(`${global.BASE_URL}/class/${inputClassCode}/phase`, {
+                        headers: {
+                            'bypass-tunnel-reminder': 'any-value-you-want'
+                        }
+                    });
                     if (response.ok) {
                         const data = await response.json();
                         if (data.phase > 0) {
@@ -147,6 +151,7 @@ function StudentJoin({ navigate, classCode }) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'bypass-tunnel-reminder': 'any-value-you-want'
                 },
                 body: JSON.stringify({ name }),
             });
