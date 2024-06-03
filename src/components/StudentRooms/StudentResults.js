@@ -68,8 +68,6 @@ function StudentResults({ navigate, classCode }) {
         element.style.height = '1080px'; // Match the PDF height
         element.style.background = 'white';
 
-        console.log(getFromSessionStorage('iterationData'));
-
         element.innerHTML = ReactDOMServer.renderToString(<StudentPDF />);
 
         document.body.appendChild(element);
@@ -210,6 +208,8 @@ function StudentResults({ navigate, classCode }) {
                 return { color: '#127edd', fontWeight: 500 };
             case 'G':
                 return { color: '#ee1212', fontWeight: 500 };
+            case 'X':
+                return { color: '#1c1c1c', fontWeight: 500 };
             default:
                 return { color: '#1c1c1c', fontWeight: 500 };
         }
@@ -268,10 +268,11 @@ function StudentResults({ navigate, classCode }) {
 
                                         <div className='row-span-3 mt-2'>
 
-                                            <div className='self-center text-center'>
+                                            <div className='px-2 mr-7 mb-5 mt-5 text-2xl self-center text-center'>
+                                                {t('rightTest')}
                                             </div>
 
-                                            <div className='ml-5 mt-20' style={{ boxShadow: '0 0 1rem rgba(0, 0, 0, 0.25)', width: '12rem', borderRadius: '1rem' }}>
+                                            <div className='ml-3 mb-4' style={{ boxShadow: '0 0 1rem rgba(0, 0, 0, 0.25)', width: '12rem', borderRadius: '1rem' }}>
 
                                                 <div className="flex row-span-2 justify-center">
                                                     <div className="type-score-bar-container light diphthong">
@@ -282,7 +283,6 @@ function StudentResults({ navigate, classCode }) {
                                                         </div>
                                                     </div>
 
-
                                                     <div className="type-score-bar-container light hiatus">
                                                         <div className='type-score-bar-text-white'>{t('h')}</div>
                                                         <div className="type-score-bar hiatus" style={{ height: `${hiatusScore}%` }}></div>
@@ -291,7 +291,6 @@ function StudentResults({ navigate, classCode }) {
                                                         </div>
                                                     </div>
 
-
                                                     <div className="type-score-bar-container light general">
                                                         <div className='type-score-bar-text-white'>{t('g')}</div>
                                                         <div className="type-score-bar general" style={{ height: `${generalScore}%` }}></div>
@@ -299,11 +298,30 @@ function StudentResults({ navigate, classCode }) {
                                                             <div className='type-score-bar-text-black'>{t('g')}</div>
                                                         </div>
                                                     </div>
+
+                                                    <div className='absolute'>
+                                                        <div className="info-button" style={{ position: 'relative', top: '0rem', left: '7.3rem', zIndex: '100' }}>
+                                                            i
+                                                            <div className="tooltip right bottom" style={{ zIndex: '100' }}>
+                                                                <div style={{ fontWeight: '400' }}>{t('info-progress')}</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                             </div>
 
+                                            <div className='mt-3 text-center mr-9'>
+                                                <span style={getStyleForLabel('X')}>{t('diphthongs')} </span>
+                                                {diphthongScore}% <br />
+                                                <span style={getStyleForLabel('X')}>{t('hiatuses')} </span>
+                                                {hiatusScore}% <br />
+                                                <span style={getStyleForLabel('X')}>{t('generals')} </span>
+                                                {generalScore}% <br />
+                                            </div>
 
-                                            <div className='pr-4 mt-5'>
+
+                                            <div className='pr-4 mt-8'>
                                                 <button onClick={() => handleDownloadPDF()} className="animated-button p-2 text-center align-bottom">
                                                     <div className="animated-button-bg"></div>
                                                     <div className="animated-button-text">
@@ -311,8 +329,6 @@ function StudentResults({ navigate, classCode }) {
                                                     </div>
                                                 </button>
                                             </div>
-
-
                                         </div>
 
 
@@ -342,8 +358,6 @@ function StudentResults({ navigate, classCode }) {
                                                 </div>
                                             </div>
                                         </div>
-
-
                                     </div>
                                 </div>
 
@@ -354,7 +368,71 @@ function StudentResults({ navigate, classCode }) {
                                         <div>{t('AIResultsShort')}</div>
                                     </div>
 
-                                    <div ref={scrollbarRef2} className="inside-card-2 lg:pt-14 md:pt-14 pt-14 pl-5 pb-5 justify-center">
+                                    <div ref={scrollbarRef2} className="inside-card-2 lg:pt-14 md:pt-14 pt-12 pl-5 pb-5 justify-center">
+
+                                        <div className='mt-2'>
+
+                                            <div className='px-2 mr-8 mb-4 mt-5 text-2xl self-center text-center'>
+                                                {t('rightTest')}
+                                            </div>
+
+                                            <div className='ml-1 mb-2' style={{ boxShadow: '0 0 1rem rgba(0, 0, 0, 0.25)', width: '12rem', borderRadius: '1rem' }}>
+
+                                                <div className="flex row-span-2 justify-center">
+                                                    <div className="type-score-bar-container light diphthong">
+                                                        <div className='type-score-bar-text-white'>{t('d')}</div>
+                                                        <div className="type-score-bar diphthong" style={{ height: `${diphthongScore}%` }}></div>
+                                                        <div className="type-score-bar hide light" style={{ height: diphthongScore > 95 ? "0%" : `${100 - diphthongScore}%` }}>
+                                                            <div className='type-score-bar-text-black'>{t('d')}</div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="type-score-bar-container light hiatus">
+                                                        <div className='type-score-bar-text-white'>{t('h')}</div>
+                                                        <div className="type-score-bar hiatus" style={{ height: `${hiatusScore}%` }}></div>
+                                                        <div className="type-score-bar hide light" style={{ height: hiatusScore > 95 ? "0%" : `${100 - hiatusScore}%` }}>
+                                                            <div className='type-score-bar-text-black'>{t('h')}</div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="type-score-bar-container light general">
+                                                        <div className='type-score-bar-text-white'>{t('g')}</div>
+                                                        <div className="type-score-bar general" style={{ height: `${generalScore}%` }}></div>
+                                                        <div className="type-score-bar hide light" style={{ height: generalScore > 95 ? "0%" : `${100 - generalScore}%` }}>
+                                                            <div className='type-score-bar-text-black'>{t('g')}</div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className='absolute'>
+                                                        <div className="info-button" style={{ position: 'relative', top: '0rem', left: '7rem', zIndex: '100' }}>
+                                                            i
+                                                            <div className="tooltip left bottom" style={{ zIndex: '100' }}>
+                                                                <div style={{ fontWeight: '400' }}>{t('info-progress')}</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <div className='mt-3 text-center mr-9'>
+                                                <span style={getStyleForLabel('X')}>{t('diphthongs')} </span>
+                                                {diphthongScore}% <br />
+                                                <span style={getStyleForLabel('X')}>{t('hiatuses')} </span>
+                                                {hiatusScore}% <br />
+                                                <span style={getStyleForLabel('X')}>{t('generals')} </span>
+                                                {generalScore}% <br />
+                                            </div>
+
+                                            <div className='pr-7 mt-5 mb-3'>
+                                                <button onClick={() => handleDownloadPDF()} className="animated-button p-2 text-center align-bottom">
+                                                    <div className="animated-button-bg"></div>
+                                                    <div className="animated-button-text">
+                                                        {t('download')}
+                                                    </div>
+                                                </button>
+                                            </div>
+                                        </div>
 
                                         <div className='contain-mistakes-slim'>
                                             <div className='inside-card-mistakes-header mt-4 text-white' > {/* Header */}

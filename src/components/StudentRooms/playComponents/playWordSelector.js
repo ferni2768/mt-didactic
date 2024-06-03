@@ -22,7 +22,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
     const [newAnswer, setNewAnswer] = useState([]); // To store the input answers
     const [newWords, setNewWords] = useState(false); // To trigger the new batch of words
     const [, setTrainingData] = useState([]);
-    const [forceCheckMatrix, setForceCheckMatrix] = useState(false);
+    const [forceCheckMatrix, setForceCheckMatrix] = useState(-1);
     const { selectedElements, processTrainingDataMatrix } = useDataFetcher();
 
     const [animationClass, setAnimationClass] = useState(''); // To trigger the transition animation between words
@@ -256,7 +256,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                     setExternalIsTraining(false);
                     setNewWords(false);
                 }
-                setForceCheckMatrix(true);
+                setForceCheckMatrix(1);
             }
         };
 
@@ -271,11 +271,18 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
     }, [matrix, forceCheckMatrix]);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            if (forceCheckMatrix === false) setForceCheckMatrix(true);
-        }, 1000);
+        const interval = setInterval(() => {
+            setForceCheckMatrix(prevForceCheckMatrix => {
+                if (prevForceCheckMatrix < 0) {
+                    return prevForceCheckMatrix - 1;
+                } else if (prevForceCheckMatrix > 0) {
+                    clearInterval(interval);
+                }
+                return prevForceCheckMatrix;
+            });
+        }, 500);
 
-        return () => clearTimeout(timer);
+        return () => clearInterval(interval);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -662,7 +669,7 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                                 </div>
                             </div>
                         </div>
-                        <div className={`block lg:row-span-2 ${isTurningIn && !isTraining ? 'buttonsOut' : 'buttonsIn'}`}>
+                        <div className={`block lg:row-span-2 overflow-visible ${isTurningIn && !isTraining ? 'buttonsOut' : 'buttonsIn'}`} style={{ zIndex: '100' }}>
                             <div className="flex row-span-2 justify-center lg:mt-12">
                                 <div className="type-score-bar-container diphthong">
                                     <div className='type-score-bar-text-white'>{t('d')}</div>
@@ -672,7 +679,6 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                                     </div>
                                 </div>
 
-
                                 <div className="type-score-bar-container hiatus">
                                     <div className='type-score-bar-text-white'>{t('h')}</div>
                                     <div className="type-score-bar hiatus" style={{ height: `${hiatusScore}%` }}></div>
@@ -681,7 +687,6 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                                     </div>
                                 </div>
 
-
                                 <div className="type-score-bar-container general">
                                     <div className='type-score-bar-text-white'>{t('g')}</div>
                                     <div className="type-score-bar general" style={{ height: `${generalScore}%` }}></div>
@@ -689,6 +694,16 @@ function PlayWordSelector({ updateScore, setProgress, setWords, ExternalCurrentW
                                         <div className='type-score-bar-text-black'>{t('g')}</div>
                                     </div>
                                 </div>
+
+                                <div className='absolute'>
+                                    <div className="info-button" style={{ position: 'relative', top: '-0.4rem', left: '7.3rem', zIndex: '100' }}>
+                                        i
+                                        <div className="tooltip top left" style={{ zIndex: '100' }}>
+                                            <div style={{ fontWeight: '400' }}>{t('info-progress')}</div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>

@@ -9,13 +9,12 @@ require('dotenv').config();
 const { API_URL, BASE_PORT, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME } = require('./src/config');
 
 const app = express();
-const port = 3306;
 
 const db = mysql.createConnection({
-    host: '127.0.0.1',
-    user: 'pupis',
-    password: 'pupis',
-    database: 'tfg_db'
+    host: DB_HOST,
+    user: DB_USER,
+    password: DB_PASSWORD,
+    database: DB_NAME
 });
 
 // Get a hashed password
@@ -205,26 +204,6 @@ app.post('/class/:code/join', async (req, res) => {
             return res.status(500).json({ error: 'Failed to create model' });
         }
 
-        console.log("UNO");
-
-        // try {
-        //     const modelResponse = await fetch(`${API_URL}/models/${model}`, {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         }
-        //     });
-
-        //     // Removed the check for!modelResponse.ok
-
-        //     // If the model creation is successful, proceed with the rest of the function
-        // } catch (modelError) {
-        //     console.error('Error creating model:', modelError);
-        //     // Since we're ignoring the server's response, we don't need to handle errors here either
-        // }
-
-        console.log("DOS");
-
         const insertResult = await query('INSERT INTO student (name, class_code, score, progress, model) VALUES (?, ?, 0, 0, ?)', [name, classCode, model]);
 
         // Check if the insert was successful
@@ -240,8 +219,6 @@ app.post('/class/:code/join', async (req, res) => {
         if (newStudentResult.length === 0) {
             return res.status(500).json({ error: 'Failed to retrieve newly created student' });
         }
-
-        console.log("TRES");
 
         log(`Student ${name} joined class ${classCode} with model ${model}`)
 

@@ -126,9 +126,9 @@ if models_missing:
 
 
 # Root
-# @app.route('/')
-# def root():
-#     return '¡Bienvenido a la aplicación!'
+@app.route('/')
+def root():
+    return '¡Bienvenido a la aplicación!'
 
 
 # Resets models to default with a new fresh training.

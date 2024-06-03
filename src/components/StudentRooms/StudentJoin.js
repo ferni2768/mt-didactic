@@ -146,6 +146,7 @@ function StudentJoin({ navigate, classCode }) {
 
     const handleJoin = async (event) => {
         event.preventDefault();
+        console.log(`${global.BASE_URL}/class/${inputClassCode}/join`);
         try {
             const response = await fetch(`${global.BASE_URL}/class/${inputClassCode}/join`, {
                 method: 'POST',
