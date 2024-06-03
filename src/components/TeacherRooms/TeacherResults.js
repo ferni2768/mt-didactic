@@ -241,7 +241,7 @@ function TeacherResults({ navigate, classCode }) {
         sessionStorage.removeItem('createdClassCode');
         sessionStorage.removeItem('isAuthenticated');
         sessionStorage.removeItem('isFinished');
-        navigate('/teacher/ABC123');
+        navigate('/');
         window.location.reload(); // Reload the page to reset the state
     };
 

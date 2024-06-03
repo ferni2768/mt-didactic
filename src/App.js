@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Link, Routes, Navigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Link, Routes, Navigate, useLocation } from 'react-router-dom';
 import StudentView from './components/StudentView';
 import TeacherView from './components/TeacherView';
 import TeacherPDF from './components/TeacherRooms/TeacherPDF';
@@ -17,24 +17,23 @@ global.WEB_URL = WEB_URL;
 const StorageContext = React.createContext();
 
 function App() {
+  const location = useLocation();
+  const [redirectTo, setRedirectTo] = useState('/student'); // Default redirect
+
+  useEffect(() => {
+    const isStudent = getFromSessionStorage('isStudent');
+    if (isStudent === 'true') {
+      setRedirectTo('/student');
+    } else if (isStudent === 'false') {
+      setRedirectTo('/teacher');
+    }
+  }, []);
+
   return (
     <TransitionProvider>
       <Router>
         <div className="full-screen">
           <div className="App">
-            <header className="App-header hidden">
-              <nav>
-                <ul>
-                  <li>
-                    <Link to="/student/ABC123">Student View</Link>
-                  </li>
-                  <li>
-                    <Link to="/teacher/ABC123">Teacher View</Link>
-                  </li>
-                </ul>
-              </nav>
-            </header>
-
             <StorageContext.Provider value={{ saveToSessionStorage, getFromSessionStorage }}>
               <Routes>
                 <Route path="/student" element={<StudentView />} />
@@ -45,7 +44,7 @@ function App() {
                 <Route path="/teacher/:classCode/results" element={<TeacherView />} />
                 <Route path="/pdf" element={<TeacherPDF />} />
                 <Route path="/pdf2" element={<StudentPDF />} />
-                <Route path="*" element={<Navigate to="/student" replace />} />
+                <Route path="*" element={<Navigate to={location.pathname !== '/' ? location.pathname : redirectTo} replace />} />
               </Routes>
             </StorageContext.Provider>
           </div>

@@ -11,7 +11,7 @@ import INNOVAGIA from '../../static/logos/Grupo_Eduinnovagogia.png';
 import { saveToSessionStorage } from '../../utils/storageUtils';
 
 function TeacherLogin({ navigate, classCode }) {
-    const [password, setPassword] = useState('password');
+    const [password, setPassword] = useState('');
     const [inputClassCode, setInputClassCode] = useState(classCode);
     const { isTransitioning, isEntering } = useContext(TransitionContext);
     const [classError, setClassError] = useState('');
@@ -85,6 +85,7 @@ function TeacherLogin({ navigate, classCode }) {
 
             if (response.ok) {
                 saveToSessionStorage('isAuthenticated', true);
+                saveToSessionStorage('isTeacher', true);
                 saveToSessionStorage('createdClassCode', inputClassCode);
                 navigate(`/teacher/${inputClassCode}`);
 

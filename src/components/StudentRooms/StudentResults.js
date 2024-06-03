@@ -226,7 +226,7 @@ function StudentResults({ navigate, classCode }) {
         sessionStorage.removeItem('score');
         sessionStorage.removeItem('mistakes');
         sessionStorage.removeItem('iterationData');
-        navigate('/student/ABC123');
+        navigate('/');
         window.location.reload(); // Reload the page to reset the state
     };
 

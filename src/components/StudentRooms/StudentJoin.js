@@ -12,7 +12,7 @@ import { saveToSessionStorage } from '../../utils/storageUtils';
 
 function StudentJoin({ navigate, classCode }) {
     const maxLength = 15; // Set the maximum length of the name of the student
-    const [name, setName] = useState('student1');
+    const [name, setName] = useState('');
     const [nameExceedsLimit, setNameExceedsLimit] = useState(false);
     const [isNameInputFocused, setIsNameInputFocused] = useState(false);
     const [inputClassCode, setInputClassCode] = useState(classCode);
@@ -183,6 +183,7 @@ function StudentJoin({ navigate, classCode }) {
             // If there's no error, proceed as before
             setGeneralError('');
             saveToSessionStorage('loggedInStudent', JSON.stringify(data));
+            saveToSessionStorage('isStudent', true);
             setWantsToJoin(true); // Set wantsToJoin to true to start polling for the class phase
         } catch (error) {
             setNameError('');
