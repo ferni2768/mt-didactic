@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Link, Routes, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import StudentView from './components/StudentView';
 import TeacherView from './components/TeacherView';
 import TeacherPDF from './components/TeacherRooms/TeacherPDF';
