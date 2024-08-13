@@ -68,7 +68,7 @@ function TeacherLogin({ navigate, classCode }) {
 
     const openTeacherManualInNewTab = () => {
         // Open the PDF in a new tab
-        window.open('/manuals/manual_profesor.pdf', '_blank');
+        window.open('/manuals/guia_profesor.pdf', '_blank');
     };
 
     const handleCreateClass = async (event) => {

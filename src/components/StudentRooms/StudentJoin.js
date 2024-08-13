@@ -104,7 +104,7 @@ function StudentJoin({ navigate, classCode }) {
 
     const openStudentManualInNewTab = () => {
         // Open the PDF in a new tab
-        window.open('/manuals/manual_estudiante.pdf', '_blank');
+        window.open('/manuals/guia_estudiante.pdf', '_blank');
     };
 
     useEffect(() => {
@@ -215,7 +215,7 @@ function StudentJoin({ navigate, classCode }) {
 
 
     return (
-        <div class="overflowY-container" ref={scrollbarRef}>
+        <div class="overflowY-container">
             <div className="overflowY-container-inside footer">
                 <div>
                     <div ref={shrinkCard} className={`inside-login-card ${wantsToJoin ? 'shrink' : ''} ${isTransitioning ? 'transitioning' : ''} ${isEntering ? 'entering' : ''}`}>

@@ -403,7 +403,7 @@ def handle_class_deletion(class_code):
         pass
 
 
-# Teach new examples to the model. aqui
+# Teach new examples to the model
 def teach(model_name, word_dictionary, tokenizer, padding=16):
     model = get_pretrained_model(model_name)
     added_x, added_y = list(word_dictionary.keys()), \

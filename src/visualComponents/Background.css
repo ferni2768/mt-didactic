@@ -9,6 +9,7 @@
     width: 100%;
     height: 100%;
     background-image: radial-gradient(circle at bottom, #ff0081, #ff3102);
+    /* background-image: black; */
     /* background-image: radial-gradient(circle at bottom, #118c6d, #02ff30); */
 }
 
