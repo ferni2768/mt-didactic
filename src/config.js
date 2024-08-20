@@ -1,13 +1,19 @@
-const IP = `${process.env.REACT_APP_IP}`;
-const BASE_PORT = process.env.REACT_APP_BASE_PORT;
-const WEB_PORT = process.env.REACT_APP_WEB_PORT;
-const EXTERNAL_API_PORT = process.env.REACT_APP_EXTERNAL_API_PORT;
+//////////////////////////// APP CONFIG ////////////////////////////
 
-const SERVER_URL = `${IP}:${BASE_PORT}`;
-const WEB_URL = `${IP}:${WEB_PORT}`;
-const API_URL = `http://127.0.0.1:${EXTERNAL_API_PORT}`;
+// http://localhost:3000
+const WEB_URL = `${process.env.REACT_APP_STATIC_PAGE}`;
+// http://localhost:3001
+const SERVER_URL = `${process.env.REACT_APP_SERVER}`;
+// http://localhost:8000
+const API_URL = `${process.env.REACT_APP_AI}`;
 
-// Database config
+
+
+
+
+////////////////////////// DATABASE CONFIG /////////////////////////
+
+// localhost
 const DB_HOST = `${process.env.DB_HOST}`;
 const DB_USER = process.env.DB_USER || 'pupis';
 const DB_PASSWORD = process.env.DB_PASSWORD || 'pupis';
@@ -15,7 +21,6 @@ const DB_NAME = process.env.DB_NAME || 'tfg_db';
 
 module.exports = {
     SERVER_URL,
-    BASE_PORT,
     WEB_URL,
     API_URL,
     DB_HOST,

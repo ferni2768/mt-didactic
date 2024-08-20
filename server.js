@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs'); // To hash the password
 
 require('dotenv').config();
-const { API_URL, BASE_PORT, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME } = require('./src/config');
+const { API_URL, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME } = require('./src/config');
 
 const app = express();
 
