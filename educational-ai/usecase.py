@@ -168,7 +168,7 @@ def predict(model_name, tokenizer, word, padding=16):
 
 def load_new(model_name, curriculum=True, kfolds=True):
 
-    base_model_name = "curriculum_under_trained"
+    base_model_name = "curriculum_under_trained_k_folds"
 
     # Load the pre-trained model
     original_model = get_pretrained_model(base_model_name)
@@ -341,7 +341,7 @@ def extract_class_code_from_name(name):
 
 # Get AI model.
 def get_pretrained_model(name="example", directory="models/", extension=".keras"):
-    base_model_name = "curriculum_under_trained"
+    base_model_name = "curriculum_under_trained_k_folds"
     
     # Check if the model name matches the base model name
     if name == base_model_name:
@@ -414,7 +414,7 @@ def teach(model_name, word_dictionary, tokenizer, padding=16):
     mt_y_encoded = tf.keras.utils.to_categorical(added_y, num_classes=3)
 
     # Compile model again with lower learning rate to avoid over-adapting to new examples.
-    optimizer = tf.keras.optimizers.Adam(learning_rate=0.00005)
+    optimizer = tf.keras.optimizers.Adam(learning_rate=0.0000325)
     model.compile(optimizer=optimizer,
                   loss='categorical_crossentropy',
                   metrics=['accuracy'])
