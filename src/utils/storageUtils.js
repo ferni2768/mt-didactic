@@ -1,6 +1,9 @@
 import CryptoJS from 'crypto-js';
 
-const SECRET_KEY = "knD5L27wqXkbR0DzMurVGQqXwynn7bzr582HCWgAw1SUu5Glag"
+require('dotenv').config();
+const { KEY } = require('../config');
+
+const SECRET_KEY = KEY;
 
 export const encryptData = (data) => {
     return CryptoJS.AES.encrypt(JSON.stringify(data), SECRET_KEY).toString();

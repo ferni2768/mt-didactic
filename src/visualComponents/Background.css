@@ -107,7 +107,7 @@
 @keyframes bigButtonsTransition {
     0% {
         width: 15rem;
-        height: var(--initial-height);
+        /* height: var(--initial-height); */
     }
 
     50% {
@@ -118,7 +118,7 @@
     60% {
 
         width: var(--initial-width);
-        height: var(--initial-height);
+        /* height: var(--initial-height); */
 
     }
 }
@@ -427,7 +427,7 @@
 /* Go to 'waiting' state */
 @keyframes smallTransition {
     0% {
-        width: auto;
+        /* width: auto; */
         height: var(--initial-height);
     }
 
@@ -568,6 +568,7 @@
     padding-right: 1.5rem;
     z-index: 10;
     font-size: 1.4rem;
+    font-weight: 300;
     overflow: hidden;
 }
 
@@ -732,6 +733,7 @@
     padding-right: 1.5rem;
     z-index: 10;
     font-size: 1.3rem;
+    font-weight: 300;
     overflow: hidden;
 }
 
@@ -1473,7 +1475,7 @@
 .animated-word-text {
     overflow: hidden;
 
-    font-weight: 450;
+    font-weight: 300;
     font-size: medium;
     color: #ffffff;
 

@@ -1,0 +1,480 @@
+@font-face {
+    font-family: 'Frutiger Neue LT W1G Cn UltLt';
+    src: url('FrutigerNeueLTW1G-CnUltLtIt.eot');
+    src: local('Frutiger Neue LT W1G Condensed Ultra Light Italic'), local('FrutigerNeueLTW1G-CnUltLtIt'),
+        url('FrutigerNeueLTW1G-CnUltLtIt.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-CnUltLtIt.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-CnUltLtIt.woff') format('woff'),
+        url('FrutigerNeueLTW1G-CnUltLtIt.ttf') format('truetype');
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G Cn';
+    src: url('FrutigerNeueLTW1G-CnBlk.eot');
+    src: local('Frutiger Neue LT W1G Condensed Black'), local('FrutigerNeueLTW1G-CnBlk'),
+        url('FrutigerNeueLTW1G-CnBlk.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-CnBlk.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-CnBlk.woff') format('woff'),
+        url('FrutigerNeueLTW1G-CnBlk.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G';
+    src: url('FrutigerNeueLTW1G-BlackIt.eot');
+    src: local('Frutiger Neue LT W1G Black Italic'), local('FrutigerNeueLTW1G-BlackIt'),
+        url('FrutigerNeueLTW1G-BlackIt.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-BlackIt.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-BlackIt.woff') format('woff'),
+        url('FrutigerNeueLTW1G-BlackIt.ttf') format('truetype');
+    font-weight: 900;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G';
+    src: url('FrutigerNeueLTW1G-Heavy.eot');
+    src: local('Frutiger Neue LT W1G Heavy'), local('FrutigerNeueLTW1G-Heavy'),
+        url('FrutigerNeueLTW1G-Heavy.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-Heavy.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-Heavy.woff') format('woff'),
+        url('FrutigerNeueLTW1G-Heavy.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G';
+    src: url('FrutigerNeueLTW1G-HeavyIt.eot');
+    src: local('Frutiger Neue LT W1G Heavy Italic'), local('FrutigerNeueLTW1G-HeavyIt'),
+        url('FrutigerNeueLTW1G-HeavyIt.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-HeavyIt.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-HeavyIt.woff') format('woff'),
+        url('FrutigerNeueLTW1G-HeavyIt.ttf') format('truetype');
+    font-weight: 900;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G Cn UltLt';
+    src: url('FrutigerNeueLTW1G-CnUltLt.eot');
+    src: local('Frutiger Neue LT W1G Condensed Ultra Light'), local('FrutigerNeueLTW1G-CnUltLt'),
+        url('FrutigerNeueLTW1G-CnUltLt.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-CnUltLt.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-CnUltLt.woff') format('woff'),
+        url('FrutigerNeueLTW1G-CnUltLt.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G';
+    src: url('FrutigerNeueLTW1G-Italic.eot');
+    src: local('Frutiger Neue LT W1G Italic'), local('FrutigerNeueLTW1G-Italic'),
+        url('FrutigerNeueLTW1G-Italic.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-Italic.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-Italic.woff') format('woff'),
+        url('FrutigerNeueLTW1G-Italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G Cn';
+    src: url('FrutigerNeueLTW1G-CnMd.eot');
+    src: local('Frutiger Neue LT W1G Condensed Medium'), local('FrutigerNeueLTW1G-CnMd'),
+        url('FrutigerNeueLTW1G-CnMd.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-CnMd.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-CnMd.woff') format('woff'),
+        url('FrutigerNeueLTW1G-CnMd.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G';
+    src: url('FrutigerNeueLTW1G-Light.eot');
+    src: local('Frutiger Neue LT W1G Light'), local('FrutigerNeueLTW1G-Light'),
+        url('FrutigerNeueLTW1G-Light.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-Light.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-Light.woff') format('woff'),
+        url('FrutigerNeueLTW1G-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G';
+    src: url('FrutigerNeueLTW1G-ThinIt.eot');
+    src: local('Frutiger Neue LT W1G Thin Italic'), local('FrutigerNeueLTW1G-ThinIt'),
+        url('FrutigerNeueLTW1G-ThinIt.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-ThinIt.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-ThinIt.woff') format('woff'),
+        url('FrutigerNeueLTW1G-ThinIt.ttf') format('truetype');
+    font-weight: 100;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G Cn Book';
+    src: url('FrutigerNeueLTW1G-CnBold.eot');
+    src: local('Frutiger Neue LT W1G Condensed Bold'), local('FrutigerNeueLTW1G-CnBold'),
+        url('FrutigerNeueLTW1G-CnBold.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-CnBold.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-CnBold.woff') format('woff'),
+        url('FrutigerNeueLTW1G-CnBold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G Book';
+    src: url('FrutigerNeueLTW1G-BoldIt.eot');
+    src: local('Frutiger Neue LT W1G Bold Italic'), local('FrutigerNeueLTW1G-BoldIt'),
+        url('FrutigerNeueLTW1G-BoldIt.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-BoldIt.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-BoldIt.woff') format('woff'),
+        url('FrutigerNeueLTW1G-BoldIt.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G Cn XBlack';
+    src: url('FrutigerNeueLTW1G-CnXBlkIt.eot');
+    src: local('Frutiger Neue LT W1G Condensed Extra Black Italic'), local('FrutigerNeueLTW1G-CnXBlkIt'),
+        url('FrutigerNeueLTW1G-CnXBlkIt.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-CnXBlkIt.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-CnXBlkIt.woff') format('woff'),
+        url('FrutigerNeueLTW1G-CnXBlkIt.ttf') format('truetype');
+    font-weight: 900;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G XBlack';
+    src: url('FrutigerNeueLTW1G-XBlack.eot');
+    src: local('Frutiger Neue LT W1G Extra Black'), local('FrutigerNeueLTW1G-XBlack'),
+        url('FrutigerNeueLTW1G-XBlack.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-XBlack.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-XBlack.woff') format('woff'),
+        url('FrutigerNeueLTW1G-XBlack.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G Cn';
+    src: url('FrutigerNeueLTW1G-CnLt.eot');
+    src: local('Frutiger Neue LT W1G Condensed Light'), local('FrutigerNeueLTW1G-CnLt'),
+        url('FrutigerNeueLTW1G-CnLt.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-CnLt.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-CnLt.woff') format('woff'),
+        url('FrutigerNeueLTW1G-CnLt.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G Book';
+    src: url('FrutigerNeueLTW1G-Book.eot');
+    src: local('Frutiger Neue LT W1G Book'), local('FrutigerNeueLTW1G-Book'),
+        url('FrutigerNeueLTW1G-Book.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-Book.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-Book.woff') format('woff'),
+        url('FrutigerNeueLTW1G-Book.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G';
+    src: url('FrutigerNeueLTW1G-MediumIt.eot');
+    src: local('Frutiger Neue LT W1G Medium Italic'), local('FrutigerNeueLTW1G-MediumIt'),
+        url('FrutigerNeueLTW1G-MediumIt.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-MediumIt.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-MediumIt.woff') format('woff'),
+        url('FrutigerNeueLTW1G-MediumIt.ttf') format('truetype');
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G Cn';
+    src: url('FrutigerNeueLTW1G-CnThin.eot');
+    src: local('Frutiger Neue LT W1G Condensed Thin'), local('FrutigerNeueLTW1G-CnThin'),
+        url('FrutigerNeueLTW1G-CnThin.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-CnThin.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-CnThin.woff') format('woff'),
+        url('FrutigerNeueLTW1G-CnThin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G Book';
+    src: url('FrutigerNeueLTW1G-Bold.eot');
+    src: local('Frutiger Neue LT W1G Bold'), local('FrutigerNeueLTW1G-Bold'),
+        url('FrutigerNeueLTW1G-Bold.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-Bold.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-Bold.woff') format('woff'),
+        url('FrutigerNeueLTW1G-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G Cn';
+    src: url('FrutigerNeueLTW1G-CnMdIt.eot');
+    src: local('Frutiger Neue LT W1G Condensed Medium Italic'), local('FrutigerNeueLTW1G-CnMdIt'),
+        url('FrutigerNeueLTW1G-CnMdIt.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-CnMdIt.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-CnMdIt.woff') format('woff'),
+        url('FrutigerNeueLTW1G-CnMdIt.ttf') format('truetype');
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G XBlack';
+    src: url('FrutigerNeueLTW1G-XBlackIt.eot');
+    src: local('Frutiger Neue LT W1G Extra Black Italic'), local('FrutigerNeueLTW1G-XBlackIt'),
+        url('FrutigerNeueLTW1G-XBlackIt.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-XBlackIt.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-XBlackIt.woff') format('woff'),
+        url('FrutigerNeueLTW1G-XBlackIt.ttf') format('truetype');
+    font-weight: 900;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G Cn XBlack';
+    src: url('FrutigerNeueLTW1G-CnXBlk.eot');
+    src: local('Frutiger Neue LT W1G Condensed Extra Black'), local('FrutigerNeueLTW1G-CnXBlk'),
+        url('FrutigerNeueLTW1G-CnXBlk.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-CnXBlk.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-CnXBlk.woff') format('woff'),
+        url('FrutigerNeueLTW1G-CnXBlk.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G';
+    src: url('FrutigerNeueLTW1G-Regular.eot');
+    src: local('Frutiger Neue LT W1G Regular'), local('FrutigerNeueLTW1G-Regular'),
+        url('FrutigerNeueLTW1G-Regular.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-Regular.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-Regular.woff') format('woff'),
+        url('FrutigerNeueLTW1G-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G Cn';
+    src: url('FrutigerNeueLTW1G-CnThinIt.eot');
+    src: local('Frutiger Neue LT W1G Condensed Thin Italic'), local('FrutigerNeueLTW1G-CnThinIt'),
+        url('FrutigerNeueLTW1G-CnThinIt.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-CnThinIt.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-CnThinIt.woff') format('woff'),
+        url('FrutigerNeueLTW1G-CnThinIt.ttf') format('truetype');
+    font-weight: 100;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G Cn Book';
+    src: url('FrutigerNeueLTW1G-CnBookIt.eot');
+    src: local('Frutiger Neue LT W1G Condensed Book Italic'), local('FrutigerNeueLTW1G-CnBookIt'),
+        url('FrutigerNeueLTW1G-CnBookIt.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-CnBookIt.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-CnBookIt.woff') format('woff'),
+        url('FrutigerNeueLTW1G-CnBookIt.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G Cn';
+    src: url('FrutigerNeueLTW1G-CnBlkIt.eot');
+    src: local('Frutiger Neue LT W1G Condensed Black Italic'), local('FrutigerNeueLTW1G-CnBlkIt'),
+        url('FrutigerNeueLTW1G-CnBlkIt.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-CnBlkIt.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-CnBlkIt.woff') format('woff'),
+        url('FrutigerNeueLTW1G-CnBlkIt.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G';
+    src: url('FrutigerNeueLTW1G-Medium.eot');
+    src: local('Frutiger Neue LT W1G Medium'), local('FrutigerNeueLTW1G-Medium'),
+        url('FrutigerNeueLTW1G-Medium.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-Medium.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-Medium.woff') format('woff'),
+        url('FrutigerNeueLTW1G-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G Cn';
+    src: url('FrutigerNeueLTW1G-CnItalic.eot');
+    src: local('Frutiger Neue LT W1G Condensed Italic'), local('FrutigerNeueLTW1G-CnItalic'),
+        url('FrutigerNeueLTW1G-CnItalic.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-CnItalic.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-CnItalic.woff') format('woff'),
+        url('FrutigerNeueLTW1G-CnItalic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G Cn Book';
+    src: url('FrutigerNeueLTW1G-CnBoldIt.eot');
+    src: local('Frutiger Neue LT W1G Condensed Bold Italic'), local('FrutigerNeueLTW1G-CnBoldIt'),
+        url('FrutigerNeueLTW1G-CnBoldIt.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-CnBoldIt.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-CnBoldIt.woff') format('woff'),
+        url('FrutigerNeueLTW1G-CnBoldIt.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G';
+    src: url('FrutigerNeueLTW1G-Thin.eot');
+    src: local('Frutiger Neue LT W1G Thin'), local('FrutigerNeueLTW1G-Thin'),
+        url('FrutigerNeueLTW1G-Thin.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-Thin.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-Thin.woff') format('woff'),
+        url('FrutigerNeueLTW1G-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G Book';
+    src: url('FrutigerNeueLTW1G-BookIt.eot');
+    src: local('Frutiger Neue LT W1G Book Italic'), local('FrutigerNeueLTW1G-BookIt'),
+        url('FrutigerNeueLTW1G-BookIt.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-BookIt.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-BookIt.woff') format('woff'),
+        url('FrutigerNeueLTW1G-BookIt.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G Cn Book';
+    src: url('FrutigerNeueLTW1G-CnBook.eot');
+    src: local('Frutiger Neue LT W1G Condensed Book'), local('FrutigerNeueLTW1G-CnBook'),
+        url('FrutigerNeueLTW1G-CnBook.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-CnBook.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-CnBook.woff') format('woff'),
+        url('FrutigerNeueLTW1G-CnBook.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G UltLt';
+    src: url('FrutigerNeueLTW1G-UltLtIt.eot');
+    src: local('Frutiger Neue LT W1G Ultra Light Italic'), local('FrutigerNeueLTW1G-UltLtIt'),
+        url('FrutigerNeueLTW1G-UltLtIt.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-UltLtIt.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-UltLtIt.woff') format('woff'),
+        url('FrutigerNeueLTW1G-UltLtIt.ttf') format('truetype');
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G';
+    src: url('FrutigerNeueLTW1G-Black.eot');
+    src: local('Frutiger Neue LT W1G Black'), local('FrutigerNeueLTW1G-Black'),
+        url('FrutigerNeueLTW1G-Black.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-Black.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-Black.woff') format('woff'),
+        url('FrutigerNeueLTW1G-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G';
+    src: url('FrutigerNeueLTW1G-LightIt.eot');
+    src: local('Frutiger Neue LT W1G Light Italic'), local('FrutigerNeueLTW1G-LightIt'),
+        url('FrutigerNeueLTW1G-LightIt.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-LightIt.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-LightIt.woff') format('woff'),
+        url('FrutigerNeueLTW1G-LightIt.ttf') format('truetype');
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G Cn';
+    src: url('FrutigerNeueLTW1G-CnLtIt.eot');
+    src: local('Frutiger Neue LT W1G Condensed Light Italic'), local('FrutigerNeueLTW1G-CnLtIt'),
+        url('FrutigerNeueLTW1G-CnLtIt.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-CnLtIt.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-CnLtIt.woff') format('woff'),
+        url('FrutigerNeueLTW1G-CnLtIt.ttf') format('truetype');
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G Cn';
+    src: url('FrutigerNeueLTW1G-CnHv.eot');
+    src: local('Frutiger Neue LT W1G Condensed Heavy'), local('FrutigerNeueLTW1G-CnHv'),
+        url('FrutigerNeueLTW1G-CnHv.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-CnHv.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-CnHv.woff') format('woff'),
+        url('FrutigerNeueLTW1G-CnHv.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G UltLt';
+    src: url('FrutigerNeueLTW1G-UltLt.eot');
+    src: local('Frutiger Neue LT W1G Ultra Light'), local('FrutigerNeueLTW1G-UltLt'),
+        url('FrutigerNeueLTW1G-UltLt.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-UltLt.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-UltLt.woff') format('woff'),
+        url('FrutigerNeueLTW1G-UltLt.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G Cn';
+    src: url('FrutigerNeueLTW1G-CnHvIt.eot');
+    src: local('Frutiger Neue LT W1G Condensed Heavy Italic'), local('FrutigerNeueLTW1G-CnHvIt'),
+        url('FrutigerNeueLTW1G-CnHvIt.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-CnHvIt.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-CnHvIt.woff') format('woff'),
+        url('FrutigerNeueLTW1G-CnHvIt.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue LT W1G Cn';
+    src: url('FrutigerNeueLTW1G-CnRg.eot');
+    src: local('Frutiger Neue LT W1G Condensed Regular'), local('FrutigerNeueLTW1G-CnRg'),
+        url('FrutigerNeueLTW1G-CnRg.eot?#iefix') format('embedded-opentype'),
+        url('FrutigerNeueLTW1G-CnRg.woff2') format('woff2'),
+        url('FrutigerNeueLTW1G-CnRg.woff') format('woff'),
+        url('FrutigerNeueLTW1G-CnRg.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+

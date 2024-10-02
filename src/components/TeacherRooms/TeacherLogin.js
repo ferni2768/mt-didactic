@@ -142,7 +142,7 @@ function TeacherLogin({ navigate, classCode }) {
                     <div className={`inside-login-card ${isTransitioning ? 'transitioning' : ''} ${isEntering ? 'entering' : ''}`}>
                         <div className="form-container">
                             <h1 className="text-2xl font-bold text-center">{t('teacherLogin')}</h1>
-                            <form onSubmit={handleCreateClass} className="space-y-4">
+                            <form onSubmit={handleCreateClass} className="space-y-4" autocomplete="off">
                                 <div className="flex justify-center relative">
                                     <input
                                         id="classCode"

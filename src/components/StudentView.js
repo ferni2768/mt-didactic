@@ -6,6 +6,7 @@ import StudentPlay from './StudentRooms/StudentPlay';
 import StudentResults from './StudentRooms/StudentResults';
 import Background from '../visualComponents/Background';
 import { getFromSessionStorage } from '../utils/storageUtils';
+import i18n from '../i18n/i18n';
 
 function StudentView() {
     const { classCode: urlClassCode } = useParams();
@@ -17,6 +18,23 @@ function StudentView() {
     const [renderComponent, setRenderComponent] = useState(null); // State to control rendering
     const [hasMounted, setHasMounted] = useState(true);
 
+
+    // Switch language handler
+    const handleLanguageSwitch = (event) => {
+        if (event.key === 't' || event.key === 'T') {
+            const currentLanguage = i18n.language;
+            const newLanguage = currentLanguage === 'en' ? 'es' : 'en';
+            i18n.changeLanguage(newLanguage);
+        }
+    };
+
+    // Add event listener for language switch
+    useEffect(() => {
+        window.addEventListener('keydown', handleLanguageSwitch);
+        return () => {
+            window.removeEventListener('keydown', handleLanguageSwitch);
+        };
+    }, []);
 
     useEffect(() => {
         setHasMounted(true); // Skip transition on first mount

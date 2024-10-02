@@ -182,7 +182,7 @@ function StudentPlay({ navigate, classCode }) {
                     <div className={`inside-card ${isTransitioning ? 'transitioning' : ''} ${isEntering ? 'entering' : ''}`}>
                         <div className="grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-1">
                             <div className='col-span-2'>
-                                <h1 className='hidden lg:block'>{t('studentPlay')}</h1>
+                                <h1 className='hidden lg:block' style={{ fontWeight: '600' }}>{t('studentPlay')}</h1>
                                 {/* {matrix && matrix.map((row, rowIndex) => (
                                     <div key={rowIndex}>
                                         {row.map((value, colIndex) => (
@@ -232,7 +232,7 @@ function StudentPlay({ navigate, classCode }) {
                                                             setExternalCurrentWordIndexChange(ExternalCurrentWordIndexChange * (-1)); // To notify the child component that the current word index has changed
                                                         }}>
                                                         <div className="animated-word-bg md:pl-52 lg:pl-0"></div>
-                                                        <div className="animated-word-text">
+                                                        <div className="animated-word-text" style={{ fontWeight: '500' }}>
                                                             {word} {label !== "" && `(${label})`}
                                                         </div>
                                                     </button>

@@ -365,7 +365,7 @@ function TeacherResults({ navigate, classCode }) {
                             <div className='col-span-full lg:col-span-1 lg:pl-7'>
                                 <div className="hidden lg:block">
                                     <div className='contain'>
-                                        <div className='inside-card-2-header text-white'> {/* Header */}
+                                        <div className='inside-card-2-header text-white' style={{ fontWeight: '400' }}> {/* Header */}
                                             <div>{t('name')}</div>
                                             <div>{t('score')}</div>
                                             <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
@@ -439,7 +439,7 @@ function TeacherResults({ navigate, classCode }) {
 
                                 <div className="block lg:hidden">
                                     <div className='contain small md:h-auto'>
-                                        <div className='inside-card-2-header text-white'>
+                                        <div className='inside-card-2-header text-white' style={{ fontWeight: '400' }}>
                                             <div className='hidden md:block'>{t('name')}</div>
                                             <div className='hidden md:block'>{t('score')}</div>
                                             <div className='hidden md:block'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>

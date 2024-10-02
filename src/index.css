@@ -2,6 +2,76 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Frutiger Neue Font Face Rules */
+
+@font-face {
+    font-family: 'Frutiger Neue';
+    src: local('Frutiger Neue Light'), local('FrutigerNeueLTW1G-Light'),
+        url('../public/font/FrutigerNeueLTW1G-Light.woff2') format('woff2'),
+        url('../public/font/FrutigerNeueLTW1G-Light.woff') format('woff'),
+        url('../public/font/FrutigerNeueLTW1G-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue';
+    src: local('Frutiger Neue Regular'), local('FrutigerNeueLTW1G-Regular'),
+        url('../public/font/FrutigerNeueLTW1G-Regular.woff2') format('woff2'),
+        url('../public/font/FrutigerNeueLTW1G-Regular.woff') format('woff'),
+        url('../public/font/FrutigerNeueLTW1G-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue';
+    src: local('Frutiger Neue Medium'), local('FrutigerNeueLTW1G-Medium'),
+        url('../public/font/FrutigerNeueLTW1G-Medium.woff2') format('woff2'),
+        url('../public/font/FrutigerNeueLTW1G-Medium.woff') format('woff'),
+        url('../public/font/FrutigerNeueLTW1G-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue';
+    src: local('Frutiger Neue Bold'), local('FrutigerNeueLTW1G-Bold'),
+        url('../public/font/FrutigerNeueLTW1G-Bold.woff2') format('woff2'),
+        url('../public/font/FrutigerNeueLTW1G-Bold.woff') format('woff'),
+        url('../public/font/FrutigerNeueLTW1G-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Frutiger Neue';
+    src: local('Frutiger Neue Heavy'), local('FrutigerNeueLTW1G-Heavy'),
+        url('../public/font/FrutigerNeueLTW1G-Heavy.woff2') format('woff2'),
+        url('../public/font/FrutigerNeueLTW1G-Heavy.woff') format('woff'),
+        url('../public/font/FrutigerNeueLTW1G-Heavy.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+/* Base Styles */
+
+@layer base {
+
+    html,
+    body {
+        font-family: 'Frutiger Neue', sans-serif !important;
+    }
+
+    b,
+    strong {
+        font-family: 'Frutiger Neue', sans-serif;
+        font-weight: 700;
+    }
+}
+
+/* Input Placeholder Text Styles */
+
 input[type="text"]:focus~.input-text,
 input[type="text"]:not(:placeholder-shown)~.input-text,
 input[type="password"]:focus~.input-text,

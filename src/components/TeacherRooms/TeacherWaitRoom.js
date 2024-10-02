@@ -179,7 +179,7 @@ function TeacherWaitRoom({ navigate, classCode }) {
 
                             <div className="col-span-full md:col-span-full lg:col-span-2 lg:pl-7">
                                 <div className='contain'>
-                                    <div className='inside-card-2-header text-white'> {/* Header */}
+                                    <div className='inside-card-2-header text-white' style={{ fontWeight: '400' }}> {/* Header */}
                                         <div className='hidden md:block lg:block'>{t('name')}</div>
                                         <div className='hidden md:block lg:block'>{t('progress')}</div>
                                         <div className='hidden md:block lg:block'></div>

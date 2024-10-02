@@ -19,6 +19,8 @@ const DB_USER = process.env.DB_USER || 'pupis';
 const DB_PASSWORD = process.env.DB_PASSWORD || 'pupis';
 const DB_NAME = process.env.DB_NAME || 'tfg_db';
 
+const KEY = process.env.KEY || 'secret';
+
 module.exports = {
     SERVER_URL,
     WEB_URL,
@@ -26,5 +28,6 @@ module.exports = {
     DB_HOST,
     DB_USER,
     DB_PASSWORD,
-    DB_NAME
+    DB_NAME,
+    KEY
 };

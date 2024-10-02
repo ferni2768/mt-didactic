@@ -226,7 +226,7 @@ function StudentJoin({ navigate, classCode }) {
                             <h1 className={`text-2xl font-bold text-center ${wantsToJoin ? 'form-animated' : ''}`}>{t('studentJoin')}</h1>
 
                             <div className={`${wantsToJoin ? 'form-animated' : ''}`}>
-                                <form onSubmit={handleJoin} className="space-y-4">
+                                <form onSubmit={handleJoin} className="space-y-4" autocomplete="off">
                                     <div className="flex justify-center relative">
                                         <input
                                             id="name"
